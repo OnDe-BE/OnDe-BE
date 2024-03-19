@@ -10,15 +10,10 @@ public class UserDTO {
     private String id;
     @NotNull
     private String password;
-    @NotNull
     private int age;
-    @NotNull
     private String gender;
-    @NotNull
     private String nickname;
-    @NotNull
     private String nationality;
-    @NotNull
     private String email;
 
     @Builder
