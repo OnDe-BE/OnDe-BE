@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>메인 페이지</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+</head>
+<body>
+<b>Authenticated username:</b>
+<p th:text="${#authentication.name}"></p>
+<button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/login'">로그인</button>
+<button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/join'">회원가입</button>
+<button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/logout'">로그아웃</button>
+</body>
+</html>

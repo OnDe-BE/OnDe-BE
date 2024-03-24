@@ -1,21 +1,36 @@
 package com.ott.reelpick.user.service;
 
 import com.ott.reelpick.user.User;
-import com.ott.reelpick.user.dto.UserDTO;
+import com.ott.reelpick.user.dto.UserJoinDTO;
+import com.ott.reelpick.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
 
-public interface UserService {
-    Long join(UserDTO dto);
+@Service
+@RequiredArgsConstructor
+public class UserService implements UserDetailsService {
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    default User dtoToEntity(UserDTO dto) {
-        User entity = User.builder()
+    public Long join(UserJoinDTO dto){
+        return userRepository.save(User.builder()
                 .id(dto.getId())
-                .password(dto.getPassword())
+                .password(bCryptPasswordEncoder.encode(dto.getPassword()))
                 .age(dto.getAge())
                 .gender(dto.getGender())
                 .nickname(dto.getNickname())
                 .nationality(dto.getNationality())
                 .email(dto.getEmail())
-                .build();
-        return entity;
+                .build()).getUserId();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException((id)));
     }
 }

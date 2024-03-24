@@ -1,8 +1,9 @@
 package com.ott.reelpick.user;
 
-import com.ott.reelpick.user.dto.UserDTO;
+import com.ott.reelpick.user.dto.UserJoinDTO;
 import com.ott.reelpick.user.repository.UserRepository;
-import com.ott.reelpick.user.service.UserServiceImpl;
+import com.ott.reelpick.user.service.UserService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,22 +11,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class UserServiceImplTest {
     @Autowired
-    private UserServiceImpl userService;
-    @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Test
+    @DisplayName("일반 회원가입 테스트")
     void register() {
-        UserDTO userDTO = UserDTO.builder()
-                .id("test")
-                .password("test")
-                .age(15)
-                .gender("남")
-                .nickname("test")
-                .nationality("북한")
-                .email("dbstndh12@naver.com")
-                .build();
-        User user = userService.dtoToEntity(userDTO);
-        userRepository.save(user);
+       UserJoinDTO userJoinDTO = new UserJoinDTO();
+       userJoinDTO.setId("test");
+       userJoinDTO.setPassword("test1234");
+       userJoinDTO.setAge(25);
+       userJoinDTO.setGender("m");
+       userJoinDTO.setNickname("test");
+       userJoinDTO.setNationality("korea");
+       userJoinDTO.setEmail("test@test.com");
+       userService.join(userJoinDTO);
+
     }
 }
