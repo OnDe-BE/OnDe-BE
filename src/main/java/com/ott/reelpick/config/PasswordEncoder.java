@@ -1,4 +1,4 @@
-package com.ott.reelpick.user.config;
+package com.ott.reelpick.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

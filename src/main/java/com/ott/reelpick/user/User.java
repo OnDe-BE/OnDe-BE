@@ -11,7 +11,6 @@ import java.util.List;
 
 @Data
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User implements UserDetails {
     @Id
@@ -32,8 +31,7 @@ public class User implements UserDetails {
 
 
     @Builder
-    public User(Long userId, String id, String password, int age, String gender, String nickname, String nationality, String email, String auth) {
-        this.userId = userId;
+    public User(String id, String password, int age, String gender, String nickname, String nationality, String email) {
         this.id = id;
         this.password = password;
         this.age = age;
@@ -41,6 +39,10 @@ public class User implements UserDetails {
         this.nickname = nickname;
         this.nationality = nationality;
         this.email = email;
+    }
+
+    public User() {
+
     }
 
     @Override
