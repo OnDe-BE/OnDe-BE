@@ -1,12 +1,9 @@
 package com.ott.reelpick.user.service;
 
-import com.ott.reelpick.user.User;
+import com.ott.reelpick.user.domain.User;
 import com.ott.reelpick.user.dto.UserJoinDTO;
 import com.ott.reelpick.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +22,11 @@ public class UserService  {
                 .nickname(dto.getNickname())
                 .nationality(dto.getNationality())
                 .email(dto.getEmail())
-                .build()).getUserId();
+                .build()).getUserIdx();
     }
 
-    public User findById(Long userId) {
-        return userRepository.findById(userId)
+    public User findById(Long userIdx) {
+        return userRepository.findById(userIdx)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 

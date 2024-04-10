@@ -1,4 +1,4 @@
-package com.ott.reelpick.user;
+package com.ott.reelpick.user.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,8 +15,8 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id", updatable = false)
-    private Long userId;
+    @Column(name = "user_idx", updatable = false)
+    private Long userIdx;
     private String id;
 
     @Column(name = "password")

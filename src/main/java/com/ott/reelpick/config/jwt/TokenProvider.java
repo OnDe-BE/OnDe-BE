@@ -5,7 +5,7 @@ import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
-import com.ott.reelpick.user.User;
+import com.ott.reelpick.user.domain.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -35,8 +35,8 @@ public class TokenProvider {
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(now)
                 .setExpiration(expiry)
-                .setSubject(user.getId())
-                .claim("user_id", user.getUserId())
+                .setSubject(user.getEmail())
+                .claim("id", user.getId())
                 .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecretKey())
                 .compact();
     }
@@ -64,13 +64,13 @@ public class TokenProvider {
 
     public Long getUserId(String token) {
         Claims claims = getClaims(token);
-        return claims.get("user_id", Long.class);
+        return claims.get("id", Long.class);
     }
 
     private Claims getClaims(String token) {
         return Jwts.parser()
-            .setSigningKey(jwtProperties.getSecretKey())
-            .parseClaimsJws(token)
-            .getBody();
+                .setSigningKey(jwtProperties.getSecretKey())
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
