@@ -1,6 +1,6 @@
 package com.ott.reelpick.config.jwt;
 
-import com.ott.reelpick.user.domain.User;
+import com.ott.reelpick.user.entity.User;
 import com.ott.reelpick.user.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
@@ -47,9 +47,9 @@ class TokenProviderTest {
                 .setSigningKey(jwtProperties.getSecretKey())
                 .parseClaimsJws(token)
                 .getBody()
-                .get("id", Long.class);
+                .get("user_idx", Long.class);
 
-        assertThat(userId).isEqualTo(testUser.getId());
+        assertThat(userId).isEqualTo(testUser.getUserId());
     }
 
     @DisplayName("validToken(): 만료된 토큰인 경우에 유효성 검증에 실패한다.")
@@ -107,7 +107,7 @@ class TokenProviderTest {
         // given
         Long userId = 1L;
         String token = JwtFactory.builder()
-                .claims(Map.of("id", userId))
+                .claims(Map.of("user_idx", userId))
                 .build()
                 .createToken(jwtProperties);
 

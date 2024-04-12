@@ -17,10 +17,10 @@ import static java.util.Collections.emptyMap;
 
 @Getter
 public class JwtFactory {
+    private Map<String, Object> claims = emptyMap();
     private String subject = "test@gmail.com";
     private Date issuedAt = new Date();
     private Date expiration = new Date(new Date().getTime() + Duration.ofDays(14).toMillis());
-    private Map<String, Object> claims = emptyMap();
 
     @Builder
     public JwtFactory(String subject, Date issuedAt, Date expiration, Map<String, Object> claims){
@@ -37,6 +37,7 @@ public class JwtFactory {
     // jjwt 라이브러리를 사용해 JWT 토큰 생성
     public String createToken(JwtProperties jwtProperties){
         return Jwts.builder()
+                .setSubject(subject)
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE) // 헤더 TYPE : JWT
                 .setIssuer(jwtProperties.getIssuer())
                 .setIssuedAt(issuedAt)

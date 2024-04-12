@@ -1,6 +1,6 @@
 package com.ott.reelpick.user.service;
 
-import com.ott.reelpick.user.domain.User;
+import com.ott.reelpick.user.entity.User;
 import com.ott.reelpick.user.dto.UserJoinDTO;
 import com.ott.reelpick.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +22,11 @@ public class UserService  {
                 .nickname(dto.getNickname())
                 .nationality(dto.getNationality())
                 .email(dto.getEmail())
-                .build()).getUserIdx();
+                .build()).getUserId();
     }
 
-    public User findById(Long userIdx) {
-        return userRepository.findById(userIdx)
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Unexpected user"));
     }
 

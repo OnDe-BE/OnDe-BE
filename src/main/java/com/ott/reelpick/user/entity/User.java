@@ -1,4 +1,4 @@
-package com.ott.reelpick.user.domain;
+package com.ott.reelpick.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,12 +11,13 @@ import java.util.List;
 
 @Data
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_idx", updatable = false)
-    private Long userIdx;
+    private Long userId;
     private String id;
 
     @Column(name = "password")
@@ -39,10 +40,6 @@ public class User implements UserDetails {
         this.nickname = nickname;
         this.nationality = nationality;
         this.email = email;
-    }
-
-    public User() {
-
     }
 
     @Override
