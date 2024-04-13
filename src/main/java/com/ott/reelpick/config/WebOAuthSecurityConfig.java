@@ -1,12 +1,15 @@
 package com.ott.reelpick.config;
 
 import com.ott.reelpick.config.jwt.TokenProvider;
+import com.ott.reelpick.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.ott.reelpick.config.oauth.OAuth2SuccessHandler;
 import com.ott.reelpick.config.oauth.OAuth2UserCustomService;
 import com.ott.reelpick.user.repository.RefreshTokenRepository;
 import com.ott.reelpick.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -25,6 +28,7 @@ public class WebOAuthSecurityConfig {
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final UserService userService;
+
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -51,7 +55,7 @@ public class WebOAuthSecurityConfig {
                 .anyRequest().permitAll();
 
         http.oauth2Login()
-                .loginPage("/")
+                .loginPage("/login")
                 .authorizationEndpoint()
                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
                 .and()
@@ -70,6 +74,7 @@ public class WebOAuthSecurityConfig {
 
         return http.build();
     }
+
 
 
     @Bean

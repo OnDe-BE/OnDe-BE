@@ -3,6 +3,7 @@ package com.ott.reelpick.config.oauth;
 import com.ott.reelpick.user.entity.User;
 import com.ott.reelpick.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @RequiredArgsConstructor
+@Slf4j
 @Service
 public class OAuth2UserCustomService extends DefaultOAuth2UserService {
 
@@ -29,13 +31,16 @@ public class OAuth2UserCustomService extends DefaultOAuth2UserService {
     private User saveOrUpdate(OAuth2User oAuth2User) {
         Map<String, Object> attributes = oAuth2User.getAttributes();
 
-        String id = (String) attributes.get("id");
-        String nickname = (String) attributes.get("nickname");
+        String email = (String) attributes.get("email");
+        String nickname = (String) attributes.get("name");
 
-        User user = (User) userRepository.findById(id)
+        log.info("아이디 : " + email);
+        log.info("닉네임 : " + nickname);
+
+        User user = (User) userRepository.findById(email)
                 .map(entity -> entity.update(nickname))
                 .orElse(User.builder()
-                        .id(id)
+                        .id(email)
                         .nickname(nickname)
                         .build());
 
