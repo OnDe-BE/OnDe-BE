@@ -1,5 +1,6 @@
 package com.ott.reelpick.post.entity;
 
+import com.ott.reelpick.post.dto.PostRequestsDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,4 +29,12 @@ public class Post extends Timestamped {
 
     @Column(nullable = false)
     private Integer board_id;
+
+    public Post(PostRequestsDto requestsDto) {
+        this.title = requestsDto.getTitle();
+        this.contents = requestsDto.getContents();
+        this.user_idx = requestsDto.getUser_idx();
+        this.board_id = requestsDto.getBoard_id();
+    }
+
 }
