@@ -27,14 +27,14 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private Integer views;
 
-    @Column(nullable = false)
-    private Integer board_id;
+    @Column(nullable = false, name = "board_id")
+    private Integer boardId;
 
     public Post(PostRequestsDto requestsDto) {
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         this.user_idx = requestsDto.getUser_idx();
-        this.board_id = requestsDto.getBoard_id();
+        this.boardId = requestsDto.getBoard_id();
     }
 
 }

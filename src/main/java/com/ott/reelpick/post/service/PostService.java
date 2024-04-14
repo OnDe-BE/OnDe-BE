@@ -20,7 +20,7 @@ public class PostService {
     //게시글 전체 목록 조회
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts(Integer boardId) {
-        return postRepository.findAllByBoardId(boardId).stream().map(PostResponseDto::new).toList();
+        return postRepository.findAllByboardId(boardId).stream().map(PostResponseDto::new).toList();
     }
 
     //게시글 작성

@@ -24,7 +24,7 @@ public class PostResponseDto {
         this.title = entity.getTitle();
         this.contents = entity.getContents();
         this.views = entity.getViews();
-        this.board_id = entity.getBoard_id();
+        this.board_id = entity.getBoardId();
         this.createdAt = entity.getCreatedAt();
     }
 }
