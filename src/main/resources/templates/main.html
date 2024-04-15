@@ -7,7 +7,7 @@
 </head>
 <body>
 <b>Authenticated username:</b>
-<p th:text="${#authentication.name}"></p>
+<p th:text="${user}"></p>
 <button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/login'">로그인</button>
 <button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/join'">회원가입</button>
 <button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/logout'">로그아웃</button>

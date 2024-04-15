@@ -29,10 +29,12 @@ public class User implements UserDetails {
     private String nationality;
     private String email;
 
+    @Column(name = "provider")
+    private String provider;
 
 
     @Builder
-    public User(String id, String password, int age, String gender, String nickname, String nationality, String email) {
+    public User(String id, String password, int age, String gender, String nickname, String nationality, String email, String provider) {
         this.id = id;
         this.password = password;
         this.age = age;
@@ -40,6 +42,7 @@ public class User implements UserDetails {
         this.nickname = nickname;
         this.nationality = nationality;
         this.email = email;
+        this.provider = provider;
     }
 
     @Override
@@ -72,8 +75,9 @@ public class User implements UserDetails {
         return true;
     }
 
-    public Object update(String nickname) {
+    public User update(String nickname, String email) {
         this.nickname = nickname;
+        this.email = email;
         return this;
     }
 }

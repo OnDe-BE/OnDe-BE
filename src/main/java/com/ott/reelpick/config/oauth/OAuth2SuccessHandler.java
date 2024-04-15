@@ -4,7 +4,6 @@ import com.ott.reelpick.config.jwt.TokenProvider;
 import com.ott.reelpick.user.entity.RefreshToken;
 import com.ott.reelpick.user.entity.User;
 import com.ott.reelpick.user.repository.RefreshTokenRepository;
-import com.ott.reelpick.user.service.UserService;
 import com.ott.reelpick.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,12 +29,12 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
     private final TokenProvider tokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
-    private final UserService userService;
+    private final OAuth2UserCustomService userService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
-        User user = userService.findById((String) oAuth2User.getAttributes().get("id"));
+        User user = userService.findUserByEmailAndProvider((String) oAuth2User.getAttributes().get("email"), (String) oAuth2User.getAttributes().get("provider"));
 
         String refreshToken = tokenProvider.generateToken(user, REFRESH_TOKEN_DURATION);
         saveRefreshToken(user.getUserId(), refreshToken);
