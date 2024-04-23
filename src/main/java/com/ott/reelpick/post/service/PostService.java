@@ -13,14 +13,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PostService {
+public class PostService{
 
     private final PostRepository postRepository;
 
     //게시글 전체 목록 조회
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts(Integer boardId) {
-        return postRepository.findAllByboardId(boardId).stream().map(PostResponseDto::new).toList();
+        return postRepository.findAllByBoardId(boardId).stream().map(PostResponseDto::new).toList();
     }
 
     //게시글 작성
@@ -66,5 +66,7 @@ public class PostService {
     }
 
 
-
+    public void clear() {
+        postRepository.deleteAll();
+    }
 }
