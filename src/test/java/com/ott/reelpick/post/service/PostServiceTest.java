@@ -2,6 +2,7 @@ package com.ott.reelpick.post.service;
 
 import com.ott.reelpick.post.dto.PostRequestsDto;
 import com.ott.reelpick.post.dto.PostResponseDto;
+import com.ott.reelpick.post.repository.PostRepository;
 import com.ott.reelpick.post.service.PostService;
 import groovy.util.logging.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PostServiceTest {
 
     @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private PostService postService;
 
-    @BeforeEach
-    public void Reset(){
-        postService.clear();
-    }
+    //@BeforeEach
+    //public void Reset(){
+        //postService.clear();
+    //}
 
     @Test
     @DisplayName("Post 생성 및 검색 테스트")
@@ -55,6 +59,35 @@ public class PostServiceTest {
         assertThat(test.get(1).getContents()).isEqualTo("본문2");
         assertThat(test.get(1).getUser_idx()).isEqualTo(1235L);
         assertThat(p.getContents()).isEqualTo("본문1");
+    }
+
+    @Test
+    @DisplayName("Post 업데이트 및 삭제 테스트")
+    void UpdatePost() throws Exception {
+        //given
+        PostRequestsDto postRequests1 = new PostRequestsDto();
+        postRequests1.setUser_idx(1234L);
+        postRequests1.setContents("본문업데이트1");
+        postRequests1.setTitle("제목업데이트1");
+        postRequests1.setBoard_id(2);
+        Long postIdx1 = Long.valueOf(1);
+
+        PostRequestsDto postRequests2 = new PostRequestsDto();
+        postRequests2.setUser_idx(1236L); //다른 사람이 수정하려고 할때는 업데이트되지 않아야함
+        postRequests2.setContents("본문업데이트2");
+        postRequests2.setTitle("제목업데이트2");
+        postRequests2.setBoard_id(1);
+        Long postIdx2 = Long.valueOf(2);
+
+        //when
+        PostResponseDto p1 = postService.updatePost(postIdx1, postRequests1);
+        PostResponseDto p2 = postService.updatePost(postIdx2, postRequests2);
+
+        //then
+        assertThat(p1.getContents()).isEqualTo("본문업데이트1");
+        assertThat(p2.getContents()).isEqualTo("본문2");
+
+
     }
 
 

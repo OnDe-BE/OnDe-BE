@@ -48,6 +48,9 @@ public class PostService{
         if (!requestsDto.getUser_idx().equals(post.getUser_idx()))
             throw new Exception("아이디가 일치하지 않습니다.");
 
+        post.update(requestsDto);
+        postRepository.flush(); // responseDto 에 modified 업데이트를 위해 flush 사용
+
         return new PostResponseDto(new Post(requestsDto));
     }
 
