@@ -47,12 +47,23 @@ public class Comment extends Timestamped{
     private int like_count;
 
     @Builder
-    private Comment(CommentRequestDto requestDto, Post post, User user) {
+    public Comment(CommentRequestDto requestDto, Post post, User user) {
         this.contents = requestDto.getContents();
         this.parent_id = requestDto.getParent_id();
         this.post = post;
         this.user = user;
         this.like_count = 0;
     }
+
+    public void update(CommentRequestDto requestDto, User user) {
+        this.contents = requestDto.getContents();
+        this.user = user;
+    }
+
+    public void addChildComment(Comment child) {
+        this.getChildCommentList().add(child);
+    }
+
+
 
 }
