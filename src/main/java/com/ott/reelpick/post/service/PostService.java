@@ -13,14 +13,14 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PostService{
+public class PostService {
 
     private final PostRepository postRepository;
 
     //게시글 전체 목록 조회
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts(Integer boardId) {
-        return postRepository.findAllByBoardId(boardId).stream().map(PostResponseDto::new).toList();
+        return postRepository.findAllByboardId(boardId).stream().map(PostResponseDto::new).toList();
     }
 
     //게시글 작성
@@ -48,9 +48,6 @@ public class PostService{
         if (!requestsDto.getUser_idx().equals(post.getUser_idx()))
             throw new Exception("아이디가 일치하지 않습니다.");
 
-        post.update(requestsDto);
-        postRepository.flush(); // responseDto 에 modified 업데이트를 위해 flush 사용
-
         return new PostResponseDto(new Post(requestsDto));
     }
 
@@ -69,7 +66,5 @@ public class PostService{
     }
 
 
-    public void clear() {
-        postRepository.deleteAll();
-    }
+
 }

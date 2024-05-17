@@ -1,31 +1,26 @@
 package com.ott.reelpick.config;
 
-import com.ott.reelpick.config.jwt.TokenProvider;
-import com.ott.reelpick.config.oauth.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.ott.reelpick.config.oauth.OAuth2SuccessHandler;
-import com.ott.reelpick.config.oauth.OAuth2UserCustomService;
-import com.ott.reelpick.user.repository.RefreshTokenRepository;
+import com.ott.reelpick.config.oauth.OAuthFailureHandler;
+import com.ott.reelpick.config.oauth.OAuthSuccessHandler;
+import com.ott.reelpick.user.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @Configuration
 public class WebOAuthSecurityConfig {
-
-    private final OAuth2UserCustomService oAuth2UserCustomService;
-    private final TokenProvider tokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final OAuth2UserCustomService userService;
-
+    private final OAuthSuccessHandler oauthSuccessHandler;
+    private final OAuthFailureHandler oauthfailureHandler;
+    private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -37,30 +32,27 @@ public class WebOAuthSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .httpBasic().disable()
-                .formLogin().disable()
                 .logout().disable();
 
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-
-
         http.authorizeRequests()
-                .requestMatchers("/api/token").permitAll()
-                .requestMatchers("/api/**").authenticated()
+                .requestMatchers("/api/token", "/users/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                 .anyRequest().permitAll();
 
         http.oauth2Login()
                 .loginPage("/login")
-                .authorizationEndpoint()
-                .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository())
-                .and()
-                .successHandler(oAuth2SuccessHandler())
                 .userInfoEndpoint()
-                .userService(oAuth2UserCustomService);
+                .userService(customOAuth2UserService)
+                .and()
+                .successHandler(oauthSuccessHandler)
+                .failureHandler(oauthfailureHandler);
 
         http.logout()
+                .logoutUrl("/users/logout")
+                .deleteCookies("refresh_token")
                 .logoutSuccessUrl("/");
 
 
@@ -70,26 +62,5 @@ public class WebOAuthSecurityConfig {
 
 
         return http.build();
-    }
-
-
-
-    @Bean
-    public OAuth2SuccessHandler oAuth2SuccessHandler() {
-        return new OAuth2SuccessHandler(tokenProvider,
-                refreshTokenRepository,
-                oAuth2AuthorizationRequestBasedOnCookieRepository(),
-                userService
-        );
-    }
-
-    @Bean
-    public TokenAuthenticationFilter tokenAuthenticationFilter() {
-        return new TokenAuthenticationFilter(tokenProvider);
-    }
-
-    @Bean
-    public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
-        return new OAuth2AuthorizationRequestBasedOnCookieRepository();
     }
 }

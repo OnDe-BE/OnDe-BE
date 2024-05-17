@@ -11,12 +11,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/board/*")
+@RequestMapping("/board/")
 public class PostController {
 
     private final PostService postService;
 
-    // 게시판 조회
+    // 게시판 조회 - 테스트 필요
     @GetMapping("/{boardId}")
     public List<PostResponseDto> getPosts(@PathVariable Integer boardId) {
         return postService.getPosts(boardId);
@@ -40,7 +40,7 @@ public class PostController {
         return postService.updatePost(postIdx, requestsDto);
     }
 
-    //게시글 삭제 - 테스트 필요
+    //게시글 삭제
     @DeleteMapping("/delete/{postIdx}")
     public SuccessResponseDto deletePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto) throws Exception {
         return postService.deletePost(postIdx, requestsDto);

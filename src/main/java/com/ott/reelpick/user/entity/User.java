@@ -1,19 +1,15 @@
 package com.ott.reelpick.user.entity;
 
+import com.ott.reelpick.user.dto.UserJoinRequest;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
 
 @Data
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
 @Table(name = "user")
-public class User implements UserDetails {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_idx", updatable = false)
@@ -33,7 +29,6 @@ public class User implements UserDetails {
     private String provider;
 
 
-    @Builder
     public User(String id, String password, int age, String gender, String nickname, String nationality, String email, String provider) {
         this.id = id;
         this.password = password;
@@ -45,34 +40,15 @@ public class User implements UserDetails {
         this.provider = provider;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("user"));
-    }
-
-    @Override
-    public String getUsername() {
-        return id;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
+    public User(UserJoinRequest userJoinRequest) {
+        this.id = userJoinRequest.getUserName();
+        this.password = userJoinRequest.getPassword();
+        this.age = userJoinRequest.getAge();
+        this.gender = userJoinRequest.getGender();
+        this.nickname = userJoinRequest.getUserName();
+        this.nationality = userJoinRequest.getNationality();
+        this.email = userJoinRequest.getEmail();
+        this.provider = userJoinRequest.getProvider();
     }
 
     public User update(String nickname, String email) {
