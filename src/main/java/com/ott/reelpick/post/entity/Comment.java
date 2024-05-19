@@ -43,6 +43,9 @@ public class Comment extends Timestamped{
     @OneToMany(mappedBy = "parent_id", cascade = CascadeType.ALL)
     private List<Comment> childCommentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<Likes> likesList = new ArrayList<>();
+
     @Column
     private int like_count;
 

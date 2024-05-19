@@ -4,6 +4,7 @@ import com.ott.reelpick.post.dto.PostRequestsDto;
 import com.ott.reelpick.post.dto.PostResponseDto;
 import com.ott.reelpick.post.dto.SuccessResponseDto;
 import com.ott.reelpick.post.service.PostService;
+import com.ott.reelpick.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,8 @@ public class PostController {
 
     //게시글 작성
     @PostMapping("/create")
-    public PostResponseDto createPost(@RequestBody PostRequestsDto requestsDto) {
-        return postService.createPost(requestsDto);
+    public PostResponseDto createPost(@RequestBody PostRequestsDto requestsDto, User user) {
+        return postService.createPost(requestsDto, user);
     }
 
     //게시글 상세조회
@@ -36,14 +37,14 @@ public class PostController {
 
     //게시글 수정
     @PutMapping("/modify/{postIdx}")
-    public PostResponseDto updatePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto) throws Exception {
-        return postService.updatePost(postIdx, requestsDto);
+    public PostResponseDto updatePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto, User user) throws Exception {
+        return postService.updatePost(postIdx, requestsDto, user);
     }
 
     //게시글 삭제 - 테스트 필요
     @DeleteMapping("/delete/{postIdx}")
-    public SuccessResponseDto deletePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto) throws Exception {
-        return postService.deletePost(postIdx, requestsDto);
+    public SuccessResponseDto deletePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto, User user) throws Exception {
+        return postService.deletePost(postIdx, requestsDto, user);
     }
 
 
