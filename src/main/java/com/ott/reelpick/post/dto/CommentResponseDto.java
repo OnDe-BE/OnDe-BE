@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 public class CommentResponseDto {
 
-    private Long comment_id;
+    private Long commentIdx;
 
     private Long post_id;
     private String contents;
@@ -22,8 +22,8 @@ public class CommentResponseDto {
 
     @Builder
     private CommentResponseDto(Comment entity) {
-        this.comment_id = entity.getComment_id();
-        this.post_id = entity.getPost().getPost_id();
+        this.commentIdx = entity.getCommentIdx();
+        this.post_id = entity.getPost().getPost_idx();
         this.contents = entity.getContents();
         this.username = entity.getUser().getUsername();
         this.createdAt = entity.getCreatedAt();

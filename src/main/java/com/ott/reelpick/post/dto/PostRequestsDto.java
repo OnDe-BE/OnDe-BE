@@ -9,5 +9,5 @@ public class PostRequestsDto {
     private Long user_idx;
     private String title;
     private String contents;
-    private Integer board_id;
+    private Integer boardid;
 }

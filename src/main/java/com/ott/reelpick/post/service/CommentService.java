@@ -60,7 +60,7 @@ public class CommentService {
 
         // 댓글의 작성자와 수정하려는 사용자의 정보가 일치하는지 확인
         // 관리자의 수정 기능은 이후에 추가할 것
-        Optional<Comment> found = commentRepository.findByIdAndUser(commentIdx, user);
+        Optional<Comment> found = commentRepository.findByCommentIdxAndUser(commentIdx, user);
         if (found.isEmpty()) {
             throw new IllegalArgumentException("댓글 작성자가 아닙니다.");
         }
@@ -85,7 +85,7 @@ public class CommentService {
 
         // 댓글의 작성자와 수정하려는 사용자의 정보가 일치하는지 확인
         // 관리자의 삭제 기능은 이후에 추가할 것
-        Optional<Comment> found = commentRepository.findByIdAndUser(commentIdx, user);
+        Optional<Comment> found = commentRepository.findByCommentIdxAndUser(commentIdx, user);
         if (found.isEmpty()) {
             throw new IllegalArgumentException("댓글 작성자가 아닙니다.");
         }

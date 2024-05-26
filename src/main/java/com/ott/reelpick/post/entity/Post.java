@@ -38,7 +38,7 @@ public class Post extends Timestamped {
     private Integer like_count;
 
     @Column(nullable = false)
-    private Integer board_id;
+    private Integer boardid;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
@@ -51,7 +51,7 @@ public class Post extends Timestamped {
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         this.user = user;
-        this.board_id = requestsDto.getBoard_id();
+        this.boardid = requestsDto.getBoardid();
         this.post_views = 0;
         this.like_count = 0;
     }
@@ -60,7 +60,7 @@ public class Post extends Timestamped {
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         this.user = user;
-        this.board_id = requestsDto.getBoard_id();
+        this.boardid = requestsDto.getBoardid();
     }
 
 }
