@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,10 +22,15 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder;
 
-    @Value("${jwt.token.secret}")
+    @Value("${jwt.secret_key}")
     private String secretKey;
     private long expiredTimeMs = 1000 * 60 * 60; //1시간
 
+    /**
+     * 회원가입
+     * @param user
+     * @return
+     */
     public User join(User user){
         userRepository.findById(user.getId())
                 .ifPresent( user1 -> {
@@ -33,6 +40,13 @@ public class UserService {
 
         return user;
     }
+
+    /**
+     * 로그인
+     * @param userId
+     * @param password
+     * @return
+     */
     public String login(String userId, String password) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new HospitalReviewAppException(ErrorCode.USER_NOT_FOUNDED, String.format("%s는 가입된 적이 없습니다.", userId)));
@@ -41,6 +55,19 @@ public class UserService {
             throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, String.format("userName 또는 password가 잘못 되었습니다."));
         }
         return JwtTokenUtil.createToken(userId, secretKey, Duration.ofDays(expiredTimeMs));
+    }
+
+    public List<String> getUserId(String email){
+        List<User> userIdList = userRepository.findAllByEmail(email);
+        List<String> findIdList = new ArrayList<>();
+
+        for(int i=0;i<userIdList.size();i++){
+            findIdList.add(userIdList.get(i).getEmail());
+        }
+        return findIdList;
+    }
+    public User getUserInfo(String userId, String provider){
+        return null;
     }
 }
 

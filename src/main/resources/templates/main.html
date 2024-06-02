@@ -8,6 +8,7 @@
 <body>
 <th:block th:if="${session.name !=null}">
     <p th:text="${session.name}"></p>님 환영합니다!
+    <p th:text="${session.provider}"></p>
 </th:block>
 <button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/login'">로그인</button>
 <button type="button" class="btn btn-secondary mt-3" onclick="location.href='/users/join'">회원가입</button>

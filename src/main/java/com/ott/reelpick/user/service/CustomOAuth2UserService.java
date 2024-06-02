@@ -66,9 +66,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
             SaveUser(user);
         }
 
-        // 로그인 성공하면 세션에 회원 실명 저장
-        httpSession.setAttribute("name",oAuthProfile.getName());
-
         // 해당 계정이 갖고 있는 권한 그대로 주입
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority("user")),

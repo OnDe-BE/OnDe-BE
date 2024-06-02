@@ -29,7 +29,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-    @Value("${jwt.token.secret}")
+    @Value("${jwt.secret_key}")
     private String key;
 
     @Value("${app.oauth2.authorizedRedirectUri}")
@@ -91,8 +91,10 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         OAuthLoginRequest oAuthLoginRequest = new OAuthLoginRequest();
         oAuthLoginRequest.setUsername(realName);
+        oAuthLoginRequest.setProvider(provider);
 
         httpSession.setAttribute("name", oAuthLoginRequest.getUsername());
+        httpSession.setAttribute("provider", oAuthLoginRequest.getProvider());
         // 회원 계정으로 토큰 생성 후 쿼리 파라미터로 보냄
         String refreshToken = JwtTokenUtil.createToken(foundAccount,key, REFRESH_TOKEN_DURATION);
         saveRefreshToken(foundUser.getUserId(), refreshToken);
