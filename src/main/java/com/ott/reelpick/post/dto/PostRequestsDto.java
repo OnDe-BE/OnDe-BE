@@ -1,10 +1,8 @@
 package com.ott.reelpick.post.dto;
 
-import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
-@Data
+@Getter
 public class PostRequestsDto {
     private Long user_idx;
     private String title;
