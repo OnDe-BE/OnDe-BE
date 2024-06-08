@@ -91,8 +91,10 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
         OAuthLoginRequest oAuthLoginRequest = new OAuthLoginRequest();
         oAuthLoginRequest.setUsername(realName);
+        oAuthLoginRequest.setId(foundUser.getId());
 
         httpSession.setAttribute("name", oAuthLoginRequest.getUsername());
+        httpSession.setAttribute("user_id", oAuthLoginRequest.getId());
         // 회원 계정으로 토큰 생성 후 쿼리 파라미터로 보냄
         String refreshToken = JwtTokenUtil.createToken(foundAccount,key, REFRESH_TOKEN_DURATION);
         saveRefreshToken(foundUser.getUserId(), refreshToken);

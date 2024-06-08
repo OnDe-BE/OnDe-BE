@@ -10,6 +10,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Getter
@@ -19,6 +20,7 @@ import java.util.List;
 public class Post extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_idx", updatable = false)
     private Long post_idx;
 
     @ManyToOne
@@ -62,6 +64,4 @@ public class Post extends Timestamped {
         this.user = user;
         this.boardid = requestsDto.getBoardid();
     }
-
-
 }

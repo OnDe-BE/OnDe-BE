@@ -1,8 +1,12 @@
 package com.ott.ond.user.entity;
 
+import com.ott.ond.post.entity.Post;
 import com.ott.ond.user.dto.UserJoinRequest;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -27,6 +31,9 @@ public class User {
 
     @Column(name = "provider")
     private String provider;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
 
 
     public User(String id, String password, int age, String gender, String nickname, String nationality, String email, String provider) {

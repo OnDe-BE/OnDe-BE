@@ -6,17 +6,20 @@ import com.ott.ond.post.dto.SuccessResponseDto;
 import com.ott.ond.post.entity.Post;
 import com.ott.ond.post.repository.PostRepository;
 import com.ott.ond.user.entity.User;
+import com.ott.ond.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class PostService{
 
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
     //게시글 전체 목록 조회
     @Transactional(readOnly = true)
@@ -26,7 +29,8 @@ public class PostService{
 
     //게시글 작성
     @Transactional
-    public PostResponseDto createPost(PostRequestsDto requestsDto, User user) {
+    public PostResponseDto createPost(PostRequestsDto requestsDto) {
+        User user = userRepository.findAllById(requestsDto.getId());
         Post post = new Post(requestsDto, user);
         postRepository.save(post);
         return new PostResponseDto(post);

@@ -48,8 +48,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Map<String, Object> attributes = oAuth2User.getAttributes();
         //서비스 마다 다른 키와 벨류 값을 변환하여 객체를 만든다.
         OAuthProfile oAuthProfile = OAuthAttributes.extract(registrationId, attributes);
-        // OAuthProfile oAuthProfile = OAuthAttributes.extract(registrationId, attributes);
         oAuthProfile.setProvider(registrationId);
+
 
         log.info("🌈 소셜 인증한 서비스 [{}]", oAuthProfile.getProvider());
         log.info("🌈 이름 [{}]", oAuthProfile.getName());
@@ -61,14 +61,14 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // 없을 경우 신규 가입
         if(check == null) {
             User user = new User();
+            user.setId(DomainExtract.extractUsername(oAuthProfile.getEmail()) + "_" + oAuthProfile.getProvider());
             user.setNickname(oAuthProfile.getName());
             user.setEmail(oAuthProfile.getEmail());
             user.setProvider(oAuthProfile.getProvider());
             SaveUser(user);
         }
 
-        // 로그인 성공하면 세션에 회원 실명 저장
-        httpSession.setAttribute("name",oAuthProfile.getName());
+        // 로그인 성공하면 세션에 회원 실명, 식별번호 저장
 
         // 해당 계정이 갖고 있는 권한 그대로 주입
         return new DefaultOAuth2User(
