@@ -24,7 +24,7 @@ public class Post extends Timestamped {
     private Long post_idx;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_idx", nullable = false)
     private User user;
 
     @Column(nullable = false)
