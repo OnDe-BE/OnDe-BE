@@ -22,10 +22,11 @@ public class Comment extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_idx")
     private Long commentIdx;
 
     @ManyToOne
-    @JoinColumn(name = "post_id", nullable = false)
+    @JoinColumn(name = "post_idx", nullable = false)
     private Post post;
 
     @ManyToOne

@@ -45,7 +45,8 @@ public class PostService{
 
     //게시글 수정
     @Transactional
-    public PostResponseDto updatePost(Long postIdx, PostRequestsDto requestsDto, User user) throws Exception {
+    public PostResponseDto updatePost(Long postIdx, PostRequestsDto requestsDto) throws Exception {
+        User user = userRepository.findAllById(requestsDto.getId());
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
@@ -60,7 +61,7 @@ public class PostService{
 
     //게시글 삭제
     @Transactional
-    public SuccessResponseDto deletePost(Long postIdx, PostRequestsDto requestsDto, User user) throws Exception {
+    public SuccessResponseDto deletePost(Long postIdx, PostRequestsDto requestsDto) throws Exception {
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );

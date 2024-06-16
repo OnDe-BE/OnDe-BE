@@ -17,7 +17,7 @@ public class PostController {
 
     private final PostService postService;
 
-    // 게시판 조회 - 테스트 필요
+    // 게시판 조회
     @GetMapping("/{boardId}")
     public List<PostResponseDto> getPosts(@PathVariable Integer boardId) {
         return postService.getPosts(boardId);
@@ -37,14 +37,14 @@ public class PostController {
 
     //게시글 수정
     @PutMapping("/modify/{postIdx}")
-    public PostResponseDto updatePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto, User user) throws Exception {
-        return postService.updatePost(postIdx, requestsDto, user);
+    public PostResponseDto updatePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto) throws Exception {
+        return postService.updatePost(postIdx, requestsDto);
     }
 
     //게시글 삭제
     @DeleteMapping("/delete/{postIdx}")
-    public SuccessResponseDto deletePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto, User user) throws Exception {
-        return postService.deletePost(postIdx, requestsDto, user);
+    public SuccessResponseDto deletePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto) throws Exception {
+        return postService.deletePost(postIdx, requestsDto);
     }
 
 
