@@ -4,10 +4,7 @@ import com.ott.onde.post.dto.CommentRequestDto;
 import com.ott.onde.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 
 import jakarta.persistence.*;
@@ -47,6 +44,7 @@ public class Comment extends Timestamped {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<Likes> likesList = new ArrayList<>();
 
+    @Setter
     @Column
     private int like_count;
 
@@ -71,7 +69,6 @@ public class Comment extends Timestamped {
     public void addChildComment(Comment child) {
         this.getChildCommentList().add(child);
     }
-
 
 
 }

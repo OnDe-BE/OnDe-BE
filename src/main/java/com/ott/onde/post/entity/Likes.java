@@ -41,6 +41,7 @@ public class Likes {
         Likes likes = Likes.builder()
                 .post(post)
                 .user(user)
+                .comment(null)
                 .build();
         post.getLikesList().add(likes);
         return likes;
@@ -48,6 +49,7 @@ public class Likes {
 
     public static Likes of(Comment comment, User user) {
         Likes likes = Likes.builder()
+                .post(null)
                 .comment(comment)
                 .user(user)
                 .build();

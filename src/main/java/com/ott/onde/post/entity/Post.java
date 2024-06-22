@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +32,11 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String contents;
 
-    @Column(nullable = true)
+    @Column
     private Integer post_views;
 
-    @Column(nullable = true)
+    @Setter
+    @Column
     private Integer like_count;
 
     @Column(nullable = false)
@@ -62,4 +64,5 @@ public class Post extends Timestamped {
         this.user = user;
         this.boardid = requestsDto.getBoardid();
     }
+
 }
