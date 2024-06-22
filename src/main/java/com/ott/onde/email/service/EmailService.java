@@ -51,7 +51,7 @@ public class EmailService {
         Random random = new Random();
         StringBuffer key = new StringBuffer();
 
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 6; i++) {
             int index = random.nextInt(4);
 
             switch (index) {

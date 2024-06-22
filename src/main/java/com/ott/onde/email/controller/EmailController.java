@@ -6,6 +6,7 @@ import com.ott.onde.email.dto.EmailVerficationRequest;
 import com.ott.onde.email.dto.EmailVerficationResponse;
 import com.ott.onde.email.entity.Email;
 import com.ott.onde.email.service.EmailService;
+import com.ott.onde.user.service.UserService;
 import com.ott.onde.util.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,9 +20,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
 
     private final EmailService emailService;
+    private final UserService userService;
     private String code;
 
-    // 임시 비밀번호 발급
+    // 임시 비밀번호 발급후 임시 비밀번호로 비밀번호 변경
+    @PostMapping("/temporarilypassword")
+    public Response<EmailPostResponse> sendTemporarilyPassword(@RequestBody EmailPostRequest emailPostDto) {
+        Email emailMessage = Email.builder()
+                .to(emailPostDto.getEmail())
+                .subject("[ONED] 임시 비밀번호 발송")
+                .build();
+
+        code = emailService.sendMail(emailMessage, "password");
+
+        userService.updateByTemporarilyPassword(code, emailPostDto.getEmail());
+
+        EmailPostResponse emailResponseDto = new EmailPostResponse();
+        emailResponseDto.setCode(code);
+
+        return Response.success(emailResponseDto);
+    }
 
     // 회원가입 이메일 인증 - 요청 시 body로 인증번호 반환하도록 작성하였음
     @PostMapping("/email")

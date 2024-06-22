@@ -1,9 +1,6 @@
 package com.ott.onde.user.controller;
 
-import com.ott.onde.user.dto.UserJoinRequest;
-import com.ott.onde.user.dto.UserJoinResponse;
-import com.ott.onde.user.dto.UserLoginRequest;
-import com.ott.onde.user.dto.UserLoginResponse;
+import com.ott.onde.user.dto.*;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
 import com.ott.onde.util.Response;
@@ -12,10 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -40,10 +34,24 @@ public class UserRestController {
         session.setAttribute("name", userLoginRequest.getUserId());
         return Response.success(new UserLoginResponse(token));
     }
+
+    /* 아이디 찾기 */
+    @PostMapping("/findId")
+    public Response<UserFindIdResponse> findId(@RequestBody UserFindIdRequest userFindIdRequest){
+        String id = userService.findId(userFindIdRequest.getEmail());
+        UserFindIdResponse userFindIdResponse = new UserFindIdResponse();
+        userFindIdResponse.setId(id);
+        return Response.success(userFindIdResponse);
+    }
+
     //
-    //    /* 회원정보 조회 */
-    //    @GetMapping("/{id}")
-    //    public void get(){}
+    /* 회원정보 조회 */
+    @GetMapping("/{id}")
+    public Response<UserInfoResponse> getUserInfo(@RequestBody UserInfoRequest userInfoRequest){
+        Long userId = userInfoRequest.getId();
+        UserInfoResponse userInfoResponse = userService.getInfo(userId);
+        return Response.success(userInfoResponse);
+    }
     //
     //    /* 회원정보 수정 */
     //    @PutMapping("/{id}")
