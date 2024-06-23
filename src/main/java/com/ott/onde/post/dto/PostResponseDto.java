@@ -26,7 +26,7 @@ public class PostResponseDto {
         this.title = entity.getTitle();
         this.contents = entity.getContents();
         this.post_views = entity.getPost_views();
-        this.boardid = entity.getBoardid();
+        this.boardid = entity.getBoardkind().getBoardid();
         this.like_count = entity.getLike_count();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();

@@ -8,6 +8,7 @@ import com.ott.onde.post.entity.Post;
 import com.ott.onde.post.repository.CommentRepository;
 import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.user.entity.User;
+import com.ott.onde.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,15 @@ import java.util.Optional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
     private final PostRepository postRepository;
 
     //댓글 작성
     @Transactional
-    public CommentResponseDto createComment(Long postIdx, CommentRequestDto requestDto, User user){
+    public CommentResponseDto createComment(Long postIdx, CommentRequestDto requestDto){
         //선택한 게시글 DB 에서 조회
         Optional<Post> post = postRepository.findById(postIdx);
+        User user = userRepository.findAllById(requestDto.getId());
         if (post.isEmpty()) {
             throw new IllegalArgumentException("게시글이 존재하지 않습니다.");
         }
@@ -51,9 +54,10 @@ public class CommentService {
 
     //댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long commentIdx, CommentRequestDto requestDto, User user){
+    public CommentResponseDto updateComment(Long commentIdx, CommentRequestDto requestDto){
         // 선택한 댓글이 DB에 있는지 확인
         Optional<Comment> comment = commentRepository.findById(commentIdx);
+        User user = userRepository.findAllById(requestDto.getId());
         if (comment.isEmpty()) {
             throw new IllegalArgumentException("댓글이 존재하지 않습니다.");
         }
@@ -76,9 +80,10 @@ public class CommentService {
 
     //댓글 삭제
     @Transactional
-    public SuccessResponseDto deleteComment(Long commentIdx, User user){
+    public SuccessResponseDto deleteComment(Long commentIdx, CommentRequestDto requestDto){
         // 선택한 댓글이 DB에 있는지 확인
         Optional<Comment> comment = commentRepository.findById(commentIdx);
+        User user = userRepository.findAllById(requestDto.getId());
         if (comment.isEmpty()) {
             throw new IllegalArgumentException("댓글이 존재하지 않습니다.");
         }

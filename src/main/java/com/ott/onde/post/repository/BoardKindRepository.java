@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findAllByBoardkind(BoardKind boardkind);
+public interface BoardKindRepository extends JpaRepository<BoardKind, Long> {
+    List<BoardKind> findAllByBoardid(Integer boardId);
 }

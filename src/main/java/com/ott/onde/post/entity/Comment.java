@@ -58,7 +58,11 @@ public class Comment extends Timestamped {
     }
 
     public Comment(CommentRequestDto requestDto, Post post, User user) {
-        super();
+        this.contents = requestDto.getContents();
+        this.parent_id = requestDto.getParent_id();
+        this.post = post;
+        this.user = user;
+        this.like_count = 0;
     }
 
     public void update(CommentRequestDto requestDto, User user) {

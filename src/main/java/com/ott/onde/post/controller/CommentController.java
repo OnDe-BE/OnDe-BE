@@ -16,20 +16,20 @@ public class CommentController {
 
     // 댓글 작성
     @PostMapping("/{postIdx}")   // 여기서 ID는 게시글의 id
-    public CommentResponseDto createComment(@PathVariable Long postIdx, @RequestBody CommentRequestDto requestDto, User user) {
-        return commentService.createComment(postIdx, requestDto, user);
+    public CommentResponseDto createComment(@PathVariable Long postIdx, @RequestBody CommentRequestDto requestDto) {
+        return commentService.createComment(postIdx, requestDto);
     }
 
     // 댓글 수정
     @PutMapping("/modify/{commentIdx}")    // 여기서 ID는 댓글의 id
-    public CommentResponseDto updateComment(@PathVariable Long commentIdx, @RequestBody CommentRequestDto requestDto, User user) {
-        return commentService.updateComment(commentIdx, requestDto, user);
+    public CommentResponseDto updateComment(@PathVariable Long commentIdx, @RequestBody CommentRequestDto requestDto) {
+        return commentService.updateComment(commentIdx, requestDto);
     }
 
     // 댓글 삭제
     @DeleteMapping("/delete/{commentIdx}")     // 여기서 ID는 댓글의 id
-    public SuccessResponseDto deleteComment(@PathVariable Long commentIdx, User user) {
-        return commentService.deleteComment(commentIdx, user);
+    public SuccessResponseDto deleteComment(@PathVariable Long commentIdx, @RequestBody CommentRequestDto requestDto) {
+        return commentService.deleteComment(commentIdx, requestDto);
     }
 
 }
