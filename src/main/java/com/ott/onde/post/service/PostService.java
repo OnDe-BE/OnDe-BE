@@ -56,7 +56,7 @@ public class PostService{
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
-        if(!requestsDto.getUser_idx().equals(post.getUser().getUserId()))
+        if(!user.getUserId().equals(post.getUser().getUserId()))
             throw new Exception("아이디가 일치하지 않습니다.");
 
         post.update(requestsDto, boardkind, user);
@@ -68,11 +68,12 @@ public class PostService{
     //게시글 삭제
     @Transactional
     public SuccessResponseDto deletePost(Long postIdx, PostRequestsDto requestsDto) throws Exception {
+        User user = userRepository.findAllById(requestsDto.getId());
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
 
-        if (!requestsDto.getUser_idx().equals(post.getUser().getUserId()))
+        if (!user.getUserId().equals(post.getUser().getUserId()))
             throw new Exception("아이디가 일치하지 않습니다.");
 
         postRepository.deleteById(postIdx);

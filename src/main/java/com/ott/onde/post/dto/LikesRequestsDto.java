@@ -4,7 +4,5 @@ import lombok.Data;
 
 @Data
 public class LikesRequestsDto {
-
-    private Long user_idx;
-    private String id;
+    private String id; //user의 id
 }

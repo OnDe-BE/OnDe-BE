@@ -1,6 +1,6 @@
 package com.ott.onde.post.service;
 
-import com.ott.onde.post.dto.CommentRequestDto;
+import com.ott.onde.post.dto.CommentRequestsDto;
 import com.ott.onde.post.dto.CommentResponseDto;
 import com.ott.onde.post.dto.SuccessResponseDto;
 import com.ott.onde.post.entity.Comment;
@@ -25,7 +25,7 @@ public class CommentService {
 
     //댓글 작성
     @Transactional
-    public CommentResponseDto createComment(Long postIdx, CommentRequestDto requestDto){
+    public CommentResponseDto createComment(Long postIdx, CommentRequestsDto requestDto){
         //선택한 게시글 DB 에서 조회
         Optional<Post> post = postRepository.findById(postIdx);
         User user = userRepository.findAllById(requestDto.getId());
@@ -54,7 +54,7 @@ public class CommentService {
 
     //댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long commentIdx, CommentRequestDto requestDto){
+    public CommentResponseDto updateComment(Long commentIdx, CommentRequestsDto requestDto){
         // 선택한 댓글이 DB에 있는지 확인
         Optional<Comment> comment = commentRepository.findById(commentIdx);
         User user = userRepository.findAllById(requestDto.getId());
@@ -80,7 +80,7 @@ public class CommentService {
 
     //댓글 삭제
     @Transactional
-    public SuccessResponseDto deleteComment(Long commentIdx, CommentRequestDto requestDto){
+    public SuccessResponseDto deleteComment(Long commentIdx, CommentRequestsDto requestDto){
         // 선택한 댓글이 DB에 있는지 확인
         Optional<Comment> comment = commentRepository.findById(commentIdx);
         User user = userRepository.findAllById(requestDto.getId());

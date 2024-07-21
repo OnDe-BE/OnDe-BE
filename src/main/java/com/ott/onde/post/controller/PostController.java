@@ -9,8 +9,11 @@ import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.post.service.PostService;
 import com.ott.onde.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController

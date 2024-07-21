@@ -1,6 +1,6 @@
 package com.ott.onde.post.entity;
 
-import com.ott.onde.post.dto.CommentRequestDto;
+import com.ott.onde.post.dto.CommentRequestsDto;
 import com.ott.onde.user.entity.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -57,7 +57,7 @@ public class Comment extends Timestamped {
         this.like_count = 0;
     }
 
-    public Comment(CommentRequestDto requestDto, Post post, User user) {
+    public Comment(CommentRequestsDto requestDto, Post post, User user) {
         this.contents = requestDto.getContents();
         this.parent_id = requestDto.getParent_id();
         this.post = post;
@@ -65,7 +65,7 @@ public class Comment extends Timestamped {
         this.like_count = 0;
     }
 
-    public void update(CommentRequestDto requestDto, User user) {
+    public void update(CommentRequestsDto requestDto, User user) {
         this.contents = requestDto.getContents();
         this.user = user;
     }
