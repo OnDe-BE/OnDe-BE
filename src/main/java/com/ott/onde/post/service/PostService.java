@@ -20,7 +20,6 @@ import java.util.List;
 public class PostService{
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final BoardKindRepository boardKindRepository;
 
     //게시글 전체 목록 조회
@@ -32,8 +31,7 @@ public class PostService{
 
     //게시글 작성
     @Transactional
-    public PostResponseDto createPost(PostRequestsDto requestsDto) {
-        User user = userRepository.findAllById(requestsDto.getId());
+    public PostResponseDto createPost(PostRequestsDto requestsDto, User user) {
         BoardKind boardkind = boardKindRepository.findAllByBoardid(requestsDto.getBoardid()).get(0);
         Post post = new Post(requestsDto, boardkind, user);
         postRepository.save(post);
@@ -50,8 +48,7 @@ public class PostService{
 
     //게시글 수정
     @Transactional
-    public PostResponseDto updatePost(Long postIdx, PostRequestsDto requestsDto) throws Exception {
-        User user = userRepository.findAllById(requestsDto.getId());
+    public PostResponseDto updatePost(Long postIdx, PostRequestsDto requestsDto, User user) throws Exception {
         BoardKind boardkind = boardKindRepository.findAllByBoardid(requestsDto.getBoardid()).get(0);
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
@@ -67,8 +64,7 @@ public class PostService{
 
     //게시글 삭제
     @Transactional
-    public SuccessResponseDto deletePost(Long postIdx, PostRequestsDto requestsDto) throws Exception {
-        User user = userRepository.findAllById(requestsDto.getId());
+    public SuccessResponseDto deletePost(Long postIdx, User user) throws Exception {
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
