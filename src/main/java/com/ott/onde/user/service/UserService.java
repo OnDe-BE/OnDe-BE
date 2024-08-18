@@ -7,6 +7,7 @@ import com.ott.onde.user.entity.User;
 import com.ott.onde.user.repository.UserRepository;
 import com.ott.onde.util.ErrorCode;
 import com.ott.onde.util.HospitalReviewAppException;
+import com.ott.onde.util.RandomTag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,6 +38,7 @@ public class UserService {
                 .ifPresent( user1 -> {
                     throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("UserId : %s",user1.getUserId()));
                 });
+        user.setId(RandomTag.createHashtag());
         userRepository.save(user);
 
         return user;
@@ -85,7 +87,7 @@ public class UserService {
      * @param id
      * @return
      */
-    public UserInfoResponse getInfo(Long id){
+    public UserInfoResponse getInfo(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
         UserInfoResponse userInfoResponse = new UserInfoResponse();
@@ -98,6 +100,5 @@ public class UserService {
         userInfoResponse.setEmail(user.getEmail());
         return userInfoResponse;
     }
-
 }
 

@@ -20,4 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE User u SET u.password = :password WHERE u.email = :email")
     void updatePassword(String password, String email);
+
+    @Modifying
+    @Query(value = "DELETE FROM User u WHERE u.userId = :userId", nativeQuery = true)
+    void deleteById(Long userId);
 }

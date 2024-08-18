@@ -57,7 +57,11 @@ public class UserRestController {
     //    @PutMapping("/{id}")
     //    public void edit(){}
     //
-    //    /* 회원 탈퇴 */
-    //    @DeleteMapping("/{id}")
-    //    public void remove(){}
+
+    /* 회원 탈퇴 */
+    @DeleteMapping("/{id}")
+    public void remove(@RequestBody UserDeleteRequest userDeleteRequest){
+        String userId = userDeleteRequest.getId();
+        Long id = null;
+    }
 }
