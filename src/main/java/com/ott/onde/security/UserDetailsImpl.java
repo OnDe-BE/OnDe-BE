@@ -1,6 +1,7 @@
 package com.ott.onde.security;
 
 import com.ott.onde.user.entity.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,7 +17,7 @@ public class UserDetailsImpl implements UserDetails {
         this.username = username;
     }
 
-    public User getUser() {
+    public User user() {
         return user;
     }
 
@@ -34,6 +35,7 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return this.username;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {

@@ -1,5 +1,6 @@
 package com.ott.onde.user.controller;
 
+import com.ott.onde.security.UserDetailsImpl;
 import com.ott.onde.user.dto.*;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +32,16 @@ public class UserRestController {
     @PostMapping("/login")
     public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         String token = userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword());
-        HttpSession session = request.getSession();
-        session.setAttribute("name", userLoginRequest.getUserId());
+
         return Response.success(new UserLoginResponse(token));
+    }
+
+    /* 프로필 값 가져오기 */
+    @GetMapping("/profile")
+    public Response<UserInfoResponse> findUsersProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        UserInfoResponse userInfoResponse = userService.getInfo(userDetails.user());
+        log.info(userInfoResponse.getUserId());
+        return Response.success(userInfoResponse);
     }
 
     /* 아이디 찾기 */
@@ -48,15 +57,15 @@ public class UserRestController {
     /* 회원정보 조회 */
     @GetMapping("/{id}")
     public Response<UserInfoResponse> getUserInfo(@RequestBody UserInfoRequest userInfoRequest){
-        Long userId = userInfoRequest.getId();
-        UserInfoResponse userInfoResponse = userService.getInfo(userId);
-        return Response.success(userInfoResponse);
+//        Long userId = userInfoRequest.getId();
+//        UserInfoResponse userInfoResponse = userService.getInfo(user);
+        return null;
     }
-    //
-    //    /* 회원정보 수정 */
-    //    @PutMapping("/{id}")
-    //    public void edit(){}
-    //
+
+    /* 회원정보 수정 */
+    @PutMapping("/{id}")
+    public void edit(){}
+
 
     /* 회원 탈퇴 */
     @DeleteMapping("/{id}")

@@ -35,7 +35,7 @@ public class PostController {
     //게시글 작성
     @PostMapping("/create")
     public PostResponseDto createPost(@RequestBody PostRequestsDto requestsDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.createPost(requestsDto, userDetails.getUser());
+        return postService.createPost(requestsDto, userDetails.user());
     }
 
     //게시글 상세조회
@@ -47,13 +47,13 @@ public class PostController {
     //게시글 수정
     @PutMapping("/modify/{postIdx}")
     public PostResponseDto updatePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
-        return postService.updatePost(postIdx, requestsDto, userDetails.getUser());
+        return postService.updatePost(postIdx, requestsDto, userDetails.user());
     }
 
     //게시글 삭제
     @DeleteMapping("/delete/{postIdx}")
     public SuccessResponseDto deletePost(@PathVariable Long postIdx, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
-        return postService.deletePost(postIdx, userDetails.getUser());
+        return postService.deletePost(postIdx, userDetails.user());
     }
 
 

@@ -28,7 +28,7 @@ public class EmailController {
     public Response<EmailPostResponse> sendTemporarilyPassword(@RequestBody EmailPostRequest emailPostDto) {
         Email emailMessage = Email.builder()
                 .to(emailPostDto.getEmail())
-                .subject("[ONED] 임시 비밀번호 발송")
+                .subject("[ONDE] 임시 비밀번호 발송")
                 .build();
 
         code = emailService.sendMail(emailMessage, "password");
@@ -46,7 +46,7 @@ public class EmailController {
     public Response<EmailPostResponse> sendJoinMail(@RequestBody EmailPostRequest emailPostDto) {
         Email emailMessage = Email.builder()
                 .to(emailPostDto.getEmail())
-                .subject("[ONED] 이메일 인증을 위한 인증 코드 발송")
+                .subject("[ONDE] 이메일 인증을 위한 인증 코드 발송")
                 .build();
 
         code = emailService.sendMail(emailMessage, "email");

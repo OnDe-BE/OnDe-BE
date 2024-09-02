@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class OAuthLoginRequest {
+    Long index;
     private String username;
     private String id;
 }

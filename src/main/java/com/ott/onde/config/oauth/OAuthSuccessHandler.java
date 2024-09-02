@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-            throws IOException, ServletException {
+            throws IOException {
 
         OAuth2User oAuth2User = (OAuth2User)authentication.getPrincipal();
         Map<String, Object> attributes = oAuth2User.getAttributes();
@@ -87,15 +88,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String foundAccount = foundUser.getEmail();
         log.info("🌈 소셜 로그인 인증한 계정명 [{}]",foundAccount);
 
-        HttpSession httpSession = request.getSession();
-
         OAuthLoginRequest oAuthLoginRequest = new OAuthLoginRequest();
         oAuthLoginRequest.setUsername(realName);
         oAuthLoginRequest.setId(foundUser.getId());
+        oAuthLoginRequest.setIndex(foundUser.getUserId());
 
-        httpSession.setAttribute("name", oAuthLoginRequest.getUsername());
-        httpSession.setAttribute("user_id", oAuthLoginRequest.getId());
-        httpSession.setAttribute("id", foundUser.getUserId());
         // 회원 계정으로 토큰 생성 후 쿼리 파라미터로 보냄
         String refreshToken = JwtTokenUtil.createToken(foundAccount,key, REFRESH_TOKEN_DURATION);
         saveRefreshToken(foundUser.getUserId(), refreshToken);
@@ -107,7 +104,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                 .build().toUriString();
 
         clearAuthenticationAttributes(request, response);
-        response.sendRedirect("/");
+        response.sendRedirect("");
     }
 
     private void saveRefreshToken(Long userId, String newRefreshToken) {

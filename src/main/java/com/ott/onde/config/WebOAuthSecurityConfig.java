@@ -10,6 +10,8 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -19,7 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 public class WebOAuthSecurityConfig {
     private final OAuthSuccessHandler oauthSuccessHandler;
-    private final OAuthFailureHandler oauthfailureHandler;
+    private final OAuthFailureHandler oauthFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -30,37 +32,42 @@ public class WebOAuthSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .httpBasic().disable()
-                .logout().disable();
-
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        http.authorizeRequests()
-                .requestMatchers("/api/token", "/users/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
-                .anyRequest().permitAll();
-
-        http.oauth2Login()
-                .loginPage("/login")
-                .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
-                .successHandler(oauthSuccessHandler)
-                .failureHandler(oauthfailureHandler);
-
-        http.logout()
-                .logoutUrl("/users/logout")
-                .deleteCookies("refresh_token")
-                .logoutSuccessUrl("/");
-
-
-        http.exceptionHandling()
-                .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
-                        new AntPathRequestMatcher("/api/**"));
-
-
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .logout(logout ->
+                        logout
+                                .logoutUrl("/users/logout")
+                                .deleteCookies("refresh_token")
+                                .logoutSuccessUrl("/")
+                )
+                .headers(headers ->
+                        headers.frameOptions(
+                                HeadersConfigurer.FrameOptionsConfig::disable).disable())
+                .sessionManagement(sessionManagement ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/api/token", "/users/**", "/").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+                                .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2Login ->
+                        oauth2Login
+                                .loginPage("/")
+                                .userInfoEndpoint(userInfoEndpoint ->
+                                        userInfoEndpoint.userService(customOAuth2UserService)
+                                )
+                                .successHandler(oauthSuccessHandler)
+                                .failureHandler(oauthFailureHandler)
+                )
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.defaultAuthenticationEntryPointFor(
+                                new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+                                new AntPathRequestMatcher("/api/**")
+                        )
+                );
         return http.build();
     }
 }

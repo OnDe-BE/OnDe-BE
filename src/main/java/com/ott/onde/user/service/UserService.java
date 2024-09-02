@@ -38,7 +38,7 @@ public class UserService {
                 .ifPresent( user1 -> {
                     throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("UserId : %s",user1.getUserId()));
                 });
-        user.setId(RandomTag.createHashtag());
+        user.setUserId(RandomTag.createHashtag());
         userRepository.save(user);
 
         return user;
@@ -87,9 +87,7 @@ public class UserService {
      * @param id
      * @return
      */
-    public UserInfoResponse getInfo(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+    public UserInfoResponse getInfo(User user) {
         UserInfoResponse userInfoResponse = new UserInfoResponse();
         userInfoResponse.setUserId(user.getId());
         userInfoResponse.setPassword(user.getPassword());
