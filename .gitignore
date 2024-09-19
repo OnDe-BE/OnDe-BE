@@ -37,4 +37,4 @@ out/
 .vscode/
 src/main/resources/application.yml
 application-oauth.yml
-application.yml
+onde.env

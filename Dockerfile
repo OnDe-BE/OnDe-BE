@@ -1,10 +1,12 @@
 FROM openjdk:17.0.1-jdk-slim AS builder
 LABEL authors="minjuko"
+
 COPY gradlew .
 COPY gradle gradle
 COPY build.gradle .
 COPY settings.gradle .
 COPY src src
+
 RUN ls
 RUN chmod +x ./gradlew
 RUN ./gradlew bootJar
