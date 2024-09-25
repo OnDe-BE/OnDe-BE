@@ -37,12 +37,12 @@ public class UserRestController {
     }
 
     /* 프로필 값 가져오기 */
-    @GetMapping("/profile")
-    public Response<UserInfoResponse> findUsersProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        UserInfoResponse userInfoResponse = userService.getInfo(userDetails.user());
-        log.info(userInfoResponse.getUserId());
-        return Response.success(userInfoResponse);
-    }
+//    @GetMapping("/profile")
+//    public Response<UserInfoResponse> findUsersProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+//        UserInfoResponse userInfoResponse = userService.getInfo(userDetails.user());
+//        log.info(userInfoResponse.getUserId());
+//        return Response.success(userInfoResponse);
+//    }
 
     /* 아이디 찾기 */
     @PostMapping("/findId")
@@ -55,11 +55,11 @@ public class UserRestController {
 
     //
     /* 회원정보 조회 */
-    @GetMapping("/{id}")
+    @GetMapping("/profile")
     public Response<UserInfoResponse> getUserInfo(@RequestBody UserInfoRequest userInfoRequest){
-//        Long userId = userInfoRequest.getId();
-//        UserInfoResponse userInfoResponse = userService.getInfo(user);
-        return null;
+        Long userId = userInfoRequest.getId();
+        UserInfoResponse userInfoResponse = userService.getInfo(userId);
+        return Response.success(userInfoResponse);
     }
 
     /* 회원정보 수정 */

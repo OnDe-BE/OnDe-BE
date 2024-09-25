@@ -1,4 +1,3 @@
-
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
@@ -47,7 +46,7 @@ spring:
             authorization-grant-type: authorization_code
             scope : email, profile
           kakao :
-            client-id: 176b91cb87af202a69d8a1925af24dcd
+            client-id: ${KAKAO_CLIENT_ID}
             redirect-uri: ${KAKAO_REDIRECT_URI}
             authorization-grant-type: authorization_code
             client-authentication-method: POST

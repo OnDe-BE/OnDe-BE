@@ -87,15 +87,16 @@ public class UserService {
      * @param id
      * @return
      */
-    public UserInfoResponse getInfo(User user) {
+    public UserInfoResponse getInfo(Long id) {
         UserInfoResponse userInfoResponse = new UserInfoResponse();
-        userInfoResponse.setUserId(user.getId());
-        userInfoResponse.setPassword(user.getPassword());
-        userInfoResponse.setAge(user.getAge());
-        userInfoResponse.setGender(user.getGender());
-        userInfoResponse.setNickname(user.getNickname());
-        userInfoResponse.setNationality(user.getNationality());
-        userInfoResponse.setEmail(user.getEmail());
+        Optional<User> user = userRepository.findById(id);
+        userInfoResponse.setUserId(user.get().getId());
+        userInfoResponse.setPassword(user.get().getPassword());
+        userInfoResponse.setAge(user.get().getAge());
+        userInfoResponse.setGender(user.get().getGender());
+        userInfoResponse.setNickname(user.get().getNickname());
+        userInfoResponse.setNationality(user.get().getNationality());
+        userInfoResponse.setEmail(user.get().getEmail());
         return userInfoResponse;
     }
 }

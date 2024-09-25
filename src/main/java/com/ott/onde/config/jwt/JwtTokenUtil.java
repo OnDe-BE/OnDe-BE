@@ -3,17 +3,20 @@ package com.ott.onde.config.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.Date;
 
 @Component
+@Slf4j
 public class JwtTokenUtil {
     public static String createToken(String userId, String key, Duration expireTime) {
         Claims claims = Jwts.claims();
         claims.put("userId", userId);
 
+        log.info("userId : " + userId);
         long expireTimeMs = expireTime.toMillis(); // Duration을 밀리초로 변환
 
         return Jwts.builder()
