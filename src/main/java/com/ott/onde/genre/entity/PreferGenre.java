@@ -13,8 +13,10 @@ public class PreferGenre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "prefer_id", updatable = false)
-    private Long prefer_id;
-    private String genre_id;
+    private Long preferId;
+
+    @Column(name = "genre_id", updatable = false)
+    private String genreId;
 
     @ManyToOne
     @JoinColumn(name = "user_idx", nullable = false)
