@@ -77,4 +77,4 @@ jwt:
 app:
   oauth2:
     authorizedRedirectUri:
-      http://localhost:8080/oauth2/redirect
+      https://ondemandia.com/oauth2/redirect
