@@ -7,7 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+/*@Getter
 @Entity
 @NoArgsConstructor
 @Table(name = "content")
@@ -30,4 +30,4 @@ public class Content {
 
     @Column(name = "released")
     private String released;
-}
+}*/

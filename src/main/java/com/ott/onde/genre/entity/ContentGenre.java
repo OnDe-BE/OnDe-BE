@@ -1,12 +1,12 @@
 package com.ott.onde.genre.entity;
 
-import com.ott.onde.content.entity.Content;
-import com.ott.onde.content.entity.ContentCountry;
+//import com.ott.onde.content.entity.Content;
+//import com.ott.onde.content.entity.ContentCountry;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+/*@Getter
 @Entity
 @NoArgsConstructor
 @Table(name = "content_genre")
@@ -22,4 +22,4 @@ public class ContentGenre {
     @ManyToOne
     @JoinColumn(name="country_id", updatable = false)
     private ContentCountry country;
-}
+}*/

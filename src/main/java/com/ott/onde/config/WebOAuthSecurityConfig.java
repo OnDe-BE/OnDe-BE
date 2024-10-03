@@ -62,6 +62,7 @@ public class WebOAuthSecurityConfig {
                                 .successHandler(oauthSuccessHandler)
                                 .failureHandler(oauthFailureHandler)
                 )
+
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.defaultAuthenticationEntryPointFor(
                                 new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),

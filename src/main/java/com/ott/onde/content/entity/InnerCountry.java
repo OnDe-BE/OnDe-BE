@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/*
 @Getter
 @Entity
 @NoArgsConstructor
@@ -19,3 +20,4 @@ public class InnerCountry {
     @Column(name = "country")
     private String country;
 }
+*/

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+/*@Getter
 @Entity
 @NoArgsConstructor
 @Table(name = "content_country")
@@ -20,4 +20,4 @@ public class ContentCountry {
     @OneToMany
     @JoinColumn (name = "country_id")
     private InnerCountry innerCountry;
-}
+}*/

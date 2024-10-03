@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Getter
+/*@Getter
 @Entity
 @NoArgsConstructor
 @Table(name = "prefer_genre")
@@ -21,4 +21,4 @@ public class PreferGenre {
     @ManyToOne
     @JoinColumn(name = "user_idx", nullable = false)
     private User user;
-}
+}*/
