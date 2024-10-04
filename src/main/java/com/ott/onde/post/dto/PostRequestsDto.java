@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class PostRequestsDto {
-    private Integer boardid;
+    private Integer boardId;
     private String title;
     private String contents;
 }

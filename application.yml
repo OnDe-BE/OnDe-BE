@@ -77,3 +77,7 @@ app:
   oauth2:
     authorizedRedirectUri:
       https://ondemandia.com/oauth2/redirect
+
+logging:
+  level:
+    org.springframework.security: DEBUG

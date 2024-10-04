@@ -20,7 +20,7 @@ public class Post extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_idx", updatable = false)
-    private Long post_idx;
+    private Long postIdx;
 
     @ManyToOne
     @JoinColumn(name = "user_idx", nullable = false)
@@ -32,16 +32,16 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private String contents;
 
-    @Column
-    private Integer post_views;
+    @Column(name = "post_views")
+    private Integer postViews;
 
     @Setter
-    @Column
-    private Integer like_count;
+    @Column(name = "like_count")
+    private Integer likeCount;
 
     @ManyToOne
     @JoinColumn(name = "boardid", nullable = false)
-    private BoardKind boardkind;
+    private BoardKind boardKind;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
@@ -50,20 +50,20 @@ public class Post extends Timestamped {
     private List<Likes> likesList = new ArrayList<>();
 
 
-    public Post(PostRequestsDto requestsDto, BoardKind boardkind, User user) {
+    public Post(PostRequestsDto requestsDto, BoardKind boardKind, User user) {
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         this.user = user;
-        this.boardkind = boardkind;
-        this.post_views = 0;
-        this.like_count = 0;
+        this.boardKind = boardKind;
+        this.postViews = 0;
+        this.likeCount = 0;
     }
 
-    public void update(PostRequestsDto requestsDto, BoardKind boardkind, User user){
+    public void update(PostRequestsDto requestsDto, BoardKind boardKind, User user){
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         this.user = user;
-        this.boardkind = boardkind;
+        this.boardKind = boardKind;
     }
 
 }

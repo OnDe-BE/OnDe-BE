@@ -32,7 +32,7 @@ public class CommentService {
         if (post.isEmpty()) {
             throw new IllegalArgumentException("게시글이 존재하지 않습니다.");
         }
-        Long parentId = requestDto.getParent_id();
+        Long parentId = requestDto.getParentId();
         Comment comment = new Comment(requestDto, post.get(), user);
 
         if (parentId == null) {  // parent 가 없다면

@@ -19,12 +19,13 @@ public class BoardKind {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int boardid;
+    @Column(name = "boardid")
+    private int boardId;
 
-    @Column(nullable = false)
-    private String board_name;
+    @Column(name = "board_name", nullable = false)
+    private String boardName;
 
-    @OneToMany(mappedBy = "boardkind", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "boardKind", cascade = CascadeType.REMOVE)
     private List<Post> postList = new ArrayList<>();
 
 

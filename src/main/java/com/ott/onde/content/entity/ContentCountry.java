@@ -13,11 +13,11 @@ public class ContentCountry {
     @Column(name = "content_country_id")
     private long contentCountryId;
 
-    @OneToMany
-    @JoinColumn(name = "content_id")
-    private ContentCountry contentCountry;
+    //@OneToMany
+    //@JoinColumn(name = "content_id")
+    //private ContentCountry contentCountry;
 
-    @OneToMany
-    @JoinColumn (name = "country_id")
-    private InnerCountry innerCountry;
+    //@OneToMany
+    //@JoinColumn (name = "country_id")
+    //private InnerCountry innerCountry;
 }*/

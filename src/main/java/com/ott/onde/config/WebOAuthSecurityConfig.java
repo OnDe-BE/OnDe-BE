@@ -49,7 +49,7 @@ public class WebOAuthSecurityConfig {
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/token", "/users/**", "/").permitAll()
+                        auth.requestMatchers("/api/token", "/users/**", "/","/board/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                                 .anyRequest().authenticated()
                 )

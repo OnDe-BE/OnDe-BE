@@ -34,35 +34,35 @@ public class Comment extends Timestamped {
     @Column(nullable = false, length = 2000)
     private String contents;
 
-    @Column
-    private Long parent_id;
+    @Column(name = "parent_id")
+    private Long parentId;
 
     @OrderBy("createdAt asc ")
-    @OneToMany(mappedBy = "parent_id", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parentId", cascade = CascadeType.ALL)
     private List<Comment> childCommentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
     private List<Likes> likesList = new ArrayList<>();
 
     @Setter
-    @Column
-    private int like_count;
+    @Column(name = "like_count")
+    private int likeCount;
 
     @Builder
     public Comment(Comment requestDto, Post post, User user) {
         this.contents = requestDto.getContents();
-        this.parent_id = requestDto.getParent_id();
+        this.parentId = requestDto.getParentId();
         this.post = post;
         this.user = user;
-        this.like_count = 0;
+        this.likeCount = 0;
     }
 
     public Comment(CommentRequestsDto requestDto, Post post, User user) {
         this.contents = requestDto.getContents();
-        this.parent_id = requestDto.getParent_id();
+        this.parentId = requestDto.getParentId();
         this.post = post;
         this.user = user;
-        this.like_count = 0;
+        this.likeCount = 0;
     }
 
     public void update(CommentRequestsDto requestDto, User user) {
