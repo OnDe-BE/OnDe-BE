@@ -59,13 +59,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SimpleUrlAuthenticationSuccessHandler authenticationSuccessHandler() {
-        SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-        successHandler.setDefaultTargetUrl("/"); // 로그인 성공 후 리디렉션할 URL 설정
-        return successHandler;
-    }
-
-    @Bean
     public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }

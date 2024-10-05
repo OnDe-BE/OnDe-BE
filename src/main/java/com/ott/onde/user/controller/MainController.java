@@ -22,7 +22,7 @@ public class MainController {
     private final UserService userService;
     private final TokenProvider tokenProvider;
 
-    @GetMapping("")
+    @GetMapping("/")
     public String Main(Model model, HttpServletRequest request) {
         return "main";
     }
