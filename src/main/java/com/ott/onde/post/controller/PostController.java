@@ -7,7 +7,6 @@ import com.ott.onde.post.entity.BoardKind;
 import com.ott.onde.post.repository.BoardKindRepository;
 import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.post.service.PostService;
-import com.ott.onde.security.UserDetailsImpl;
 import com.ott.onde.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -34,8 +33,8 @@ public class PostController {
 
     //게시글 작성
     @PostMapping("/create")
-    public PostResponseDto createPost(@RequestBody PostRequestsDto requestsDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return postService.createPost(requestsDto, userDetails.user());
+    public PostResponseDto createPost(@RequestBody PostRequestsDto requestsDto, @AuthenticationPrincipal User user) {
+        return postService.createPost(requestsDto, user);
     }
 
     //게시글 상세조회
@@ -46,14 +45,14 @@ public class PostController {
 
     //게시글 수정
     @PutMapping("/modify/{postIdx}")
-    public PostResponseDto updatePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
-        return postService.updatePost(postIdx, requestsDto, userDetails.user());
+    public PostResponseDto updatePost(@PathVariable Long postIdx, @RequestBody PostRequestsDto requestsDto, @AuthenticationPrincipal User user) throws Exception {
+        return postService.updatePost(postIdx, requestsDto, user);
     }
 
     //게시글 삭제
     @DeleteMapping("/delete/{postIdx}")
-    public SuccessResponseDto deletePost(@PathVariable Long postIdx, @AuthenticationPrincipal UserDetailsImpl userDetails) throws Exception {
-        return postService.deletePost(postIdx, userDetails.user());
+    public SuccessResponseDto deletePost(@PathVariable Long postIdx, @AuthenticationPrincipal User user) throws Exception {
+        return postService.deletePost(postIdx, user);
     }
 
 

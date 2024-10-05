@@ -1,28 +1,46 @@
 package com.ott.onde.user.service;
 
-import com.ott.onde.config.jwt.JwtTokenUtil;
-import com.ott.onde.post.entity.Comment;
+import com.ott.onde.config.jwt.GlobalResDTO;
+import com.ott.onde.config.jwt.JwtTokenDTO;
+import com.ott.onde.config.jwt.TokenProvider;
+import com.ott.onde.genre.entity.InnerGenre;
+import com.ott.onde.genre.entity.PreferGenre;
+import com.ott.onde.genre.repository.InnerGenreRepository;
 import com.ott.onde.user.dto.UserInfoResponse;
+import com.ott.onde.user.dto.UserJoinRequest;
+import com.ott.onde.user.entity.RefreshToken;
 import com.ott.onde.user.entity.User;
+import com.ott.onde.user.repository.RefreshTokenRepository;
 import com.ott.onde.user.repository.UserRepository;
 import com.ott.onde.util.ErrorCode;
 import com.ott.onde.util.HospitalReviewAppException;
 import com.ott.onde.util.RandomTag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final InnerGenreRepository innerGenreRepository;
     private final BCryptPasswordEncoder encoder;
+    private final TokenProvider tokenProvider;
 
     @Value("${jwt.secret_key}")
     private String secretKey;
@@ -30,18 +48,35 @@ public class UserService {
 
     /**
      * 회원가입
-     * @param user
+     * @param userJoinRequest
      * @return
      */
-    public User join(User user){
-        userRepository.findById(user.getId())
-                .ifPresent( user1 -> {
-                    throw new HospitalReviewAppException(ErrorCode.DUPLICATED_USER_NAME, String.format("UserId : %s",user1.getUserId()));
-                });
+    @Transactional
+    public User join(UserJoinRequest userJoinRequest){
+        User user = userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword()));
         user.setUserId(RandomTag.createHashtag());
-        userRepository.save(user);
 
+        List<PreferGenre> preferGenres = new ArrayList<>();
+        for (Long genreId : userJoinRequest.getPreferGenreList()) {
+            InnerGenre genre = innerGenreRepository.findById(String.valueOf(genreId)).orElseThrow(
+                    () -> new IllegalArgumentException("Invalid genre ID: " + genreId)
+            );
+            PreferGenre preferGenre = new PreferGenre();
+            preferGenre.setUser(user);
+            preferGenre.setInnerGenre(genre);
+            preferGenres.add(preferGenre);
+        }
+        user.setPreferGenres(preferGenres);
+
+        // User 저장 (Cascade로 PreferGenre도 자동 저장)
+        userRepository.save(user);
         return user;
+    }
+
+    // 회원가입 시 선호 장르 저장
+    @Transactional
+    public void addPreferGenre(PreferGenre preferGenre, Long userId){
+
     }
 
     /**
@@ -50,14 +85,41 @@ public class UserService {
      * @param password
      * @return
      */
-    public String login(String userId, String password) {
+    @Transactional
+    public GlobalResDTO login(String userId, String password, HttpServletResponse response) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new HospitalReviewAppException(ErrorCode.USER_NOT_FOUNDED, String.format("%s는 가입된 적이 없습니다.", userId)));
 
         if(!encoder.matches(password,user.getPassword())){
             throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, String.format("userName 또는 password가 잘못 되었습니다."));
         }
-        return JwtTokenUtil.createToken(userId, secretKey, Duration.ofDays(expiredTimeMs));
+
+        Long id = user.getUserId();
+        JwtTokenDTO jwtTokenDTO = tokenProvider.createAllToken(id);
+
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserId(user.getUserId());
+
+        if(refreshToken.isPresent()) {
+            refreshTokenRepository.save(refreshToken.get().update(jwtTokenDTO.getRefreshToken()));
+        }else {
+            RefreshToken newToken = new RefreshToken(id, jwtTokenDTO.getRefreshToken());
+            refreshTokenRepository.save(newToken);
+        }
+
+        setHeader(response, jwtTokenDTO);
+
+        return new GlobalResDTO("Success Login", HttpStatus.OK.value());
+    }
+
+    private void setHeader(HttpServletResponse response, JwtTokenDTO jwtTokenDTO) {
+        response.addHeader(tokenProvider.ACCESS_TOKEN, jwtTokenDTO.getAccessToken());
+        response.addHeader(tokenProvider.REFRESH_TOKEN, jwtTokenDTO.getRefreshToken());
+    }
+
+    @Transactional(readOnly = true)
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
     }
 
     /**
@@ -80,7 +142,6 @@ public class UserService {
         code = encoder.encode(code);
         userRepository.updatePassword(code, email);
     }
-
     /**
      * 사용자 정보 불러오기
      *
@@ -91,7 +152,6 @@ public class UserService {
         UserInfoResponse userInfoResponse = new UserInfoResponse();
         Optional<User> user = userRepository.findById(id);
         userInfoResponse.setUserId(user.get().getId());
-        userInfoResponse.setPassword(user.get().getPassword());
         userInfoResponse.setAge(user.get().getAge());
         userInfoResponse.setGender(user.get().getGender());
         userInfoResponse.setNickname(user.get().getNickname());

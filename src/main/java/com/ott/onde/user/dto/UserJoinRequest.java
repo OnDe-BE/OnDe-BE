@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +20,7 @@ public class UserJoinRequest {
     private String nationality;
     private String email;
     private String provider;
+    private List<Long> preferGenreList;
 
     public User toEntity(String password){
         return new User(this.userId, password, this.age, this.gender, this.nickname, this.nationality, this.email, this.provider);

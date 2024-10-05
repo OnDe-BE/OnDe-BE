@@ -1,16 +1,14 @@
 package com.ott.onde.config.oauth;
 
-import com.ott.onde.config.jwt.JwtTokenUtil;
+import com.ott.onde.config.jwt.TokenProvider;
 import com.ott.onde.user.dto.OAuthLoginRequest;
 import com.ott.onde.user.entity.RefreshToken;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.repository.RefreshTokenRepository;
 import com.ott.onde.user.repository.UserRepository;
 import com.ott.onde.util.CookieUtil;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +16,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.ui.Model;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -40,10 +37,12 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final OAuthAuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
+    private final TokenProvider tokenProvider;
 
     public static final String REFRESH_TOKEN_COOKIE_NAME = "refresh_token";
     public static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
     public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
+//    public static final String REDIRECT_PATH = "";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
@@ -94,11 +93,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         oAuthLoginRequest.setIndex(foundUser.getUserId());
 
         // 회원 계정으로 토큰 생성 후 쿼리 파라미터로 보냄
-        String refreshToken = JwtTokenUtil.createToken(foundAccount,key, REFRESH_TOKEN_DURATION);
+        String refreshToken = tokenProvider.createToken(foundUser.getUserId(), String.valueOf(REFRESH_TOKEN_DURATION));
         saveRefreshToken(foundUser.getUserId(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
-        String accessToken = JwtTokenUtil.createToken(foundAccount,key, ACCESS_TOKEN_DURATION);
+        String accessToken = tokenProvider.createToken(foundUser.getUserId(), String.valueOf(ACCESS_TOKEN_DURATION));
         targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
                 .queryParam("token", accessToken)
                 .build().toUriString();
@@ -126,4 +125,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         super.clearAuthenticationAttributes(request);
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
+
+//    private String getTargetUrl(String token){
+//        return UriComponentsBuilder.fromUriString(REDIRECT_PATH)
+//                .queryParam("token", token)
+//                .build()
+//                .toUriString();
+//    }
 }

@@ -1,11 +1,15 @@
 package com.ott.onde.user.entity;
 
+import com.ott.onde.genre.entity.PreferGenre;
 import com.ott.onde.post.entity.Post;
 import com.ott.onde.user.dto.UserJoinRequest;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -13,9 +17,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @AllArgsConstructor
 @Table(name = "user")
-public class User {
+public class User implements UserDetails {
     @Id
-    @Column(name = "user_idx", updatable = false)
+    @Column(name = "user_idx")
     private Long userId;
     private String id;
 
@@ -34,6 +38,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PreferGenre> preferGenres = new ArrayList<>();
 
     public User(String id, String password, int age, String gender, String nickname, String nationality, String email, String provider) {
         this.id = id;
@@ -46,20 +52,37 @@ public class User {
         this.provider = provider;
     }
 
-    public User(UserJoinRequest userJoinRequest) {
-        this.id = userJoinRequest.getNickname();
-        this.password = userJoinRequest.getPassword();
-        this.age = userJoinRequest.getAge();
-        this.gender = userJoinRequest.getGender();
-        this.nickname = userJoinRequest.getNickname();
-        this.nationality = userJoinRequest.getNationality();
-        this.email = userJoinRequest.getEmail();
-        this.provider = userJoinRequest.getProvider();
+    public User(Long userId) {
+        this.userId = userId;
     }
 
-    public User update(String nickname, String email) {
-        this.nickname = nickname;
-        this.email = email;
-        return this;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.id;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
     }
 }

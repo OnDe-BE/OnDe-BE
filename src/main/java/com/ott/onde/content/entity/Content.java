@@ -1,13 +1,14 @@
 package com.ott.onde.content.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.ott.onde.genre.entity.ContentGenre;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/*@Getter
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 @Entity
 @NoArgsConstructor
 @Table(name = "content")
@@ -30,4 +31,7 @@ public class Content {
 
     @Column(name = "released")
     private String released;
-}*/
+
+    @OneToMany(mappedBy = "content")
+    private List<ContentGenre> contentGenres = new ArrayList<>();
+}

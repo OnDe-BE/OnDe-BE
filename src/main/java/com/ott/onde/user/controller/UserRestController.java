@@ -1,17 +1,21 @@
 package com.ott.onde.user.controller;
 
-import com.ott.onde.security.UserDetailsImpl;
+import com.ott.onde.genre.entity.PreferGenre;
 import com.ott.onde.user.dto.*;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
 import com.ott.onde.util.Response;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -23,15 +27,16 @@ public class UserRestController {
     /* 자체 회원가입 */
     @PostMapping("/join")
     public Response<UserJoinResponse> join(@RequestBody UserJoinRequest userJoinRequest) {
-        User join = userService.join(userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword())));
+        User join = userService.join(userJoinRequest);
+
         UserJoinResponse userJoinResponse = new UserJoinResponse(join);
         return Response.success(userJoinResponse);
     }
 
     /* 로그인 */
     @PostMapping("/login")
-    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
-        String token = userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword());
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
+        String token = String.valueOf(userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword(), response));
 
         return Response.success(new UserLoginResponse(token));
     }
@@ -43,7 +48,6 @@ public class UserRestController {
 //        log.info(userInfoResponse.getUserId());
 //        return Response.success(userInfoResponse);
 //    }
-
     /* 아이디 찾기 */
     @PostMapping("/findId")
     public Response<UserFindIdResponse> findId(@RequestBody UserFindIdRequest userFindIdRequest){

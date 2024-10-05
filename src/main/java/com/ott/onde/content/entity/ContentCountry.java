@@ -1,10 +1,14 @@
 package com.ott.onde.content.entity;
 
+import com.ott.onde.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/*@Getter
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
 @Entity
 @NoArgsConstructor
 @Table(name = "content_country")
@@ -13,11 +17,11 @@ public class ContentCountry {
     @Column(name = "content_country_id")
     private long contentCountryId;
 
-    @OneToMany
-    @JoinColumn(name = "content_id")
-    private ContentCountry contentCountry;
+    @ManyToOne
+    @JoinColumn(name = "content_id", nullable = false)
+    private Content content;
 
-    @OneToMany
-    @JoinColumn (name = "country_id")
+    @ManyToOne
+    @JoinColumn(name = "country_id", nullable = false)
     private InnerCountry innerCountry;
-}*/
+}

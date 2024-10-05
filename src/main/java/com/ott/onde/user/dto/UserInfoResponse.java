@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserInfoResponse {
     private String userId;
-    private String password;
     private int age;
     private String gender;
     private String nickname;

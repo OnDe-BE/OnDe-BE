@@ -1,5 +1,7 @@
 package com.ott.onde.config;
 
+import com.ott.onde.config.jwt.JwtTokenFilter;
+import com.ott.onde.config.jwt.TokenProvider;
 import com.ott.onde.config.oauth.OAuthFailureHandler;
 import com.ott.onde.config.oauth.OAuthSuccessHandler;
 import com.ott.onde.user.service.CustomOAuth2UserService;
@@ -8,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,6 +19,7 @@ import org.springframework.security.config.annotation.web.configurers.HeadersCon
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
@@ -23,6 +28,7 @@ public class WebOAuthSecurityConfig {
     private final OAuthSuccessHandler oauthSuccessHandler;
     private final OAuthFailureHandler oauthFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final TokenProvider tokenProvider;
 
     @Bean
     public WebSecurityCustomizer configure() {
@@ -48,6 +54,7 @@ public class WebOAuthSecurityConfig {
                                 HeadersConfigurer.FrameOptionsConfig::disable).disable())
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/token", "/users/**", "/").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
@@ -70,5 +77,10 @@ public class WebOAuthSecurityConfig {
                         )
                 );
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }

@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:mariadb://localhost:3307/ond?useUnicode=yes&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Seoul
+    username: root
+    password: suoh33004
   jpa:
     hibernate:
       ddl-auto: none
@@ -15,10 +15,10 @@ spring:
         format_sql: true
     show-sql: true
   mail:
-    host: ${MAIL_HOST}
-    port: ${MAIL_PORT}
-    username: ${MAIL_USERNAME}
-    password: ${MAIL_PASSWORD}
+    host: smtp.gmail.com
+    port: 587
+    username: dbstndh12@gmail.com
+    password: rmeeltkjxcumummf
     properties:
       mail:
         smtp:
@@ -35,21 +35,22 @@ spring:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
-            redirect-uri: ${GOOGLE_REDIRECT_URI}
+            client-id: 18031684661-rtgks3voshmflhnmlgqq1q3snr65p6as.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: http://localhost:8080/login/oauth2/code/google
             scope : email, profile
           naver :
-            client-id: ${NAVER_CLIENT_ID}
-            client-secret: ${NAVER_CLIENT_SECRET}
-            redirect-uri: ${NAVER_REDIRECT_URI}
+            client-id: ZMlbMqrvoMWIeBMz4M9P
+            client-secret: JVK3klMp8R
+            redirect-uri: http://localhost:8080/login/oauth2/code/naver
             authorization-grant-type: authorization_code
             scope : email, profile
           kakao :
-            client-id: ${KAKAO_CLIENT_ID}
-            redirect-uri: ${KAKAO_REDIRECT_URI}
+            client-id: 176b91cb87af202a69d8a1925af24dcd
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
-            client-name: ${KAKAO_CLIENT_NAME}
+            client-authentication-method: POST
+            client-name: Kakao
             scope:
               - profile_nickname
               - profile_image
@@ -76,4 +77,4 @@ jwt:
 app:
   oauth2:
     authorizedRedirectUri:
-      https://ondemandia.com/oauth2/redirect
+      http://localhost:8080/oauth2/redirect

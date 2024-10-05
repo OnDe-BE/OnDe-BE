@@ -1,13 +1,13 @@
 package com.ott.onde.genre.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.ott.onde.content.entity.ContentCountry;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-/*
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -19,5 +19,7 @@ public class InnerGenre {
 
     @Column(name = "genre", nullable = false)
     private String genre;
+
+    @OneToMany(mappedBy = "innerGenre")
+    private List<ContentGenre> contentGenres = new ArrayList<>();
 }
-*/
