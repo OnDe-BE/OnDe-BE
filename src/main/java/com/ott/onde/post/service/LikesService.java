@@ -42,12 +42,12 @@ public class LikesService {
         if (found.isEmpty()) {  // 좋아요 누른적 없음
             Likes likes = Likes.of(post.get(), user);
             likesRepository.save(likes);
-            post.get().setLike_count(post.get().getLike_count() + 1); // like_count 증가
+            post.get().setLikeCount(post.get().getLikeCount() + 1); // like_count 증가
 
         } else { // 좋아요 누른 적 있음
             likesRepository.delete(found.get()); // 좋아요 눌렀던 정보를 지운다.
             likesRepository.flush();
-            post.get().setLike_count(post.get().getLike_count() - 1); // like_count 감소
+            post.get().setLikeCount(post.get().getLikeCount() - 1); // like_count 감소
         }
 
         return PostResponseDto.from(post.get());
@@ -70,11 +70,11 @@ public class LikesService {
         if (found.isEmpty()) {  // 좋아요 누른적 없음
             Likes likes = Likes.of(comment.get(), user);
             likesRepository.save(likes);
-            comment.get().setLike_count(comment.get().getLike_count() + 1); //like_count 증가
+            comment.get().setLikeCount(comment.get().getLikeCount() + 1); //like_count 증가
         } else { // 좋아요 누른 적 있음
             likesRepository.delete(found.get()); // 좋아요 눌렀던 정보를 지운다.
             likesRepository.flush();
-            comment.get().setLike_count(comment.get().getLike_count() - 1); //like_count 증가
+            comment.get().setLikeCount(comment.get().getLikeCount() - 1); //like_count 증가
         }
 
         return CommentResponseDto.from(comment.get());

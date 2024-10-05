@@ -11,25 +11,25 @@ import java.util.List;
 public class CommentResponseDto {
 
     private Long commentIdx;
-    private Long user_idx;
-    private Long post_id;
+    private Long userIdx;
+    private Long postId;
     private String contents;
     private String username;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
-    private Integer like_count;
+    private Integer likeCount;
     private List<CommentResponseDto> childCommentList;
 
     @Builder
     private CommentResponseDto(Comment entity) {
         this.commentIdx = entity.getCommentIdx();
-        this.user_idx = entity.getUser().getUserId();
-        this.post_id = entity.getPost().getPost_idx();
+        this.userIdx = entity.getUser().getUserId();
+        this.postId = entity.getPost().getPostIdx();
         this.contents = entity.getContents();
         this.username = entity.getUser().getNickname();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
-        this.like_count = entity.getLike_count();
+        this.likeCount = entity.getLikeCount();
         this.childCommentList = entity.getChildCommentList().stream().map(CommentResponseDto::from).toList();
     }
 

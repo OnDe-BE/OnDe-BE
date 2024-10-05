@@ -6,5 +6,5 @@ import lombok.Getter;
 public class CommentRequestsDto {
     private String contents;
     private String id;
-    private Long parent_id;
+    private Long parentId;
 }

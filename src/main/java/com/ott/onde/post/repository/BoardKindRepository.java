@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface BoardKindRepository extends JpaRepository<BoardKind, Long> {
-    List<BoardKind> findAllByBoardid(Integer boardId);
+    List<BoardKind> findAllByBoardId(Integer boardId);
 }

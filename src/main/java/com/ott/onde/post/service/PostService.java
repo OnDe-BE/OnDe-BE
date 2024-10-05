@@ -25,14 +25,14 @@ public class PostService{
     //게시글 전체 목록 조회
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts(Integer boardId) {
-        BoardKind boardkind = boardKindRepository.findAllByBoardid(boardId).get(0);
-        return postRepository.findAllByBoardkind(boardkind).stream().map(PostResponseDto::new).toList();
+        BoardKind boardKind = boardKindRepository.findAllByBoardId(boardId).get(0);
+        return postRepository.findAllByBoardKind(boardKind).stream().map(PostResponseDto::new).toList();
     }
 
     //게시글 작성
     @Transactional
     public PostResponseDto createPost(PostRequestsDto requestsDto, User user) {
-        BoardKind boardkind = boardKindRepository.findAllByBoardid(requestsDto.getBoardid()).get(0);
+        BoardKind boardkind = boardKindRepository.findAllByBoardId(requestsDto.getBoardId()).get(0);
         Post post = new Post(requestsDto, boardkind, user);
         postRepository.save(post);
         return new PostResponseDto(post);
@@ -49,7 +49,7 @@ public class PostService{
     //게시글 수정
     @Transactional
     public PostResponseDto updatePost(Long postIdx, PostRequestsDto requestsDto, User user) throws Exception {
-        BoardKind boardkind = boardKindRepository.findAllByBoardid(requestsDto.getBoardid()).get(0);
+        BoardKind boardkind = boardKindRepository.findAllByBoardId(requestsDto.getBoardId()).get(0);
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
         );
