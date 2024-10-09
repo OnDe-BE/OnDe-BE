@@ -47,6 +47,9 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         AntPathRequestMatcher.antMatcher("/api/**")
                                 ).permitAll()
+                                .requestMatchers(
+                                        AntPathRequestMatcher.antMatcher("/users/**")
+                                ).permitAll()
                 )
                 .headers(
                         headersConfiguer ->

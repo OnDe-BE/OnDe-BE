@@ -5,9 +5,11 @@ import com.ott.onde.post.entity.Post;
 import com.ott.onde.user.dto.UserJoinRequest;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -34,6 +36,10 @@ public class User implements UserDetails {
 
     @Column(name = "provider")
     private String provider;
+
+    @UpdateTimestamp    // 현재시간 디폴트값
+    @Column(name="createdAt", updatable = false) // insert시 최초 시간만 넣고 시간 수정 안되게
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
