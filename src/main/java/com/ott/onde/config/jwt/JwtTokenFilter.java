@@ -36,7 +36,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
             // 어세스 토큰값이 유효하다면 setAuthentication를 통해
             // security context에 인증 정보저장
             if(tokenProvider.tokenValidation(accessToken)){
-                setAuthentication(String.valueOf(tokenProvider.getUserIdFromToken(accessToken)));
+                setAuthentication(tokenProvider.getUserIdFromToken(accessToken));
             }
             // 어세스 토큰이 만료된 상황 && 리프레시 토큰 또한 존재하는 상황
             else if (refreshToken != null) {
@@ -51,7 +51,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     // 헤더에 어세스 토큰 추가
                     tokenProvider.setHeaderAccessToken(response, newAccessToken);
                     // Security context에 인증 정보 넣기
-                    setAuthentication(String.valueOf(tokenProvider.getUserIdFromToken(newAccessToken)));
+                    setAuthentication(tokenProvider.getUserIdFromToken(newAccessToken));
                 }
                 // 리프레시 토큰이 만료 || 리프레시 토큰이 DB와 비교했을때 똑같지 않다면
                 else {
@@ -65,8 +65,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     // SecurityContext 에 Authentication 객체를 저장합니다.
-    public void setAuthentication(String email) {
-        Authentication authentication = tokenProvider.createAuthentication(email);
+    public void setAuthentication(Long id) {
+        Authentication authentication = tokenProvider.createAuthentication(id);
         // security가 만들어주는 securityContextHolder 그 안에 authentication을 넣어줍니다.
         // security가 securitycontextholder에서 인증 객체를 확인하는데
         // jwtAuthfilter에서 authentication을 넣어주면 UsernamePasswordAuthenticationFilter 내부에서 인증이 된 것을 확인하고 추가적인 작업을 진행하지 않습니다.

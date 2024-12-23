@@ -23,8 +23,8 @@ public class TokenProvider {
     private final UserDetailsServiceImpl userDetailsService;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    private static final long ACCESS_TIME =  60 * 1000L;
-    private static final long REFRESH_TIME =  2 * 60 * 1000L;
+    private static final long ACCESS_TIME =  6000 * 1000L; //100분
+    private static final long REFRESH_TIME =  2 * 6000 * 1000L; //200분
     public static final String ACCESS_TOKEN = "Access_Token";
     public static final String REFRESH_TOKEN = "Refresh_Token";
 
@@ -76,8 +76,8 @@ public class TokenProvider {
     }
 
     // 인증 객체 생성
-    public Authentication createAuthentication(String email) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+    public Authentication createAuthentication(Long userId) {
+        UserDetails userDetails = userDetailsService.loadUserByUserId(userId);
         // spring security 내에서 가지고 있는 객체입니다. (UsernamePasswordAuthenticationToken)
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }

@@ -33,8 +33,8 @@ public class PostController {
 
     //게시글 작성
     @PostMapping("/create")
-    public PostResponseDto createPost(@RequestBody PostRequestsDto requestsDto, @AuthenticationPrincipal User user) {
-        return postService.createPost(requestsDto, user);
+    public PostResponseDto createPost(@RequestBody PostRequestsDto requestsDto) {
+        return postService.createPost(requestsDto);
     }
 
     //게시글 상세조회
