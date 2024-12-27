@@ -6,6 +6,7 @@ import com.ott.onde.user.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -76,6 +77,7 @@ public class TokenProvider {
     }
 
     // 인증 객체 생성
+    @Transactional
     public Authentication createAuthentication(Long userId) {
         UserDetails userDetails = userDetailsService.loadUserByUserId(userId);
         // spring security 내에서 가지고 있는 객체입니다. (UsernamePasswordAuthenticationToken)

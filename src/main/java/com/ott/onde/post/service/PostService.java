@@ -33,18 +33,7 @@ public class PostService{
 
     //게시글 작성
     @Transactional
-    public PostResponseDto createPost(PostRequestsDto requestsDto) {
-        // SecurityContext에서 Authentication 객체 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        // Authentication이 null이거나 인증되지 않은 경우 예외 처리
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new IllegalArgumentException("로그인한 사용자가 없습니다.");
-        }
-
-        // 인증된 사용자 정보 가져오기
-        User user = (User) authentication.getPrincipal();
-
+    public PostResponseDto createPost(PostRequestsDto requestsDto, User user) {
         BoardKind boardKind = boardKindRepository.findAllByBoardId(requestsDto.getBoardId()).get(0);
         Post post = new Post(requestsDto, boardKind, user);
         postRepository.save(post);
@@ -65,7 +54,7 @@ public class PostService{
     public PostResponseDto updatePost(Long postIdx, PostRequestsDto requestsDto, User user) throws Exception {
         BoardKind boardKind = boardKindRepository.findAllByBoardId(requestsDto.getBoardId()).get(0);
         Post post = postRepository.findById(postIdx).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
         if(!user.getUserId().equals(post.getUser().getUserId()))
             throw new Exception("아이디가 일치하지 않습니다.");
@@ -80,7 +69,7 @@ public class PostService{
     @Transactional
     public SuccessResponseDto deletePost(Long postIdx, User user) throws Exception {
         Post post = postRepository.findById(postIdx).orElseThrow(
-                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
 
         if (!user.getUserId().equals(post.getUser().getUserId()))
