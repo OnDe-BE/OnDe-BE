@@ -1,0 +1,58 @@
+package com.ott.onde.user.entity;
+
+import com.ott.onde.genre.entity.PreferGenre;
+import com.ott.onde.post.entity.Post;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Data
+@Entity
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor
+@Table(name = "user")
+public class User {
+    @Id
+    @Column(name = "user_idx")
+    private Long userId;
+    private String id;
+
+    @Column(name = "password")
+    private String password;
+
+    private int age;
+    private String gender;
+    private String nickname;
+    private String nationality;
+    private String email;
+
+    @Column(name = "provider")
+    private String provider;
+
+    @UpdateTimestamp    // 현재시간 디폴트값
+    @Column(name = "createdAt", updatable = false) // insert시 최초 시간만 넣고 시간 수정 안되게
+    private LocalDateTime createdAt;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<PreferGenre> preferGenres = new ArrayList<>();
+
+    public User(String id, String password, int age, String gender, String nickname, String nationality, String email, String provider) {
+        this.id = id;
+        this.password = password;
+        this.age = age;
+        this.gender = gender;
+        this.nickname = nickname;
+        this.nationality = nationality;
+        this.email = email;
+        this.provider = provider;
+    }
+}
+
+

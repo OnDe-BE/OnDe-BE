@@ -1,0 +1,38 @@
+package com.ott.onde.post.dto;
+
+import com.ott.onde.post.entity.Post;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Getter
+@NoArgsConstructor
+public class PostResponseDto {
+
+    private Long postIdx;
+    private Long userIdx;
+    private String title;
+    private String contents;
+    private Integer postViews;
+    private Integer boardId;
+    private Integer likeCount;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAt;
+
+    public PostResponseDto(Post entity) {
+        this.postIdx = entity.getPostIdx();
+        this.userIdx = entity.getUser().getUserId();
+        this.title = entity.getTitle();
+        this.contents = entity.getContents();
+        this.postViews = entity.getPostViews();
+        this.boardId = entity.getBoardKind().getBoardId();
+        this.likeCount = entity.getLikeCount();
+        this.createdAt = entity.getCreatedAt();
+        this.modifiedAt = entity.getModifiedAt();
+    }
+
+    public static PostResponseDto from(Post entity) {
+        return new PostResponseDto(entity);
+    }
+}

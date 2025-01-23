@@ -1,0 +1,103 @@
+package com.ott.onde.post.service;
+
+import com.ott.onde.post.dto.CommentRequestsDto;
+import com.ott.onde.post.dto.CommentResponseDto;
+import com.ott.onde.post.dto.SuccessResponseDto;
+import com.ott.onde.post.entity.Comment;
+import com.ott.onde.post.entity.Post;
+import com.ott.onde.post.repository.CommentRepository;
+import com.ott.onde.post.repository.PostRepository;
+import com.ott.onde.user.entity.User;
+import com.ott.onde.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+
+@RequiredArgsConstructor
+@Service
+public class CommentService {
+
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
+
+    //댓글 작성
+    @Transactional
+    public CommentResponseDto createComment(Long postIdx, CommentRequestsDto requestDto){
+        //선택한 게시글 DB 에서 조회
+        Optional<Post> post = postRepository.findById(postIdx);
+        User user = userRepository.findAllById(requestDto.getId());
+        if (post.isEmpty()) {
+            throw new IllegalArgumentException("게시글이 존재하지 않습니다.");
+        }
+        Long parentId = requestDto.getParentId();
+        Comment comment = new Comment(requestDto, post.get(), user);
+
+        if (parentId == null) {  // parent 가 없다면
+            commentRepository.save(comment);    // 바로 저장
+            return CommentResponseDto.from(comment);
+        }
+
+        // parentComment 가 있다면 parent comment 에 childComment 를 추가
+        Comment parentComment = commentRepository.findById(parentId)
+                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+
+        parentComment.addChildComment(comment); // parentComment 에 childComment 추가
+        commentRepository.save(comment);
+
+        return CommentResponseDto.from(comment);
+
+    }
+
+
+    //댓글 수정
+    @Transactional
+    public CommentResponseDto updateComment(Long commentIdx, CommentRequestsDto requestDto){
+        // 선택한 댓글이 DB에 있는지 확인
+        Optional<Comment> comment = commentRepository.findById(commentIdx);
+        User user = userRepository.findAllById(requestDto.getId());
+        if (comment.isEmpty()) {
+            throw new IllegalArgumentException("댓글이 존재하지 않습니다.");
+        }
+
+        // 댓글의 작성자와 수정하려는 사용자의 정보가 일치하는지 확인
+        // 관리자의 수정 기능은 이후에 추가할 것
+        Optional<Comment> found = commentRepository.findByCommentIdxAndUser(commentIdx, user);
+        if (found.isEmpty()) {
+            throw new IllegalArgumentException("댓글 작성자가 아닙니다.");
+        }
+
+        // 댓글의 작성자와 수정하려는 사용자의 정보가 일치한다면, 댓글 수정
+        comment.get().update(requestDto, user);
+        commentRepository.flush();   // responseDto 에 modifiedAt 업데이트 해주기 위해 saveAndFlush 사용
+
+        return CommentResponseDto.from(comment.get());
+
+    }
+
+
+    //댓글 삭제
+    @Transactional
+    public SuccessResponseDto deleteComment(Long commentIdx, CommentRequestsDto requestDto){
+        // 선택한 댓글이 DB에 있는지 확인
+        Optional<Comment> comment = commentRepository.findById(commentIdx);
+        User user = userRepository.findAllById(requestDto.getId());
+        if (comment.isEmpty()) {
+            throw new IllegalArgumentException("댓글이 존재하지 않습니다.");
+        }
+
+        // 댓글의 작성자와 수정하려는 사용자의 정보가 일치하는지 확인
+        // 관리자의 삭제 기능은 이후에 추가할 것
+        Optional<Comment> found = commentRepository.findByCommentIdxAndUser(commentIdx, user);
+        if (found.isEmpty()) {
+            throw new IllegalArgumentException("댓글 작성자가 아닙니다.");
+        }
+        // 댓글의 작성자와 삭제하려는 사용자의 정보가 일치한다면, 댓글 삭제
+        commentRepository.deleteById(commentIdx);
+        return new SuccessResponseDto(true);
+    }
+
+
+}
