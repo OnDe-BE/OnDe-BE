@@ -88,10 +88,16 @@ public class UserService {
     @Transactional
     public GlobalResDTO login(String userId, String password, HttpServletResponse response) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new HospitalReviewAppException(ErrorCode.USER_NOT_FOUNDED, String.format("%s는 가입된 적이 없습니다.", userId)));
+                .orElseThrow(() -> new HospitalReviewAppException(
+                        ErrorCode.UNAUTHORIZED,  // 이미 HttpStatus.UNAUTHORIZED 포함
+                        "아이디 혹은 패스워드가 틀렸습니다."
+                ));
 
-        if(!encoder.matches(password,user.getPassword())){
-            throw new HospitalReviewAppException(ErrorCode.INVALID_PASSWORD, String.format("userName 또는 password가 잘못 되었습니다."));
+        if (!encoder.matches(password, user.getPassword())) {
+            throw new HospitalReviewAppException(
+                    ErrorCode.UNAUTHORIZED,
+                    "아이디 혹은 패스워드가 틀렸습니다."
+            );
         }
 
         Long id = user.getUserId();
