@@ -10,4 +10,7 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByBoardKind(BoardKind boardKind);
+    List<Post> findAllByBoardKindOrderByPostViewsDesc(BoardKind boardKind);   // 조회순
+    List<Post> findAllByBoardKindOrderByCreatedAtDesc(BoardKind boardKind); // 최신순
+    List<Post> findAllByBoardKindOrderByLikeCountDesc(BoardKind boardKind);   // 좋아요순
 }

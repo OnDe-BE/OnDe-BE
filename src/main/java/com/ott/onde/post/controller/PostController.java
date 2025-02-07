@@ -25,10 +25,13 @@ public class PostController {
 
     private final PostService postService;
 
-    // 게시판 조회
+    // 게시판 조회 및 정렬
     @GetMapping("/{boardId}")
-    public List<PostResponseDto> getPosts(@PathVariable Integer boardId) {
-        return postService.getPosts(boardId);
+    public List<PostResponseDto> getPosts(
+            @PathVariable Integer boardId,
+            @RequestParam(required = false) Integer type // 선택적 파라미터
+    ) {
+        return postService.getPosts(boardId, type);
     }
 
     //게시글 작성

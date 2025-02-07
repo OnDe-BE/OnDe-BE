@@ -24,11 +24,30 @@ public class PostService{
     private final PostRepository postRepository;
     private final BoardKindRepository boardKindRepository;
 
-    //게시글 전체 목록 조회
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getPosts(Integer boardId) {
+    public List<PostResponseDto> getPosts(Integer boardId, Integer type) {
+        // type = 0 : 인기순(조회순), type = 1 : 최신순, type = 2 : 좋아요순
         BoardKind boardKind = boardKindRepository.findAllByBoardId(boardId).get(0);
-        return postRepository.findAllByBoardKind(boardKind).stream().map(PostResponseDto::new).toList();
+
+        List<Post> posts;
+
+        // type이 null일 경우 최신순 정렬
+        if (type == null || type == 1) {
+            posts = postRepository.findAllByBoardKindOrderByCreatedAtDesc(boardKind);
+        } else {
+            switch (type) {
+                case 0:
+                    posts = postRepository.findAllByBoardKindOrderByPostViewsDesc(boardKind);
+                    break;
+                case 2:
+                    posts = postRepository.findAllByBoardKindOrderByLikeCountDesc(boardKind);
+                    break;
+                default:
+                    posts = postRepository.findAllByBoardKindOrderByCreatedAtDesc(boardKind); // 기본값: 최신순 정렬
+            }
+        }
+
+        return posts.stream().map(PostResponseDto::new).toList();
     }
 
     //게시글 작성
@@ -83,4 +102,6 @@ public class PostService{
     public void clear() {
         postRepository.deleteAll();
     }
+
+
 }
