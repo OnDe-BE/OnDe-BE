@@ -1,4 +1,4 @@
-package com.ott.onde.content.dto.util;
+package com.ott.onde.content.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import lombok.Builder;

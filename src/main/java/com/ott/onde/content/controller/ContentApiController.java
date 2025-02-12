@@ -1,8 +1,9 @@
 package com.ott.onde.content.controller;
 
-import com.ott.onde.content.dto.ContentResponse;
+import com.ott.onde.content.dto.request.ContentRequest;
+import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.dto.ContentResult;
-import com.ott.onde.content.dto.PlatformResponse;
+import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.service.ContentCRUDService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class ContentApiController {
 //    컨텐츠 플랫폼 리스트 조회
     @GetMapping("/content/ott")
     public ResponseEntity<Object> findOttByContentId(String contentId){
-        List<PlatformResponse> cl = this.contentCRUDService.findPlatformByContentId(contentId);
+        List< PlatformResponse> cl = this.contentCRUDService.findPlatformByContentId(contentId);
 
         return ResponseEntity.ok().body(cl);
     }
@@ -53,7 +54,7 @@ public class ContentApiController {
                                                             @Param("nowPage") int nowPage,
                                                             @Param("pageCount") int pageCount){
         long bfTime = System.currentTimeMillis();
-        Page<ContentResponse> cl = this.contentCRUDService.findContentsByMultiCategory(order, category, nowPage, pageCount);
+        Page<ContentRequest> cl = this.contentCRUDService.findContentsByMultiCategory(order, category, nowPage, pageCount);
         long afTime = System.currentTimeMillis();
 
         log.info("building DB time : {}, bfTime : {}, afTime : {}, original Time : {}", (afTime - bfTime)/1000, bfTime, afTime, (afTime - bfTime));
@@ -65,7 +66,7 @@ public class ContentApiController {
     @GetMapping("/content/ranking/category")
     public ResponseEntity<Object> findContentsByRanking(@Param("category") String category,
                                                             @Param("nowPage") int nowPage){
-        Page<ContentResponse> cl = this.contentCRUDService.findContentsByMultiCategory("rank", category, nowPage, 20);
+        Page<ContentRequest> cl = this.contentCRUDService.findContentsByMultiCategory("rank", category, nowPage, 20);
 
         return ResponseEntity.ok().body(cl);
     }

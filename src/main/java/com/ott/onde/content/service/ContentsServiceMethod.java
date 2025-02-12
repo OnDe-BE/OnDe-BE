@@ -8,10 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j@Service@RequiredArgsConstructor
 public class ContentsServiceMethod {
@@ -20,21 +17,29 @@ public class ContentsServiceMethod {
     public Map<String, String> sentenceSorting(String sentence){
         List<CategorySort> cs = new ArrayList<>();
 
-        for(String s : sentence.split("\\|")){
-            cs.addAll(this.cateSortRepository.findByWord("%"+s+"%"));
-        }
+        for(String s : sentence.split(" ")){
+            List<CategorySort> str = this.cateSortRepository.findByWord("%"+s+"%");
 
-        List<CategorySort> pfs = cs.stream().filter(x -> x.getCategoryCode().matches("PF")).toList();
-        List<CategorySort> grs = cs.stream().filter(x -> x.getCategoryCode().matches("GR")).toList();
+            cs.addAll(str);
+        }
 
         Map<String, String> result = new HashMap<>();
 
-        if(!pfs.isEmpty()){
-            result.put("platform",String.join("|",pfs.stream().map(CategorySort::getDbWord).toList()));
-        }
+        for(CategorySort c : cs){
 
-        if(!grs.isEmpty()){
-            result.put("genre",String.join("|",grs.stream().map(CategorySort::getDbWord).toList()));
+            if(c.getCategoryCode().contains("PF")){
+                if(!result.containsKey("platform")){
+                    result.put("platform",c.getDbWord());
+                }else{
+                    result.put("platform", result.get("platform") + "|" + c.getDbWord());
+                }
+            }else{
+                if(!result.containsKey("genre")){
+                    result.put("genre",c.getDbWord());
+                }else{
+                    result.put("genre", result.get("genre") + "|" + c.getDbWord());
+                }
+            }
         }
 
         return result;

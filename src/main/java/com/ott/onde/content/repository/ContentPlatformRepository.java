@@ -1,7 +1,7 @@
 package com.ott.onde.content.repository;
 
 
-import com.ott.onde.content.dto.PlatformResponse;
+import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.entity.ContentPlatform;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

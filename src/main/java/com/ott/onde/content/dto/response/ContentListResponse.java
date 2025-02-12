@@ -1,4 +1,4 @@
-package com.ott.onde.content.dto;
+package com.ott.onde.content.dto.response;
 
 public interface ContentListResponse {
     String getContent_id();

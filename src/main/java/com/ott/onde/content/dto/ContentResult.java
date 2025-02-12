@@ -16,14 +16,4 @@ public class ContentResult {
     private String contentImg;
     private List<String> genre;
 
-//    @Builder
-//    public ContentResult(String contentId, String title, String summary, String cType, int age, String contentImg, List<String> genre){
-//        return ContentResult.builder().contentId(contentId)
-//                .title(title)
-//                .summary(summary)
-//                .cType(cType)
-//                .age(age)
-//                .contentImg(contentImg)
-//                .genre(genre).build();
-//    }
 }
