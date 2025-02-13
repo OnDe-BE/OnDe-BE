@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <link href="/css/main.css" rel="stylesheet">
+</head>
+<body>
+    <div>testing file</div>
+    <button id="orderCategory" class="rank">rank</button>
+    <button id="platformBtn">platform</button>
+    <label for="search">검색</label>
+    <input id="search" placeholder="search">
+    <button id="searchBtn">search</button>
+
+    <input id="category" placeholder="category">
+    <input id="nowPage" placeholder="nowPage">
+    <input id="pageCount" placeholder="pageCount">
+    <button id="cateSearch">search</button>
+
+    <input id="sentence" placeholder="sentence">
+    <button id="sentenceSearch">search</button>
+
+    <button id="todayPick">today</button>
+
+
+
+    <section>
+        <main>
+            <div id="content_constructor">
+
+            </div>
+            <div id="more_button">
+            </div>
+
+            <div id="content_sentence">
+
+            </div>
+        </main>
+    </section>
+</body>
+<script>
+    $(function (){
+        $("#contentListBtn").click(function (){
+            $.ajax({
+                data : {category : "netflix"},
+                method : 'get',
+                url : '/contents/platform',
+                success : function (res) {
+                    console.log(res);
+                }, error : function(e) {
+                    console.error(e);
+                }
+            })
+        });
+        $("#contentListBtn2").click(function (){
+            $.ajax({
+                data : {category : "tving"},
+                method : 'post',
+                url : '/contents/platform',
+                success : function (res) {
+                    console.log(res);
+                }, error : function(e) {
+                    console.error(e);
+                }
+            })
+        });
+
+        $("#contentBtn").click(function(){
+            $.ajax({
+                data : {contentId : 'C_1004500'},
+                method : 'post',
+                url : '/contents/content',
+                success : function (res) {
+                    console.log(res);
+                }, error : function(e) {
+                    console.error(e);
+                }
+            })
+        });
+
+        $("#platformBtn").click(function (){
+            $.ajax({
+                data : {contentId : "C_1004780",},
+                method : 'get',
+                url : '/contents/content/ott',
+                success : function (res) {
+                    console.log(res);
+                }, error : function(e) {
+                    console.error(e);
+                }
+            })
+        });
+
+        $("#searchBtn").click(function (){
+            console.log($("#search").val());
+            $.ajax({
+                data : {search : $("#search").val(),},
+                method : 'get',
+                url : "/contents/search",
+                success : function (res){
+                    console.log(res);
+                }, error : function (e) {
+                    console.error(e);
+                }
+            })
+        });
+
+        $("#cateSearch").click(function (){
+            const nowPage = $("#nowPage");
+            $("#content_constructor").empty();
+            $("#more_button").show();
+            console.log($("#orderCategory").text());
+            $.ajax({
+                data : {
+                    order : $("#orderCategory").text(),
+                    category : $("#category").val(),
+                    nowPage : nowPage.val(),
+                    pageCount : $("#pageCount").val(),
+                },method : 'get',
+                url : "/contents/content/category",
+                success : function(res){
+                    const content = res.content;
+                    console.log(res);
+                    for(let i=0; i<content.length/5; i++){
+                        const containerNum = "row-container-" + i.toString();
+                        $("#content_constructor").append(`<div class="row-container" id=${containerNum}></div>`);
+
+                        for(let j=i*5; j<(i+1) * 5; j++){
+                            if(j<content.length){
+                                $("#"+containerNum).append(`<div class="contents"><input type="hidden" class="contentId" value=${content[j].content_id}><div class="image"></div><div class='title'>${content[j].title}</div></div>`);
+                            }
+
+                        }
+                    }
+
+                    nowPage.val(Number(nowPage.val()) + 1);
+
+                    $(".contents").click(function (){
+                        $.ajax({
+                            data : {contentId : $(this).find(".contentId").val(),},
+                            method : 'get',
+                            url : '/contents/content',
+                            success : function (res) {
+                                console.log(res);
+                            }, error : function(e) {
+                                console.error(e);
+                            }
+                        })
+                    })
+
+                }, error : function (e){
+                    console.error(e);
+                }
+            })
+        })
+
+        $("#sentenceSearch").click(function (){
+
+            $("#content_sentence").empty();
+            $.ajax({
+                data : {
+                    sentence : $("#sentence").val(),
+                },method : 'get',
+                url : "/contents/content/sentence",
+                success : function(res){
+                    console.log(res);
+                    for(let i=0; i<res.data.length/5; i++){
+                        const containerNum = "row-container-" + i.toString();
+                        $("#content_sentence").append(`<div class="row-container" id=${containerNum}></div>`);
+
+                        for(let j=i*5; j<(i+1) * 5; j++){
+                            if(j<res.data.length){
+                                $("#"+containerNum).append(`<div class="contents"><input type="hidden" class="contentId" value=${res.data[j].content_id}><div class="image"></div><div class='title'>${res.data[j].title}</div></div>`);
+                            }
+                        }
+                    }
+                }, error : function (e){
+                    console.error(e);
+                }
+            })
+        })
+
+        $("#more_button").click(function (){
+            $.ajax({
+                data : {
+                    order : $("#orderCategory").text(),
+                    category : $("#category").val(),
+                    nowPage : $("#nowPage").val(),
+                    pageCount : $("#pageCount").val(),
+                },method : 'get',
+                url : "/contents/content/category",
+                success : function(res){
+                    const nowPage = $("#nowPage").val();
+                    console.log(res);
+                    for(let i=0; i<res.data.length/5; i++){
+
+                        console.log(nowPage);
+                        const containerNum = "row-container-" + (i + Number(nowPage) * 10).toString();
+                        $("#content_constructor").append(`<div class="row-container" id=${containerNum}></div>`);
+
+                        for(let j=i*5; j<(i+1) * 5; j++){
+                            if(j<res.data.length){
+                                $("#"+containerNum).append(`<div class="contents"><div class="image"></div><div class='title'>${res.data[j].title}</div></div>`);
+                            }
+
+                        }
+
+                    }
+
+                    if(res.data.length === 0){
+                        $("#more_button").hide();
+                        return;
+                    }
+                    $("#nowPage").val(Number(nowPage) + 1);
+
+                }, error : function (e){
+                    console.error(e);
+                }
+            })
+        })
+
+        $("#orderCategory").click(function (){
+            if($(this).hasClass("rank")){
+                $(this).removeClass("rank").addClass("new").text("new");
+            }else{
+                $(this).removeClass("new").addClass("rank").text("rank");
+            }
+        })
+
+        $("#todayPick").click(function (){
+            $.ajax({
+                method : 'post',
+                url : "/contents/content/todayPick",
+                success : function(res) {
+                    console.log(res);
+                },error : function (err) {
+                    console.log(err);
+                }
+            });
+        })
+    })
+</script>
+</html>

@@ -58,6 +58,6 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     @Query(value = "select * from content as c " +
             "right outer join content_genre as cg on c.content_id = cg.content_id " +
             "left outer join inner_genre as ig on cg.genre_id = ig.genre_id " +
-            "group by title order by c.hit_point limit 20", nativeQuery = true)
+            "order by c.hit_point limit 20", nativeQuery = true)
     List<ContentResponse> findContentsByTodayPick();
 }

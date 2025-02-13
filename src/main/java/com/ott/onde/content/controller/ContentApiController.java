@@ -87,11 +87,7 @@ public class ContentApiController {
 //    메인 배너 오늘의 추천 방식
     @PostMapping("/content/todayPick")
     public ResponseEntity<Object> findContentsByTodayPick(){
-        long bfTime = System.currentTimeMillis();
-        List<ContentResponse> res = this.contentCRUDService.findContentsByTodayPick();
-        long afTime = System.currentTimeMillis();
-
-        log.info("building DB time : {}, bfTime : {}, afTime : {}, original Time : {}", (afTime - bfTime)/1000, bfTime, afTime, (afTime - bfTime));
+        List<ContentRequest> res = this.contentCRUDService.findContentsByTodayPick();
 
         return ResponseEntity.ok().body(res);
     }

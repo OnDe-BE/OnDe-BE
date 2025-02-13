@@ -6,6 +6,7 @@ import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.dto.ContentResult;
 import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.entity.Content;
+import com.ott.onde.content.repository.ContentGenreRepository;
 import com.ott.onde.content.repository.ContentPlatformRepository;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.repository.ContentViewRepository;
@@ -25,11 +26,8 @@ public class ContentCRUDService {
     private final ContentRepository contentRepository;
     private final ContentPlatformRepository contentPlatformRepository;
     private final ContentViewRepository contentViewRepository;
+    private final ContentGenreRepository contentGenreRepository;
     private final ContentsServiceMethod contentsServiceMethod;
-
-    public Content findByContent(String contentId){
-        return this.contentRepository.findByContentId(contentId);
-    }
 
     public List<ContentResponse> findContentByTitle(String contentTitle){
         String titleExp = contentTitle.replace(" ", "|");
@@ -79,7 +77,8 @@ public class ContentCRUDService {
                         .title(x.getTitle())
                         .age(x.getAge())
                         .contentImg(x.getContent_img())
-                        .rank(rank.getAndIncrement()).build();
+                        .rank(rank.getAndIncrement())
+                        .genres(this.findGenresByContentId(x.getContent_id())).build();
             });
         }
 
@@ -88,7 +87,8 @@ public class ContentCRUDService {
                     .title(x.getTitle())
                     .age(x.getAge())
                     .contentImg(x.getContent_img())
-                    .rank(rank.getAndIncrement()).build();
+                    .rank(rank.getAndIncrement())
+                    .genres(this.findGenresByContentId(x.getContent_id())).build();
         });
     }
 
@@ -107,7 +107,20 @@ public class ContentCRUDService {
         }
     }
 
-    public List<ContentResponse> findContentsByTodayPick(){
-        return this.contentRepository.findContentsByTodayPick();
+    public List<ContentRequest> findContentsByTodayPick(){
+        List<ContentResponse> cr = this.contentRepository.findContentsByTodayPick();
+
+        return cr.stream().map(x-> {
+            return ContentRequest.builder().contentId(x.getContent_id())
+                    .title(x.getTitle())
+                    .age(x.getAge())
+                    .contentImg(x.getContent_img())
+                    .genres(this.findGenresByContentId(x.getContent_id()))
+                    .build();
+        }).toList();
+    }
+
+    public List<String> findGenresByContentId(String contentId){
+        return this.contentGenreRepository.findGenreByContentId(contentId);
     }
 }
