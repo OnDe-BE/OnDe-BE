@@ -1,9 +1,8 @@
-package com.ott.onde.genre.repository;
+package com.ott.onde.content.repository;
 
-import com.ott.onde.genre.entity.ContentGenre;
+import com.ott.onde.content.entity.ContentGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface ContentGenreRepository extends JpaRepository<ContentGenre, String> {
+
 }

@@ -1,21 +1,14 @@
 package com.ott.onde.user.controller;
 
-import com.ott.onde.genre.entity.PreferGenre;
 import com.ott.onde.user.dto.*;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
 import com.ott.onde.util.Response;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @Slf4j

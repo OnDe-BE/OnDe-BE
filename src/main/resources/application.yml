@@ -78,6 +78,6 @@ app:
   oauth2:
     authorizedRedirectUri:
       https://ondemandia.com/oauth2/redirect
-logging:
-  level:
-    root: DEBUG  # 전체 로깅 레벨을 DEBUG로 설정
+#logging:
+#  level:
+#    root: DEBUG  # 전체 로깅 레벨을 DEBUG로 설정

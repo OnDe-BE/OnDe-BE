@@ -1,37 +1,27 @@
 package com.ott.onde.content.entity;
 
-import com.ott.onde.genre.entity.ContentGenre;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Getter
 @Entity
 @NoArgsConstructor
-@Table(name = "content")
+@Data
 public class Content {
-    @Id
-    @Column(name = "content_id", updatable = false)
+    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     private String contentId;
 
-    @Column(name = "title")
     private String title;
 
-    @Column(name = "summary")
     private String summary;
 
-    @Column(name = "type")
-    private String type;
+    private String cType;
 
-    @Column(name = "age")
     private String age;
 
-    @Column(name = "released")
     private String released;
 
-    @OneToMany(mappedBy = "content")
-    private List<ContentGenre> contentGenres = new ArrayList<>();
+    @ColumnDefault("0")
+    private Long hitPoint;
 }

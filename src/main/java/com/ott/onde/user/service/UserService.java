@@ -3,9 +3,6 @@ package com.ott.onde.user.service;
 import com.ott.onde.config.jwt.GlobalResDTO;
 import com.ott.onde.config.jwt.JwtTokenDTO;
 import com.ott.onde.config.jwt.TokenProvider;
-import com.ott.onde.genre.entity.InnerGenre;
-import com.ott.onde.genre.entity.PreferGenre;
-import com.ott.onde.genre.repository.InnerGenreRepository;
 import com.ott.onde.user.dto.UserInfoResponse;
 import com.ott.onde.user.dto.UserJoinRequest;
 import com.ott.onde.user.entity.RefreshToken;
@@ -15,7 +12,6 @@ import com.ott.onde.user.repository.UserRepository;
 import com.ott.onde.util.ErrorCode;
 import com.ott.onde.util.HospitalReviewAppException;
 import com.ott.onde.util.RandomTag;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,9 +22,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -38,7 +31,7 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final InnerGenreRepository innerGenreRepository;
+//    private final InnerGenreRepository innerGenreRepository;
     private final BCryptPasswordEncoder encoder;
     private final TokenProvider tokenProvider;
 
@@ -56,17 +49,17 @@ public class UserService {
         User user = userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword()));
         user.setUserId(RandomTag.createHashtag());
 
-        List<PreferGenre> preferGenres = new ArrayList<>();
-        for (Long genreId : userJoinRequest.getPreferGenreList()) {
-            InnerGenre genre = innerGenreRepository.findById(String.valueOf(genreId)).orElseThrow(
-                    () -> new IllegalArgumentException("Invalid genre ID: " + genreId)
-            );
-            PreferGenre preferGenre = new PreferGenre();
-            preferGenre.setUser(user);
-            preferGenre.setInnerGenre(genre);
-            preferGenres.add(preferGenre);
-        }
-        user.setPreferGenres(preferGenres);
+//        List<PreferGenre> preferGenres = new ArrayList<>();
+//        for (Long genreId : userJoinRequest.getPreferGenreList()) {
+//            InnerGenre genre = innerGenreRepository.findById(String.valueOf(genreId)).orElseThrow(
+//                    () -> new IllegalArgumentException("Invalid genre ID: " + genreId)
+//            );
+//            PreferGenre preferGenre = new PreferGenre();
+//            preferGenre.setUser(user);
+//            preferGenre.setInnerGenre(genre);
+//            preferGenres.add(preferGenre);
+//        }
+//        user.setPreferGenres(preferGenres);
 
         // User 저장 (Cascade로 PreferGenre도 자동 저장)
         userRepository.save(user);
@@ -74,10 +67,10 @@ public class UserService {
     }
 
     // 회원가입 시 선호 장르 저장
-    @Transactional
-    public void addPreferGenre(PreferGenre preferGenre, Long userId){
-
-    }
+//    @Transactional
+//    public void addPreferGenre(PreferGenre preferGenre, Long userId){
+//
+//    }
 
     /**
      * 로그인

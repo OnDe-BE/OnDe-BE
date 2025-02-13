@@ -1,10 +1,12 @@
 package com.ott.onde.user.entity;
 
-import com.ott.onde.genre.entity.PreferGenre;
+
 import com.ott.onde.post.entity.Post;
-import com.ott.onde.user.dto.UserJoinRequest;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,8 +46,8 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<PreferGenre> preferGenres = new ArrayList<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//    private List<PreferGenre> preferGenres = new ArrayList<>();
 
     public User(String id, String password, int age, String gender, String nickname, String nationality, String email, String provider) {
         this.id = id;
