@@ -5,6 +5,7 @@ import com.ott.onde.config.jwt.JwtTokenDTO;
 import com.ott.onde.config.jwt.TokenProvider;
 import com.ott.onde.user.dto.UserInfoResponse;
 import com.ott.onde.user.dto.UserJoinRequest;
+import com.ott.onde.user.dto.UserLoginResponse;
 import com.ott.onde.user.entity.RefreshToken;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.repository.RefreshTokenRepository;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -93,26 +95,32 @@ public class UserService {
             );
         }
 
-        Long id = user.getUserId();
-        JwtTokenDTO jwtTokenDTO = tokenProvider.createAllToken(id);
+        // JWT 토큰 생성
+        Long userIdLong = user.getUserId();
+        JwtTokenDTO jwtTokenDTO = tokenProvider.createAllToken(userIdLong);
 
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserId(user.getUserId());
+        // RefreshToken 처리
+        refreshTokenRepository.findByUserId(userIdLong)
+                .ifPresentOrElse(
+                        existingToken -> refreshTokenRepository.save(existingToken.update(jwtTokenDTO.getRefreshToken())),
+                        () -> refreshTokenRepository.save(new RefreshToken(userIdLong, jwtTokenDTO.getRefreshToken()))
+                );
 
-        if(refreshToken.isPresent()) {
-            refreshTokenRepository.save(refreshToken.get().update(jwtTokenDTO.getRefreshToken()));
-        }else {
-            RefreshToken newToken = new RefreshToken(id, jwtTokenDTO.getRefreshToken());
-            refreshTokenRepository.save(newToken);
-        }
+        // LoginResponseDTO 생성 (Access Token과 Refresh Token 포함)
+        UserLoginResponse loginResponseDTO = new UserLoginResponse(
+                jwtTokenDTO.getAccessToken(),
+                jwtTokenDTO.getRefreshToken()
+        );
 
-        setHeader(response, jwtTokenDTO);
+        // GlobalResDTO 생성
+        GlobalResDTO responseDTO = new GlobalResDTO(
+                "Success Login", // 성공 메시지
+                HttpStatus.OK.value(), // 상태 코드
+                loginResponseDTO // data로 loginResponseDTO 포함
+        );
 
-        return new GlobalResDTO("Success Login", HttpStatus.OK.value());
-    }
+        return responseDTO;
 
-    private void setHeader(HttpServletResponse response, JwtTokenDTO jwtTokenDTO) {
-        response.addHeader(tokenProvider.ACCESS_TOKEN, jwtTokenDTO.getAccessToken());
-        response.addHeader(tokenProvider.REFRESH_TOKEN, jwtTokenDTO.getRefreshToken());
     }
 
     @Transactional(readOnly = true)

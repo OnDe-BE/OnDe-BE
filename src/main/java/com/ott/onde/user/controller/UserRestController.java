@@ -1,5 +1,6 @@
 package com.ott.onde.user.controller;
 
+import com.ott.onde.config.jwt.GlobalResDTO;
 import com.ott.onde.user.dto.*;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
@@ -29,9 +30,14 @@ public class UserRestController {
     /* 로그인 */
     @PostMapping("/login")
     public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
-        String token = String.valueOf(userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword(), response));
+        // UserService에서 login 메소드 호출
+        GlobalResDTO globalResDTO = userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword(), response);
 
-        return Response.success(new UserLoginResponse(token));
+        // GlobalResDTO에서 data 부분만 꺼내서 UserLoginResponse로 래핑
+        UserLoginResponse userLoginResponse = (UserLoginResponse) globalResDTO.getData();
+
+        // Response.success로 성공 응답 반환
+        return Response.success(userLoginResponse);
     }
 
     /* 프로필 값 가져오기 */
