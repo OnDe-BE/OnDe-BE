@@ -18,7 +18,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -113,14 +115,18 @@ public class UserService {
                 jwtTokenDTO.getRefreshToken()
         );
 
+
         // 로그인 후 Refresh Token을 HttpOnly 쿠키로 저장
-        Cookie refreshTokenCookie = new Cookie("refreshToken", jwtTokenDTO.getRefreshToken());
-        refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 못 하도록 설정
-        refreshTokenCookie.setSecure(true);   // HTTPS에서만 접근 가능하도록 설정
-        refreshTokenCookie.setPath("/");      // 전체 도메인에서 접근 가능
-        refreshTokenCookie.setMaxAge(60 * 60 * 24 * 7); // 7일 동안 유효
-        refreshTokenCookie.setDomain(".ondemandia.com");  // .을 앞에 붙여서 최상위 도메인으로 설정
-        response.addCookie(refreshTokenCookie); // 쿠키를 응답에 추가
+        ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", jwtTokenDTO.getRefreshToken())
+                .httpOnly(true) // JavaScript에서 접근 못 하도록 설정
+                .secure(true)   // HTTPS에서만 접근 가능하도록 설정
+                .path("/")      // 전체 도메인에서 접근 가능
+                .maxAge(60 * 60 * 24 * 7) // 7일 동안 유효
+                .domain(".ondemandia.com")  // 최상위 도메인 설정
+                .build();
+
+        // 쿠키를 응답에 추가
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
 
 
         // GlobalResDTO 생성
