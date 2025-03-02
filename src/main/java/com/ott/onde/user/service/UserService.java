@@ -119,7 +119,9 @@ public class UserService {
         refreshTokenCookie.setSecure(true);   // HTTPS에서만 접근 가능하도록 설정
         refreshTokenCookie.setPath("/");      // 전체 도메인에서 접근 가능
         refreshTokenCookie.setMaxAge(60 * 60 * 24 * 7); // 7일 동안 유효
+        refreshTokenCookie.setDomain(".ondemandia.com");  // .을 앞에 붙여서 최상위 도메인으로 설정
         response.addCookie(refreshTokenCookie); // 쿠키를 응답에 추가
+
 
         // GlobalResDTO 생성
         GlobalResDTO responseDTO = new GlobalResDTO(
