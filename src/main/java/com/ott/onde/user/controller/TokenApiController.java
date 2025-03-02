@@ -22,7 +22,8 @@ public class TokenApiController {
     private final UserService userService;
 
     @PostMapping("/refresh")
-    public ResponseEntity<?> refreshAccessToken(@CookieValue(value = "refresh_token", required = false) String refreshToken) {
+    public ResponseEntity<?> refreshAccessToken(@CookieValue(value = "refreshToken", required = false) String refreshToken) {
+        System.out.println("Refresh token: " + refreshToken);
         if (refreshToken == null || refreshToken.isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token is missing.");
         }

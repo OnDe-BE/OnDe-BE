@@ -13,6 +13,7 @@ import com.ott.onde.user.repository.UserRepository;
 import com.ott.onde.util.ErrorCode;
 import com.ott.onde.util.HospitalReviewAppException;
 import com.ott.onde.util.RandomTag;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -111,6 +112,14 @@ public class UserService {
                 jwtTokenDTO.getAccessToken(),
                 jwtTokenDTO.getRefreshToken()
         );
+
+        // 로그인 후 Refresh Token을 HttpOnly 쿠키로 저장
+        Cookie refreshTokenCookie = new Cookie("refreshToken", jwtTokenDTO.getRefreshToken());
+        refreshTokenCookie.setHttpOnly(true); // JavaScript에서 접근 못 하도록 설정
+        refreshTokenCookie.setSecure(true);   // HTTPS에서만 접근 가능하도록 설정
+        refreshTokenCookie.setPath("/");      // 전체 도메인에서 접근 가능
+        refreshTokenCookie.setMaxAge(60 * 60 * 24 * 7); // 7일 동안 유효
+        response.addCookie(refreshTokenCookie); // 쿠키를 응답에 추가
 
         // GlobalResDTO 생성
         GlobalResDTO responseDTO = new GlobalResDTO(
