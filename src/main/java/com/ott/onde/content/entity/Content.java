@@ -9,7 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 @NoArgsConstructor
 @Data
 public class Content {
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id@GeneratedValue
     private String contentId;
 
     private String title;

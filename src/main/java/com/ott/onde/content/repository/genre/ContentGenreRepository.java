@@ -1,4 +1,4 @@
-package com.ott.onde.content.repository;
+package com.ott.onde.content.repository.genre;
 
 import com.ott.onde.content.entity.ContentGenre;
 import org.springframework.data.jpa.repository.JpaRepository;

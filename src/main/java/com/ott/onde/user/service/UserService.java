@@ -13,7 +13,6 @@ import com.ott.onde.user.repository.UserRepository;
 import com.ott.onde.util.ErrorCode;
 import com.ott.onde.util.HospitalReviewAppException;
 import com.ott.onde.util.RandomTag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,7 +50,7 @@ public class UserService {
     @Transactional
     public User join(UserJoinRequest userJoinRequest){
         User user = userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword()));
-        user.setUserId(RandomTag.createHashtag());
+        user.setUserId(user.getNickname() + "#" + RandomTag.createHashtag());
 
 //        List<PreferGenre> preferGenres = new ArrayList<>();
 //        for (Long genreId : userJoinRequest.getPreferGenreList()) {
@@ -99,7 +97,7 @@ public class UserService {
         }
 
         // JWT 토큰 생성
-        Long userIdLong = user.getUserId();
+        String userIdLong = user.getUserId();
         JwtTokenDTO jwtTokenDTO = tokenProvider.createAllToken(userIdLong);
 
         // RefreshToken 처리

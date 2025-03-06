@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class ContentGenre {
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id@GeneratedValue
     private String contentGenreId;
 
     private String contentId;
 
+    private int genreId;
 }

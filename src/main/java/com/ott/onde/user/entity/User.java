@@ -23,8 +23,8 @@ import java.util.List;
 @Table(name = "user")
 public class User implements UserDetails {
     @Id
-    @Column(name = "user_idx")
-    private Long userId;
+    @Column(name = "user_code")
+    private String userId;
     private String id;
 
     @Column(name = "password")
@@ -60,7 +60,7 @@ public class User implements UserDetails {
         this.provider = provider;
     }
 
-    public User(Long userId) {
+    public User(String userId) {
         this.userId = userId;
     }
 

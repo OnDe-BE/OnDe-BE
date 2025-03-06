@@ -34,17 +34,17 @@ public class TokenProvider {
         return type.equals("Access") ? request.getHeader(ACCESS_TOKEN) :request.getHeader(REFRESH_TOKEN);
     }
 
-    public JwtTokenDTO createAllToken(long userId) {
+    public JwtTokenDTO createAllToken(String userId) {
         return new JwtTokenDTO(createToken(userId, "Access"), createToken(userId, "Refresh"));
     }
 
-    public String createToken(long userId, String type) {
+    public String createToken(String userId, String type) {
         Date date = new Date();
 
         long time = type.equals("Access") ? ACCESS_TIME : REFRESH_TIME;
 
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
+                .setSubject(userId)
                 .setExpiration(new Date(date.getTime() + time))
                 .setIssuedAt(date)
                 .signWith(SignatureAlgorithm.HS256, properties.getSecretKey())
@@ -78,15 +78,15 @@ public class TokenProvider {
 
     // 인증 객체 생성
     @Transactional
-    public Authentication createAuthentication(Long userId) {
+    public Authentication createAuthentication(String userId) {
         UserDetails userDetails = userDetailsService.loadUserByUserId(userId);
         // spring security 내에서 가지고 있는 객체입니다. (UsernamePasswordAuthenticationToken)
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
 
-    public Long getUserIdFromToken(String token){
-        return Long.valueOf(Jwts.parser().setSigningKey(properties.getSecretKey()).parseClaimsJws(token).getBody().getSubject());
+    public String getUserIdFromToken(String token){
+        return Jwts.parser().setSigningKey(properties.getSecretKey()).parseClaimsJws(token).getBody().getSubject();
     }
 
     // 어세스 토큰 헤더 설정

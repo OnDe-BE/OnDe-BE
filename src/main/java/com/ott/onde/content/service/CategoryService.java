@@ -1,10 +1,13 @@
 package com.ott.onde.content.service;
 
+import com.ott.onde.content.entity.InnerGenre;
 import com.ott.onde.content.repository.CategorySortRepository;
-import com.ott.onde.content.repository.InnerGenreRepository;
+import com.ott.onde.content.repository.genre.InnerGenreRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -16,13 +19,9 @@ public class CategoryService {
     public void insertWordCategory(String word, String dbWord){
         String categoryCode = "";
 
-        Integer exist = this.innerGenreRepository.findGenreByGenre(dbWord);
+        Optional<InnerGenre> genre = this.innerGenreRepository.findGenreByGenre(dbWord);
 
-        if(exist == 1){
-            categoryCode = "GR";
-        }else{
-            categoryCode = "PF";
-        }
+        categoryCode = genre.isPresent() ? "GR" : "PF";
 
         categoryCode = categoryCode+this.categorySortRepository.countByCategoryCode(categoryCode);
 

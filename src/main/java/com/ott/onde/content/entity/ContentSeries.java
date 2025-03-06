@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data@NoArgsConstructor
 public class ContentSeries {
-    @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id@GeneratedValue
     private String innerSeriesId;
 
     private String seriesId;

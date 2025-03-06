@@ -14,7 +14,7 @@ public interface CategorySortRepository extends JpaRepository<CategorySort, Stri
     Integer findExistsByWord(@Param("word") String word);
 
     @Query(value = "SELECT * FROM category_sort WHERE word like :word",nativeQuery = true)
-    List<CategorySort> findByWord(@Param("word")String word);
+    List<CategorySort> findByWord(String word);
 
     @Modifying
     @Transactional

@@ -1,6 +1,5 @@
 package com.ott.onde.config.jwt;
 
-import com.ott.onde.user.dto.UserLoginResponse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

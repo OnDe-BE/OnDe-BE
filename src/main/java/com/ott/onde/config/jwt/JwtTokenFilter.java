@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
                     // 리프레시 토큰으로 아이디 정보 가져오기
                     String loginId = String.valueOf(tokenProvider.getUserIdFromToken(refreshToken));
                     // 새로운 어세스 토큰 발급
-                    String newAccessToken = tokenProvider.createToken(Long.parseLong(loginId), "Access");
+                    String newAccessToken = tokenProvider.createToken(loginId, "Access");
                     // 헤더에 어세스 토큰 추가
                     tokenProvider.setHeaderAccessToken(response, newAccessToken);
                     // Security context에 인증 정보 넣기
@@ -65,8 +64,8 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     }
 
     // SecurityContext 에 Authentication 객체를 저장합니다.
-    public void setAuthentication(Long id) {
-        Authentication authentication = tokenProvider.createAuthentication(id);
+    public void setAuthentication(String userId) {
+        Authentication authentication = tokenProvider.createAuthentication(userId);
         // security가 만들어주는 securityContextHolder 그 안에 authentication을 넣어줍니다.
         // security가 securitycontextholder에서 인증 객체를 확인하는데
         // jwtAuthfilter에서 authentication을 넣어주면 UsernamePasswordAuthenticationFilter 내부에서 인증이 된 것을 확인하고 추가적인 작업을 진행하지 않습니다.

@@ -1,4 +1,4 @@
-package com.ott.onde.content.repository;
+package com.ott.onde.content.repository.genre;
 
 import com.ott.onde.content.entity.InnerGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface InnerGenreRepository extends JpaRepository<InnerGenre, Long> {
     @Query(value = "select ig.genre from inner_genre as ig, " +
@@ -16,6 +17,6 @@ public interface InnerGenreRepository extends JpaRepository<InnerGenre, Long> {
     @Query(value = "select genre from inner_genre",nativeQuery = true)
     List<String> findAllGenre();
 
-    @Query(value = "SELECT EXISTS (select * from inner_genre where genre = :genre)", nativeQuery = true)
-    Integer findGenreByGenre(@Param("genre")String genre);
+    @Query(value = "select * from inner_genre where genre = :genre", nativeQuery = true)
+    Optional<InnerGenre> findGenreByGenre(@Param("genre")String genre);
 }
