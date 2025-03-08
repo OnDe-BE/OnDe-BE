@@ -56,7 +56,7 @@ public class WebOAuthSecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtTokenFilter(tokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/token", "/users/**", "/","/board/**","/contents/**","/contents").permitAll()
+                        auth.requestMatchers("/api/token", "/users/**", "/","/board/**","/contents/**").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/**").authenticated()
                                 .anyRequest().authenticated()
                 )
