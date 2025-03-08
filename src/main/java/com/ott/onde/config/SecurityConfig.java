@@ -50,6 +50,10 @@ public class SecurityConfig {
                                 .requestMatchers(
                                         AntPathRequestMatcher.antMatcher("/users/**")
                                 ).permitAll()
+                                .requestMatchers(
+                                        AntPathRequestMatcher.antMatcher("/contents/**")
+                                ).permitAll()
+                                       
                 )
                 .headers(
                         headersConfiguer ->
