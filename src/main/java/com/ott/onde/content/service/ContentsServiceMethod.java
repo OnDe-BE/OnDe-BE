@@ -36,6 +36,8 @@ public class ContentsServiceMethod {
     public List<CategorySort> sentenceDivideType(String sentence){
         List<CategorySort> cs = new ArrayList<>();
 
+
+
         for(String s : sentence.split(" ")){
             List<CategorySort> str = this.cateSortRepository.findByWord("%"+s+"%");
 

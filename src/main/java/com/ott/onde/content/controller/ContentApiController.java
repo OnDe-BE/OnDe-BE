@@ -1,13 +1,12 @@
 package com.ott.onde.content.controller;
 
 
-import com.ott.onde.content.dto.request.FilterRequest;
-import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.dto.ContentResult;
+import com.ott.onde.content.dto.request.ContentRequest;
+import com.ott.onde.content.dto.request.FilterRequest;
 import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.service.crud.ContentDetailService;
 import com.ott.onde.content.service.crud.ContentSimpleService;
-import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.service.util.UserPreferContent;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
@@ -32,6 +31,7 @@ public class ContentApiController {
     private final UserPreferContent userPreferContent;
     private final UserService userService;
     private final ContentDetailService contentDetailService;
+
 //    컨텐츠 상세 조회
     @GetMapping("/content")
     public ResponseEntity<Object> findContentByContentId(String contentId){
@@ -102,7 +102,7 @@ public class ContentApiController {
     @PostMapping("/recommend")
     public ResponseEntity<Object> findContentsByRecommend(@AuthenticationPrincipal User user){
         user = this.userService.findUser("20250220");
-    //        List<String> prefers = this.userPreferContent.genreSorting(userPreferContent.preferSentenceSorting(user),userPreferContent.preferGenreSorting(user));
+//            List<String> prefers = this.userPreferContent.genreSorting(userPreferContent.preferSentenceSorting(user),userPreferContent.preferGenreSorting(user));
         Page<ContentRequest> prefers = this.userPreferContent.recommendedContent(user);
 
         return ResponseEntity.ok().body(prefers);
@@ -112,7 +112,6 @@ public class ContentApiController {
     public ResponseEntity<Object> findContentsByFilter(@RequestParam(name = "filterRequest", required = false) FilterRequest filterRequest,
                                                        @Param("nowPage") int nowPage,
                                                        @Param("pageCount") int pageCount){
-
         Page<ContentRequest> contents = this.contentDetailService.findFilteredContents(filterRequest, nowPage, pageCount);
 
         return ResponseEntity.ok().body(contents);

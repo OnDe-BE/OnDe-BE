@@ -1,4 +1,4 @@
-package com.ott.onde.content.service.serviceImpl;
+package com.ott.onde.content.service.crud.crudImpl;
 
 import com.ott.onde.content.dto.ContentResult;
 import com.ott.onde.content.dto.request.ContentRequest;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ContentSimpleServiceImpl {
 //    제목에 대한 조회
-    public List<ContentResponse> findContentByTitle(String contentTitle);
+    public Page<ContentRequest> findContentByTitle(String contentTitle);
 //    콘텐츠 상세정보 조회
     public ContentResult findContentDetails(String contentId);
 //    플랫폼 조회

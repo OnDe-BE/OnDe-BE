@@ -5,7 +5,7 @@ import com.ott.onde.content.dto.request.FilterRequest;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.service.ContentsServiceMethod;
-import com.ott.onde.content.service.serviceImpl.ContentDetailServiceImpl;
+import com.ott.onde.content.service.crud.crudImpl.ContentDetailServiceImpl;
 import com.ott.onde.content.service.util.FilterMethod;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,3 +61,6 @@ public class ContentDetailService implements ContentDetailServiceImpl {
         return this.contentsServiceMethod.pageResponseToRequest(page, pageCount * nowPage + 1);
     }
 }
+
+// 두근 -> 심장소리 -> 공포/스릴러/반전 두근두근 -> 심장소리 -> 공포/로맨스/반전
+// 뜨겁다 -> 가슴이 뛰는 -> 액션/학원/청춘/로

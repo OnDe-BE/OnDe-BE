@@ -1,12 +1,8 @@
-package com.ott.onde.content.service.serviceImpl;
+package com.ott.onde.content.service.crud.crudImpl;
 
 import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.request.FilterRequest;
-import com.ott.onde.content.dto.response.ContentResponse;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
-import java.util.Map;
 
 public interface ContentDetailServiceImpl {
 //  장르에 따른 조회
