@@ -170,7 +170,7 @@ public class UserService {
      * @param id
      * @return
      */
-    public UserInfoResponse getInfo(Long id) {
+    public UserInfoResponse getInfo(String id) {
         UserInfoResponse userInfoResponse = new UserInfoResponse();
         Optional<User> user = userRepository.findById(id);
         userInfoResponse.setUserId(user.get().getId());
