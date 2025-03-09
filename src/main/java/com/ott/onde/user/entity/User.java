@@ -23,6 +23,7 @@ import java.util.List;
 @Table(name = "user")
 public class User implements UserDetails {
     @Id
+    @Column(name = "user_code")
     private String userCode;
     private String id;
 
