@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long> {
-    Optional<RefreshToken> findByUserId(String userId);
+    Optional<RefreshToken> findByUserCode(String userId);
     Optional<RefreshToken> findByRefreshToken(String refreshToken);
 
     /* userid에 해당하는 refresh_token 맟 access 토큰 삭제 */

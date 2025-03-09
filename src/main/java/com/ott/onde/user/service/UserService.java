@@ -101,7 +101,7 @@ public class UserService {
         JwtTokenDTO jwtTokenDTO = tokenProvider.createAllToken(userIdLong);
 
         // RefreshToken 처리
-        refreshTokenRepository.findByUserId(userIdLong)
+        refreshTokenRepository.findByUserCode(userIdLong)
                 .ifPresentOrElse(
                         existingToken -> refreshTokenRepository.save(existingToken.update(jwtTokenDTO.getRefreshToken())),
                         () -> refreshTokenRepository.save(new RefreshToken(userIdLong, jwtTokenDTO.getRefreshToken()))

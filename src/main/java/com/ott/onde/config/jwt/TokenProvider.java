@@ -71,7 +71,7 @@ public class TokenProvider {
         if(!tokenValidation(token)) return false;
 
         // DB에 저장한 토큰 비교
-        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserId(getUserIdFromToken(token));
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUserCode(getUserIdFromToken(token));
 
         return refreshToken.isPresent() && token.equals(refreshToken.get().getRefreshToken());
     }

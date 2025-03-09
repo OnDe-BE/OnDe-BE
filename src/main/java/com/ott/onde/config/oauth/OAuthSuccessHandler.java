@@ -90,7 +90,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         OAuthLoginRequest oAuthLoginRequest = new OAuthLoginRequest();
         oAuthLoginRequest.setUsername(realName);
         oAuthLoginRequest.setId(foundUser.getId());
-        oAuthLoginRequest.setUserId(foundUser.getUserCode());
+        oAuthLoginRequest.setUserCode(foundUser.getUserCode());
 
         // 회원 계정으로 토큰 생성 후 쿼리 파라미터로 보냄
         String refreshToken = tokenProvider.createToken(foundUser.getUserCode(), String.valueOf(REFRESH_TOKEN_DURATION));
@@ -106,10 +106,10 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         response.sendRedirect("");
     }
 
-    private void saveRefreshToken(String userId, String newRefreshToken) {
-        RefreshToken refreshToken = refreshTokenRepository.findByUserId(userId)
+    private void saveRefreshToken(String userCode, String newRefreshToken) {
+        RefreshToken refreshToken = refreshTokenRepository.findByUserCode(userCode)
                 .map(entity -> entity.update(newRefreshToken))
-                .orElse(new RefreshToken(userId, newRefreshToken));
+                .orElse(new RefreshToken(userCode, newRefreshToken));
 
         refreshTokenRepository.save(refreshToken);
     }
