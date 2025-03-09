@@ -12,10 +12,9 @@ public class CategorySort {
     @Column(name = "category_code")
     private String categoryCode;
 
-    @Column
     private String word;
 
-    @Column
+    @Column(name = "db_word")
     private String dbWord;
 
 }
