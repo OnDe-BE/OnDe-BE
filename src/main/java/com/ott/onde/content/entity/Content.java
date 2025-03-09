@@ -10,12 +10,14 @@ import org.hibernate.annotations.ColumnDefault;
 @Data
 public class Content {
     @Id@GeneratedValue
+    @Column(name = "content_id")
     private String contentId;
 
     private String title;
 
     private String summary;
 
+    @Column(name = "c_type")
     private String cType;
 
     private String age;
@@ -23,5 +25,6 @@ public class Content {
     private String released;
 
     @ColumnDefault("0")
+    @Column(name = "hit_point")
     private Long hitPoint;
 }

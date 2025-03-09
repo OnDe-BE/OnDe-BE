@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity@NoArgsConstructor@Data
 public class CategorySort {
     @Id
+    @Column(name = "category_code")
     private String categoryCode;
 
     @Column

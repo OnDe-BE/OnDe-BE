@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 public class PreferSentence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prefer_sentence_id")
     private Long PreferSentenceId;
 
+    @Column(name = "prefer_sentence")
     private String preferSentence;
 
     @ManyToOne(cascade = CascadeType.ALL)

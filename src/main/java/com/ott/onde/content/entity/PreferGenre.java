@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 public class PreferGenre {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "prefer_genre_id")
     private Long PreferGenreId;
 
     private String genre;

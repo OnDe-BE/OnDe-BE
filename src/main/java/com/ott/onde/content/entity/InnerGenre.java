@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InnerGenre {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "genre_id")
     private int genreId;
 
     private String genre;
