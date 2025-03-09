@@ -11,7 +11,7 @@ import java.util.List;
 public class CommentResponseDto {
 
     private Long commentIdx;
-    private Long userIdx;
+    private String userCode;
     private Long postId;
     private String contents;
     private String username;
@@ -23,7 +23,7 @@ public class CommentResponseDto {
     @Builder
     private CommentResponseDto(Comment entity) {
         this.commentIdx = entity.getCommentIdx();
-        this.userIdx = entity.getUser().getUserId();
+        this.userCode = entity.getUser().getUserCode();
         this.postId = entity.getPost().getPostIdx();
         this.contents = entity.getContents();
         this.username = entity.getUser().getNickname();
