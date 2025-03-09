@@ -29,7 +29,7 @@ public class ContentSimpleService implements ContentSimpleServiceImpl {
     @Override
     public Page<ContentRequest> findContentByTitle(String contentTitle){
         String titleExp = contentTitle.replace(" ", "|");
-        PageRequest pageRequest = PageRequest.of(1, 20);
+        PageRequest pageRequest = PageRequest.of(0, 20);
 
         Optional<Page<ContentResponse>> contents = this.contentRepository.findByTitle(pageRequest, titleExp);
 

@@ -58,10 +58,10 @@ public class ContentApiController {
 
 //    콘텐츠 검색에 대한 문장/장르에 대한 조회
     @PostMapping("/category")
-    public ResponseEntity<Object> findContentsByCategory(@Param("order") String order,
+    public ResponseEntity<Object> findContentsByCategory(@RequestParam(name = "order", required = false, defaultValue = "인기순") String order,
                                                             @Param("category") String category,
                                                             @Param("nowPage") int nowPage,
-                                                            @Param("pageCount") int pageCount){
+                                                            @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
         long bfTime = System.currentTimeMillis();
         Page<ContentRequest> cl = this.contentDetailService.findSearchContentsByMultiCategory(order, category, nowPage, pageCount);
         long afTime = System.currentTimeMillis();
@@ -82,10 +82,10 @@ public class ContentApiController {
 
 //  컨텐츠 문장/필터에 대한 검색
     @PostMapping("/sentence")
-    public ResponseEntity<Object> findContentsBySentence(@Param("order") String order,
+    public ResponseEntity<Object> findContentsBySentence(@RequestParam(name = "order", required = false, defaultValue = "인기순") String order,
                                                          @Param("sentence") String sentence,
                                                          @Param("nowPage") int nowPage,
-                                                         @Param("pageCount") int pageCount){
+                                                         @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
         Page<ContentRequest> res = this.contentDetailService.findSearchContentsByMultiCategory(order,sentence,nowPage,pageCount);
 
         return ResponseEntity.ok().body(res);
