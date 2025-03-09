@@ -140,7 +140,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public User findById(String userId) {
-        return userRepository.findByUserId(userId)
+        return userRepository.findByUserCode(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
     }
 
