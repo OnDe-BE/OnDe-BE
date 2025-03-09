@@ -60,7 +60,7 @@ public class UserRestController {
     /* 회원정보 조회 */
     @GetMapping("/profile")
     public Response<UserInfoResponse> getUserInfo(@RequestBody UserInfoRequest userInfoRequest){
-        Long userId = userInfoRequest.getId();
+        String userId = userInfoRequest.getId();
         UserInfoResponse userInfoResponse = userService.getInfo(userId);
         return Response.success(userInfoResponse);
     }
