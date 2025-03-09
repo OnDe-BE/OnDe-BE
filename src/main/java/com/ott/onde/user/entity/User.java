@@ -60,8 +60,8 @@ public class User implements UserDetails {
         this.provider = provider;
     }
 
-    public User(String userId) {
-        this.userId = userId;
+    public User(String userCode) {
+        this.userCode = userCode;
     }
 
     @Override
