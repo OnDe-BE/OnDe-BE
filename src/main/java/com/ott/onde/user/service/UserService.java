@@ -121,6 +121,7 @@ public class UserService {
                 .path("/")      // 전체 도메인에서 접근 가능
                 .maxAge(60 * 60 * 24 * 7) // 7일 동안 유효
                 .domain(".ondemandia.com")  // 최상위 도메인 설정
+                .sameSite("None")
                 .build();
 
         // 쿠키를 응답에 추가
