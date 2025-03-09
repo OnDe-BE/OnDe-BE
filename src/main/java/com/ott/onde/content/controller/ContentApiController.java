@@ -99,14 +99,14 @@ public class ContentApiController {
         return ResponseEntity.ok().body(res);
     }
 
-    @PostMapping("/recommend")
-    public ResponseEntity<Object> findContentsByRecommend(@AuthenticationPrincipal User user){
-        user = this.userService.findUser("20250220");
+    // @PostMapping("/recommend")
+    // public ResponseEntity<Object> findContentsByRecommend(@AuthenticationPrincipal User user){
+        // user = this.userService.findUser("20250220");
 //            List<String> prefers = this.userPreferContent.genreSorting(userPreferContent.preferSentenceSorting(user),userPreferContent.preferGenreSorting(user));
-        Page<ContentRequest> prefers = this.userPreferContent.recommendedContent(user);
+    //     Page<ContentRequest> prefers = this.userPreferContent.recommendedContent(user);
 
-        return ResponseEntity.ok().body(prefers);
-    }
+    //     return ResponseEntity.ok().body(prefers);
+    // }
 
     @PostMapping("/filter")
     public ResponseEntity<Object> findContentsByFilter(@RequestParam(name = "filterRequest", required = false) FilterRequest filterRequest,
