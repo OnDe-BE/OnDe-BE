@@ -113,7 +113,6 @@ public class UserService {
                 jwtTokenDTO.getRefreshToken()
         );
 
-
         // 로그인 후 Refresh Token을 HttpOnly 쿠키로 저장
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", jwtTokenDTO.getRefreshToken())
                 .httpOnly(false) // JavaScript에서 접근 못 하도록 설정
@@ -125,7 +124,7 @@ public class UserService {
                 .build();
 
         // 쿠키를 응답에 추가
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()+";HttpOnly");
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
 
         // GlobalResDTO 생성
         GlobalResDTO responseDTO = new GlobalResDTO(

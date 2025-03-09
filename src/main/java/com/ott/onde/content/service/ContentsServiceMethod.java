@@ -58,11 +58,11 @@ public class ContentsServiceMethod {
     }
 
     public PageRequest pagingRequestMethod(String orderCategory, int nowPage, int pageCount){
-        orderCategory = orderCategory == null ? "rank" : orderCategory;
+        orderCategory = orderCategory == null ? "인기순" : orderCategory;
 
         Sort sort = switch (orderCategory) {
-            case "rank" -> Sort.by(Sort.Direction.DESC, "hit_point");
-            case "new" -> Sort.by(Sort.Direction.DESC, "released");
+            case "인기순" -> Sort.by(Sort.Direction.DESC, "hit_point");
+            case "최신순" -> Sort.by(Sort.Direction.DESC, "released");
             default -> Sort.by(Sort.Direction.DESC, "title");
         };
 
