@@ -50,7 +50,7 @@ public class UserService {
     @Transactional
     public User join(UserJoinRequest userJoinRequest){
         User user = userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword()));
-        user.setUserId(user.getNickname() + "#" + RandomTag.createHashtag());
+        user.setUserCode(user.getNickname() + "#" + RandomTag.createHashtag());
 
 //        List<PreferGenre> preferGenres = new ArrayList<>();
 //        for (Long genreId : userJoinRequest.getPreferGenreList()) {
@@ -97,7 +97,7 @@ public class UserService {
         }
 
         // JWT 토큰 생성
-        String userIdLong = user.getUserId();
+        String userIdLong = user.getUserCode();
         JwtTokenDTO jwtTokenDTO = tokenProvider.createAllToken(userIdLong);
 
         // RefreshToken 처리

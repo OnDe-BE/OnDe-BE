@@ -39,7 +39,7 @@ public class TokenApiController {
         User user = userService.findById(userId);
 
         // 새로운 access_token 생성
-        String newAccessToken = tokenProvider.createToken(user.getUserId(), String.valueOf(Duration.ofHours(1)));
+        String newAccessToken = tokenProvider.createToken(user.getUserCode(), String.valueOf(Duration.ofHours(1)));
 
         // 새로운 access_token을 반환
         return ResponseEntity.ok(Map.of("accessToken", newAccessToken));

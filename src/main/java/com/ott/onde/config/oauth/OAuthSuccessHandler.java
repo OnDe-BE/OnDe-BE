@@ -90,14 +90,14 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         OAuthLoginRequest oAuthLoginRequest = new OAuthLoginRequest();
         oAuthLoginRequest.setUsername(realName);
         oAuthLoginRequest.setId(foundUser.getId());
-        oAuthLoginRequest.setUserId(foundUser.getUserId());
+        oAuthLoginRequest.setUserId(foundUser.getUserCode());
 
         // 회원 계정으로 토큰 생성 후 쿼리 파라미터로 보냄
-        String refreshToken = tokenProvider.createToken(foundUser.getUserId(), String.valueOf(REFRESH_TOKEN_DURATION));
-        saveRefreshToken(foundUser.getUserId(), refreshToken);
+        String refreshToken = tokenProvider.createToken(foundUser.getUserCode(), String.valueOf(REFRESH_TOKEN_DURATION));
+        saveRefreshToken(foundUser.getUserCode(), refreshToken);
         addRefreshTokenToCookie(request, response, refreshToken);
 
-        String accessToken = tokenProvider.createToken(foundUser.getUserId(), String.valueOf(ACCESS_TOKEN_DURATION));
+        String accessToken = tokenProvider.createToken(foundUser.getUserCode(), String.valueOf(ACCESS_TOKEN_DURATION));
         targetUrl = UriComponentsBuilder.fromUriString(redirectUri)
                 .queryParam("token", accessToken)
                 .build().toUriString();

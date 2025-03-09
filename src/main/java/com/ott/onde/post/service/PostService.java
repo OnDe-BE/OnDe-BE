@@ -8,10 +8,7 @@ import com.ott.onde.post.entity.Post;
 import com.ott.onde.post.repository.BoardKindRepository;
 import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.user.entity.User;
-import com.ott.onde.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,16 +32,11 @@ public class PostService{
         if (type == null || type == 1) {
             posts = postRepository.findAllByBoardKindOrderByCreatedAtDesc(boardKind);
         } else {
-            switch (type) {
-                case 0:
-                    posts = postRepository.findAllByBoardKindOrderByPostViewsDesc(boardKind);
-                    break;
-                case 2:
-                    posts = postRepository.findAllByBoardKindOrderByLikeCountDesc(boardKind);
-                    break;
-                default:
-                    posts = postRepository.findAllByBoardKindOrderByCreatedAtDesc(boardKind); // 기본값: 최신순 정렬
-            }
+            posts = switch (type) {
+                case 0 -> postRepository.findAllByBoardKindOrderByPostViewsDesc(boardKind);
+                case 2 -> postRepository.findAllByBoardKindOrderByLikeCountDesc(boardKind);
+                default -> postRepository.findAllByBoardKindOrderByCreatedAtDesc(boardKind); // 기본값: 최신순 정렬
+            };
         }
 
         return posts.stream().map(PostResponseDto::new).toList();
@@ -75,7 +67,7 @@ public class PostService{
         Post post = postRepository.findById(postIdx).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
-        if(!user.getUserId().equals(post.getUser().getUserId()))
+        if(!user.getUserCode().equals(post.getUser().getUserCode()))
             throw new Exception("아이디가 일치하지 않습니다.");
 
         post.update(requestsDto, boardKind, user);
@@ -91,7 +83,7 @@ public class PostService{
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
         );
 
-        if (!user.getUserId().equals(post.getUser().getUserId()))
+        if (!user.getUserCode().equals(post.getUser().getUserCode()))
             throw new Exception("아이디가 일치하지 않습니다.");
 
         postRepository.deleteById(postIdx);
