@@ -1,10 +1,10 @@
 package com.ott.onde.content.service.crud;
 
-import com.ott.onde.content.dto.ContentResult;
 import com.ott.onde.content.dto.request.ContentRequest;
-import com.ott.onde.content.dto.response.ContentListResponse;
+import com.ott.onde.content.dto.response.ContentDetailResponse;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.dto.response.PlatformResponse;
+import com.ott.onde.content.dto.result.ContentDetailResult;
 import com.ott.onde.content.repository.ContentPlatformRepository;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.repository.ContentViewRepository;
@@ -37,16 +37,15 @@ public class ContentSimpleService implements ContentSimpleServiceImpl {
     }
 
     @Override
-    public ContentResult findContentDetails(String contentId){
-        Optional<List<ContentListResponse>> res = this.contentRepository.findContentsByContentId(contentId);
+    public ContentDetailResult findContentDetails(String contentId){
+        Optional<ContentDetailResponse> res = this.contentRepository.findContentsByContentId(contentId);
 
         if(res.isPresent()){
-            ContentListResponse rs = res.get().get(0);
-            List<String> genres = res.get().stream().map(ContentListResponse::getGenre).toList();
+            ContentDetailResponse rs = res.get();
 
             this.contentViewRepository.updateHitPointContent(rs.getContent_id());
 
-            return ContentResult.builder()
+            return ContentDetailResult.builder()
                     .contentId(rs.getContent_id())
                     .title(rs.getTitle())
                     .summary(rs.getSummary())
@@ -54,9 +53,9 @@ public class ContentSimpleService implements ContentSimpleServiceImpl {
                     .age(rs.getAge())
                     .released(rs.getReleased())
                     .contentImg(rs.getContent_img())
-                    .genre(genres).build();
+                    .genres(this.contentsServiceMethod.findGenresByContentId(rs.getContent_id())).build();
         }else{
-            return ContentResult.builder().build();
+            return ContentDetailResult.builder().build();
         }
     }
 

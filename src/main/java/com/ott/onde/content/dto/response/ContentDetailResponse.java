@@ -1,6 +1,6 @@
 package com.ott.onde.content.dto.response;
 
-public interface ContentListResponse {
+public interface ContentDetailResponse {
     String getContent_id();
     String getTitle();
     String getSummary();
@@ -8,5 +8,4 @@ public interface ContentListResponse {
     String getAge();
     String getReleased();
     String getContent_img();
-    String getGenre();
 }
