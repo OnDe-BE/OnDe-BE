@@ -17,6 +17,8 @@ public class FilterRequest {
     private List<Integer> userAge;
     private String gender;
     private List<String> cType;
+    private int nowPage;
+    private int pageCount;
 
     @Builder
     public FilterRequest(List<String> age, List<Integer> released, List<String> genre, List<Integer> userAge, String gender, List<String> cType) {

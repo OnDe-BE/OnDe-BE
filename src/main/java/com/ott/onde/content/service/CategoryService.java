@@ -17,15 +17,15 @@ public class CategoryService {
     private final InnerGenreRepository innerGenreRepository;
 
     public void insertWordCategory(String word, String dbWord){
-        String categoryCode = "";
+        String category_code = "";
 
         Optional<InnerGenre> genre = this.innerGenreRepository.findGenreByGenre(dbWord);
 
-        categoryCode = genre.isPresent() ? "GR" : "PF";
+        category_code = genre.isPresent() ? "GR" : "PF";
 
-        categoryCode = categoryCode+this.categorySortRepository.countByCategoryCode(categoryCode);
+        category_code = category_code+this.categorySortRepository.countByCategoryCode(category_code);
 
-        this.categorySortRepository.insertWordCategory(categoryCode, word, dbWord);
+        this.categorySortRepository.insertWordCategory(category_code, word, dbWord);
     }
 
     public boolean findWordExist(String word){

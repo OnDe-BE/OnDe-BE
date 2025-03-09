@@ -55,10 +55,10 @@ public class ContentDetailService implements ContentDetailServiceImpl {
 //    }
 
     @Override
-    public Page<ContentRequest> findFilteredContents(FilterRequest filterRequest, int nowPage, int pageCount){
-        Page<ContentResponse> page = this.filterMethod.filteredContentLogic(filterRequest, nowPage, pageCount);
+    public Page<ContentRequest> findFilteredContents(FilterRequest filterRequest){
+        Page<ContentResponse> page = this.filterMethod.filteredContentLogic(filterRequest, filterRequest.getNowPage(), filterRequest.getPageCount());
 
-        return this.contentsServiceMethod.pageResponseToRequest(page, pageCount * nowPage + 1);
+        return this.contentsServiceMethod.pageResponseToRequest(page, filterRequest.getNowPage() * filterRequest.getPageCount() + 1);
     }
 }
 

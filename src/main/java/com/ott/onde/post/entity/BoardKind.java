@@ -1,10 +1,6 @@
 package com.ott.onde.post.entity;
 
-import com.ott.onde.post.entity.Likes;
-import com.ott.onde.post.entity.Post;
-import com.ott.onde.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,7 +15,7 @@ public class BoardKind {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "boardid")
+    @Column(name = "board_id")
     private int boardId;
 
     @Column(name = "board_name", nullable = false)

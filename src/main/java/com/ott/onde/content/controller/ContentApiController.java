@@ -109,10 +109,8 @@ public class ContentApiController {
     // }
 
     @PostMapping("/filter")
-    public ResponseEntity<Object> findContentsByFilter(@RequestParam(name = "filterRequest", required = false) FilterRequest filterRequest,
-                                                       @Param("nowPage") int nowPage,
-                                                       @Param("pageCount") int pageCount){
-        Page<ContentRequest> contents = this.contentDetailService.findFilteredContents(filterRequest, nowPage, pageCount);
+    public ResponseEntity<Object> findContentsByFilter(@RequestParam(name = "filterRequest", required = false) FilterRequest filterRequest){
+        Page<ContentRequest> contents = this.contentDetailService.findFilteredContents(filterRequest);
 
         return ResponseEntity.ok().body(contents);
     }
