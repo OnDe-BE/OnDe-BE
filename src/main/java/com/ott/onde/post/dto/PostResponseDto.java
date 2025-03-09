@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class PostResponseDto {
 
     private Long postIdx;
-    private Long userIdx;
+    private String userCode;
     private String title;
     private String contents;
     private Integer postViews;
@@ -22,7 +22,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post entity) {
         this.postIdx = entity.getPostIdx();
-        this.userIdx = entity.getUser().getUserId();
+        this.userCode = entity.getUser().getUserCode();
         this.title = entity.getTitle();
         this.contents = entity.getContents();
         this.postViews = entity.getPostViews();
