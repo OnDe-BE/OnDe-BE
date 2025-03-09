@@ -35,7 +35,7 @@ public class TokenApiController {
         }
 
         // refresh_token에서 사용자 정보 추출
-        Long userId = tokenProvider.getUserIdFromToken(refreshToken);
+        String userId = tokenProvider.getUserIdFromToken(refreshToken);
         User user = userService.findById(userId);
 
         // 새로운 access_token 생성
