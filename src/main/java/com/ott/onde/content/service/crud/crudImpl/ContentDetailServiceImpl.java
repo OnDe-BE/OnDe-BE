@@ -12,5 +12,5 @@ public interface ContentDetailServiceImpl {
 //  문장에 따른 조회
 //    public Page<ContentResponse> findContentsBySentence(String orderCategory, String sentence, int nowPage, int pageCount);
 //  필터에 따른 조회
-    public Page<ContentRequest> findFilteredContents(FilterRequest filterRequest);
+    public Page<ContentRequest> findFilteredContents(FilterRequest filterRequest,int nowPage, int pageCount);
 }

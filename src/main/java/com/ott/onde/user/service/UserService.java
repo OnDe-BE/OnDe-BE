@@ -125,8 +125,7 @@ public class UserService {
                 .build();
 
         // 쿠키를 응답에 추가
-        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
-
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString()+";HttpOnly");
 
         // GlobalResDTO 생성
         GlobalResDTO responseDTO = new GlobalResDTO(

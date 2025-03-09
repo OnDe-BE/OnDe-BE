@@ -107,8 +107,22 @@ public class ContentApiController {
     // }
 
     @PostMapping("/filter")
-    public ResponseEntity<Object> findContentsByFilter(@RequestParam(name = "filterRequest", required = false) FilterRequest filterRequest){
-        Page<ContentRequest> contents = this.contentDetailService.findFilteredContents(filterRequest);
+    public ResponseEntity<Object> findContentsByFilter(@RequestParam(value = "age", required = false) List<String> age,
+                                                       @RequestParam(value = "released", required = false) List<Integer> released,
+                                                       @RequestParam(value = "genre", required = false) List<String> genre,
+                                                       @RequestParam(value = "userAge", required = false) List<Integer> userAge,
+                                                       @RequestParam(value = "gender", required = false) String gender,
+                                                       @RequestParam(value = "cType", required = false) List<String> cType,
+                                                       @RequestParam(value = "nowPage", required = false) int nowPage,
+                                                       @RequestParam(value = "pageCount", required = false, defaultValue = "50") int pageCount){
+        FilterRequest filterRequest = FilterRequest.builder()
+                .age(age)
+                .released(released)
+                .userAge(userAge)
+                .genre(genre)
+                .gender(gender)
+                .cType(cType).build();
+        Page<ContentRequest> contents = this.contentDetailService.findFilteredContents(filterRequest, nowPage, pageCount);
 
         return ResponseEntity.ok().body(contents);
     }
