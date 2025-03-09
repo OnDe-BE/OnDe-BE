@@ -34,7 +34,7 @@ public class ContentApiController {
 
 //    컨텐츠 상세 조회
     @GetMapping("/content")
-    public ResponseEntity<Object> findContentByContentId(String contentId){
+    public ResponseEntity<Object> findContentByContentId(@Param("contentId") String contentId){
         ContentResult cl = this.contentSimpleService.findContentDetails(contentId);
 
         return ResponseEntity.ok().body(cl);
@@ -42,7 +42,7 @@ public class ContentApiController {
     
 //    컨텐츠 플랫폼 리스트 조회
     @PostMapping("/ott")
-    public ResponseEntity<Object> findOttByContentId(String contentId){
+    public ResponseEntity<Object> findOttByContentId(@Param("contentId") String contentId){
         List< PlatformResponse> cl = this.contentSimpleService.findPlatformByContentId(contentId);
 
         return ResponseEntity.ok().body(cl);
@@ -50,7 +50,7 @@ public class ContentApiController {
 
 //    컨텐츠에 대한 검색
     @PostMapping("/search")
-    public ResponseEntity<Object> findContentsByTitle(String search){
+    public ResponseEntity<Object> findContentsByTitle(@Param("search") String search){
         Page<ContentRequest> cl = this.contentSimpleService.findContentByTitle(search);
 
         return ResponseEntity.ok().body(cl);
