@@ -5,5 +5,4 @@ public interface ContentResponse {
     String getTitle();
     String getAge();
     String getContent_img();
-    String getGenre();
 }

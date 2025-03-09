@@ -1,6 +1,6 @@
 package com.ott.onde.content.repository;
 
-import com.ott.onde.content.dto.response.ContentListResponse;
+import com.ott.onde.content.dto.response.ContentDetailResponse;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.entity.Content;
 import org.springframework.data.domain.Page;
@@ -21,11 +21,10 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     Optional<Page<ContentResponse>> findByTitle(Pageable pageable, @Param("contentTitle") String contentTitle);
 
 //    컨텐츠 상세 조회
-    @Query(value = "select c.content_id, c.title, c.age, c.released, c.summary, c.c_type, ig.genre, cp.content_img " +
-            "from content as c, content_genre as cg, content_platform as cp, inner_genre as ig " +
-            "where c.content_id = cp.content_id and cg.content_id = c.content_id and cg.genre_id = ig.genre_id and " +
-            "c.content_id = :contentId", nativeQuery = true)
-    Optional<List<ContentListResponse>> findContentsByContentId(@Param("contentId")String contentId);
+    @Query(value = "select c.content_id, c.title, c.age, c.released, c.summary, c.c_type, cp.content_img " +
+            "from content as c, content_platform as cp " +
+            "where c.content_id = cp.content_id and c.content_id = :contentId", nativeQuery = true)
+    Optional<ContentDetailResponse> findContentsByContentId(@Param("contentId")String contentId);
 
     @Query(value = "select c.content_id, c.title, c.age from content as c , " +
             "(select content_id, count(*) as relevance from content_genre as cg " +

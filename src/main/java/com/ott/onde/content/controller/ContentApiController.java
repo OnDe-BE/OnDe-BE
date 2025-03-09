@@ -1,14 +1,13 @@
 package com.ott.onde.content.controller;
 
 
-import com.ott.onde.content.dto.ContentResult;
 import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.request.FilterRequest;
 import com.ott.onde.content.dto.response.PlatformResponse;
+import com.ott.onde.content.dto.result.ContentDetailResult;
 import com.ott.onde.content.service.crud.ContentDetailService;
 import com.ott.onde.content.service.crud.ContentSimpleService;
 import com.ott.onde.content.service.util.UserPreferContent;
-import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +33,7 @@ public class ContentApiController {
 //    컨텐츠 상세 조회
     @GetMapping("/content")
     public ResponseEntity<Object> findContentByContentId(@Param("contentId") String contentId){
-        ContentResult cl = this.contentSimpleService.findContentDetails(contentId);
+        ContentDetailResult cl = this.contentSimpleService.findContentDetails(contentId);
 
         return ResponseEntity.ok().body(cl);
     }

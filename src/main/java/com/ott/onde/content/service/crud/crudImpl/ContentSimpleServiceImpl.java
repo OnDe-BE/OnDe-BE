@@ -4,6 +4,7 @@ import com.ott.onde.content.dto.ContentResult;
 import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.dto.response.PlatformResponse;
+import com.ott.onde.content.dto.result.ContentDetailResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -13,7 +14,7 @@ public interface ContentSimpleServiceImpl {
 //    제목에 대한 조회
     public Page<ContentRequest> findContentByTitle(String contentTitle);
 //    콘텐츠 상세정보 조회
-    public ContentResult findContentDetails(String contentId);
+    public ContentDetailResult findContentDetails(String contentId);
 //    플랫폼 조회
     public List<PlatformResponse> findPlatformByContentId(String contentId);
 //    장르에 따른 검색
