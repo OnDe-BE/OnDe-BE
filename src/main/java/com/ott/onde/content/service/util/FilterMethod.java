@@ -1,6 +1,7 @@
 package com.ott.onde.content.service.util;
 
 import com.ott.onde.content.dto.request.FilterRequest;
+import com.ott.onde.content.dto.response.ContentIdResponse;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.service.ContentsServiceMethod;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -25,15 +27,14 @@ public class FilterMethod implements FilterCase {
 
 //        Map<String, Boolean> type = new HashMap<>();
         StringBuilder genres = new StringBuilder(request.getGenre());
+
         for (String str : request.getCType()){
             if(!str.equals("영화")){
                 genres.append("|").append(str);
             }
         }
 
-        log.info(genres.toString());
-
-        List<String> contentId = this.contentRepository.findContentIdByCategory(genres.toString());
+        List<String> contentId = this.contentRepository.findContentIdByCategory(genres.toString()).stream().map(ContentIdResponse::getContentId).toList();
 
         PageRequest pageRequest = this.contentsServiceMethod.pagingRequestMethod("rank", nowPage, pageSize);
 

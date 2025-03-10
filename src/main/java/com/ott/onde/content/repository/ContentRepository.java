@@ -1,6 +1,7 @@
 package com.ott.onde.content.repository;
 
 import com.ott.onde.content.dto.response.ContentDetailResponse;
+import com.ott.onde.content.dto.response.ContentIdResponse;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.entity.Content;
 import org.springframework.data.domain.Page;
@@ -71,12 +72,9 @@ public interface ContentRepository extends JpaRepository<Content, String> {
             "where platform REGEXP :platform and c.content_id IN (:contentId)", nativeQuery = true)
     Page<ContentResponse> findContentByPlatformsAndContentId(Pageable pageable, @Param("platform")String platform, @Param("contentId") List<String> category);
 
-    @Query(value = "select content_id from content as c , " +
-            "(select content_id,genre, count(*) as relevance from content_genre as cg " +
-            "left outer join inner_genre as ig on cg.genre_id = ig.genre_id " +
-            "where ig.genre REGEXP :category group by content_id) as rel " +
-            " order by relevance desc",nativeQuery = true)
-    List<String> findContentIdByCategory(@Param("category")String category);
+    @Query(value = "select content_id, count(*) as relevance from content_genre as cg, inner_genre as ig " +
+            "where cg.genre_id = ig.genre_id and ig.genre REGEXP :category group by content_id order by relevance desc",nativeQuery = true)
+    List<ContentIdResponse> findContentIdByCategory(@Param("category")String category);
 
     @Query(value = "select c.title, c.content_id, c.age from content as c " +
             "where c.content_id IN (:contentId) and c.age regexp :age and released between :start and :end and c.c_type regexp :cType", nativeQuery = true)

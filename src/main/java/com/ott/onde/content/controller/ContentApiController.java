@@ -57,11 +57,11 @@ public class ContentApiController {
 //    콘텐츠 검색에 대한 문장/장르에 대한 조회
     @PostMapping("/category")
     public ResponseEntity<Object> findContentsByCategory(@RequestParam(name = "order", required = false, defaultValue = "인기순") String order,
-                                                            @Param("category") String category,
+                                                            @RequestParam(name = "category") List<String> category,
                                                             @Param("nowPage") int nowPage,
                                                             @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
         long bfTime = System.currentTimeMillis();
-        Page<ContentRequest> cl = this.contentDetailService.findSearchContentsByMultiCategory(order, category, nowPage, pageCount);
+        Page<ContentRequest> cl = this.contentDetailService.findSearchContentsByMultiCategory(order, String.join(" ",category), nowPage, pageCount);
         long afTime = System.currentTimeMillis();
 
         log.info("building DB time : {}, bfTime : {}, afTime : {}, original Time : {}", (afTime - bfTime)/1000, bfTime, afTime, (afTime - bfTime));

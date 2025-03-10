@@ -1,9 +1,6 @@
 package com.ott.onde.content.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,9 +8,12 @@ import lombok.NoArgsConstructor;
 @Data@NoArgsConstructor
 public class ContentSeries {
     @Id@GeneratedValue
+    @Column(name = "inner_series_id")
     private String innerSeriesId;
 
+    @Column(name = "series_id")
     private String seriesId;
 
+    @Column(name = "content_id")
     private String contentId;
 }

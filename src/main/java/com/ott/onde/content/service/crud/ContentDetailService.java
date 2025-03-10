@@ -26,13 +26,15 @@ public class ContentDetailService implements ContentDetailServiceImpl {
     @Override
     public Page<ContentRequest> findSearchContentsByMultiCategory(String orderCategory, String category, int nowPage, int pageCount){
         PageRequest pageRequest = this.contentsServiceMethod.pagingRequestMethod(orderCategory,nowPage,pageCount);
-
+        log.info("prev category : {}", category);
         category = String.join("|",category.split("[ |,]"));
-
+        log.info("after category : {}", category);
         Map<String,String> sr = this.contentsServiceMethod.sentenceSorting(category);
 
         Page<ContentResponse> paging;
-
+        sr.forEach((k,v)->{
+            log.info("key: {} value: {}", k, v);
+        });
         paging = sr.containsKey("platform") ? this.contentRepository.findContentByPlatformsAndContentId(pageRequest, sr.get("platform"),this.contentRepository.findContentsByCategory(sr.get("genre")).stream().map(ContentResponse::getContent_id).toList()) : this.contentRepository.findContentsByCategory(pageRequest,sr.get("genre"));
 
         return this.contentsServiceMethod.pageResponseToRequest(paging,pageCount * nowPage + 1);

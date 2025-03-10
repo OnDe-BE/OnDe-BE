@@ -24,7 +24,7 @@ public class FilterRequest {
     public FilterRequest(List<String> age, List<Integer> released, List<String> genre, List<Integer> userAge, String gender, List<String> cType) {
         this.age = age == null ? "all|7|12|15|19|청불" : String.join("|",age);
         this.released = released == null ? List.of(1900, 2200) : released;
-        this.genre = genre == null ? null : String.join("|",genre);
+        this.genre = genre == null ? "" : String.join("|",genre);
         this.userAge = userAge;
         this.gender = gender;
         this.cType=cType == null ? List.of("movie|series") : cType;

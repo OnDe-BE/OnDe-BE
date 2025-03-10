@@ -36,10 +36,9 @@ public class ContentsServiceMethod {
     public List<CategorySort> sentenceDivideType(String sentence){
         List<CategorySort> cs = new ArrayList<>();
 
-
-
         for(String s : sentence.split(" ")){
-            List<CategorySort> str = this.cateSortRepository.findByWord("%"+s+"%");
+
+            List<CategorySort> str = this.cateSortRepository.findByWord(s);
 
             cs.addAll(str);
         }
@@ -48,6 +47,7 @@ public class ContentsServiceMethod {
     }
 
     public Map<String, String> sentenceToWord(CategorySort c,Map<String, String> result){
+        log.info("sentenceToWord : {}, dbWord : {}", c.getWord(), c.getDbWord());
         if(c.getCategoryCode().contains("PF")){
             result.put("platform", result.containsKey("platform") ? result.get("platform") + "|" + c.getDbWord() : c.getDbWord());
         }else{
@@ -68,10 +68,7 @@ public class ContentsServiceMethod {
 
         return PageRequest.of(nowPage, pageCount, sort);
     }
-
-//    public String sentenceSortingMethod(String sentence){
-//        return String.join("|",sentence.split("[ |,]"));
-//    }
+    
 
     public List<String> findGenresByContentId(String contentId){
         return this.contentGenreRepository.findGenreByContentId(contentId);

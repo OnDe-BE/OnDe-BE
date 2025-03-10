@@ -40,7 +40,7 @@ public class User implements UserDetails {
     private String provider;
 
     @UpdateTimestamp    // 현재시간 디폴트값
-    @Column(name="createdAt", updatable = false) // insert시 최초 시간만 넣고 시간 수정 안되게
+    @Column(name="created_at", updatable = false) // insert시 최초 시간만 넣고 시간 수정 안되게
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "user")
