@@ -7,6 +7,7 @@ import com.ott.onde.user.service.UserService;
 import com.ott.onde.util.Response;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class UserRestController {
 
     /* 로그인 */
    @PostMapping("/login")
-    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
+    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
         // UserService에서 login 메소드 호출
         GlobalResDTO globalResDTO = userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword(), response);
 
@@ -37,9 +38,9 @@ public class UserRestController {
         UserLoginResponse userLoginResponse = (UserLoginResponse) globalResDTO.getData();
 
         log.info("token :{}, {}", userLoginResponse.getAccessToken(),userLoginResponse.getRefreshToken());
-
+        
         // Response.success로 성공 응답 반환
-        return Response.success(userLoginResponse);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, userLoginResponse.getRefreshToken()).body(userLoginResponse);
     }
 
     /* 프로필 값 가져오기 */
