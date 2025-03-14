@@ -31,17 +31,15 @@ public class UserRestController {
 
     /* 로그인 */
    @PostMapping("/login")
-    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
         // UserService에서 login 메소드 호출
         GlobalResDTO globalResDTO = userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword(), response);
 
         // GlobalResDTO에서 data 부분만 꺼내서 UserLoginResponse로 래핑
         UserLoginResponse userLoginResponse = (UserLoginResponse) globalResDTO.getData();
-
-        log.info("token :{}, {}", userLoginResponse.getAccessToken(),userLoginResponse.getRefreshToken());
-        
+    
         // Response.success로 성공 응답 반환
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, userLoginResponse.getRefreshToken()).body(userLoginResponse);
+        return Response.success(userLoginResponse);
     }
 
     /* 프로필 값 가져오기 */
