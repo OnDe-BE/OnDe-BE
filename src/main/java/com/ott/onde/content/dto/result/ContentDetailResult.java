@@ -14,12 +14,13 @@ public class ContentDetailResult {
     private String summary;
     private String cType;
     private String age;
+    private String runtime;
     private String released;
     private String contentImg;
     private List<String> genres;
 
     @Builder
-    public ContentDetailResult(String contentId, String title, String summary, String cType, String age, String released, String contentImg, List<String> genres) {
+    public ContentDetailResult(String contentId, String title, String summary, String cType, String age, String released, String contentImg, List<String> genres, String runtime) {
         this.contentId = contentId;
         this.title = title;
         this.summary = summary;
@@ -28,5 +29,6 @@ public class ContentDetailResult {
         this.released = released;
         this.contentImg = contentImg;
         this.genres = genres;
+        this.runtime = runtime;
     }
 }

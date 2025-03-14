@@ -17,6 +17,9 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     @Query(value = "SELECT * from content where content_id = :contentId", nativeQuery = true)
     Content findByContentId(@Param("contentId") String contentId);
 
+    @Query(value = "select c.content_id, c.title, c.age, cp.content_img  from content as c, content_platform as cp", nativeQuery = true)
+    Page<ContentResponse> findContentsAll(Pageable pageable);
+
     @Query(value = "SELECT c.content_id, c.title, c.age, cp.content_img from content as c, " +
             "content_platform as cp where c.content_id = cp.content_id and title REGEXP :contentTitle", nativeQuery = true)
     Optional<Page<ContentResponse>> findByTitle(Pageable pageable, @Param("contentTitle") String contentTitle);
@@ -59,6 +62,14 @@ public interface ContentRepository extends JpaRepository<Content, String> {
             "right outer join content_platform as cp on c.content_id = cp.content_id " +
             "where released between :startReleased and :endReleased", nativeQuery = true)
     Page<ContentResponse> findContentByReleased(@Param("startReleased")int startReleased, @Param("endReleased")int endReleased, Pageable pageable);
+
+//    type sort
+    @Query(value = "select c.title, c.content_id, c.age, content_img from content as c " +
+            "right outer join content_platform as cp on c.content_id = cp.content_id " +
+            "where c_type = :cType", nativeQuery = true)
+    Page<ContentResponse> findContentsByCType(Pageable pageAble, @Param("cType")String cType);
+
+// -----------------------------------------------------categorySorting Query
 
     @Query(value = "select c.content_id, c.title, c.age from content as c , " +
             "(select content_id, count(*) as relevance from content_genre as cg " +

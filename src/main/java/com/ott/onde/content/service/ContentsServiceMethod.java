@@ -4,7 +4,9 @@ import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.entity.CategorySort;
 import com.ott.onde.content.repository.CategorySortRepository;
+import com.ott.onde.content.repository.ContentMovieRepository;
 import com.ott.onde.content.repository.genre.ContentGenreRepository;
+import com.ott.onde.content.repository.series.InnerSeriesRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ContentsServiceMethod {
     private final CategorySortRepository cateSortRepository;
     private final ContentGenreRepository contentGenreRepository;
+    private final ContentMovieRepository contentMovieRepository;
+    private final InnerSeriesRepository seriesRepository;
 
     public Map<String, String> sentenceSorting(String sentence){
         Map<String, String> result = new HashMap<>();
@@ -47,12 +51,7 @@ public class ContentsServiceMethod {
     }
 
     public Map<String, String> sentenceToWord(CategorySort c,Map<String, String> result){
-        log.info("sentenceToWord : {}, dbWord : {}", c.getWord(), c.getDbWord());
-        if(c.getCategoryCode().contains("PF")){
-            result.put("platform", result.containsKey("platform") ? result.get("platform") + "|" + c.getDbWord() : c.getDbWord());
-        }else{
-            result.put("genre", result.containsKey("genre") ? result.get("genre") + "|" + c.getDbWord() : c.getDbWord());
-        }
+        result.put(c.getCategory(), result.containsKey(c.getCategory()) ? result.get(c.getCategory()) + "|" + c.getDbWord() : c.getDbWord());
 
         return result;
     }
@@ -83,5 +82,9 @@ public class ContentsServiceMethod {
                 .contentImg(x.getContent_img())
                 .rank(rank.getAndIncrement())
                 .genres(this.findGenresByContentId(x.getContent_id())).build());
+    }
+
+    public String runtimeByClassifyType(String contentId, String cType){
+        return cType.equals("movie") ? this.contentMovieRepository.findRuntimeByContentId(contentId) : this.seriesRepository.findRuntimeByContentId(contentId);
     }
 }

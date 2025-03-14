@@ -56,6 +56,7 @@ public class FilterMethod implements FilterCase {
         if(request.getUserAge().size() == 1){
             request.setUserAge(List.of(request.getUserAge().get(0), request.getUserAge().get(0) + 9));
         }
+
         return request;
     }
 

@@ -2,67 +2,15 @@ package com.ott.onde.content.service.crud;
 
 import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.request.FilterRequest;
-import com.ott.onde.content.dto.response.ContentResponse;
-import com.ott.onde.content.repository.ContentRepository;
-import com.ott.onde.content.service.ContentsServiceMethod;
-import com.ott.onde.content.service.crud.crudImpl.ContentDetailServiceImpl;
-import com.ott.onde.content.service.util.FilterMethod;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
-@RequiredArgsConstructor
-@Service
-@Slf4j
-public class ContentDetailService implements ContentDetailServiceImpl {
-    private final ContentRepository contentRepository;
-    private final ContentsServiceMethod contentsServiceMethod;
-    private final FilterMethod filterMethod;
-
-    @Override
-    public Page<ContentRequest> findSearchContentsByMultiCategory(String orderCategory, String category, int nowPage, int pageCount){
-        PageRequest pageRequest = this.contentsServiceMethod.pagingRequestMethod(orderCategory,nowPage,pageCount);
-        log.info("prev category : {}", category);
-        category = String.join("|",category.split("[ |,]"));
-        log.info("after category : {}", category);
-        Map<String,String> sr = this.contentsServiceMethod.sentenceSorting(category);
-
-        Page<ContentResponse> paging;
-        sr.forEach((k,v)->{
-            log.info("key: {} value: {}", k, v);
-        });
-        paging = sr.containsKey("platform") ? this.contentRepository.findContentByPlatformsAndContentId(pageRequest, sr.get("platform"),this.contentRepository.findContentsByCategory(sr.get("genre")).stream().map(ContentResponse::getContent_id).toList()) : this.contentRepository.findContentsByCategory(pageRequest,sr.get("genre"));
-
-        return this.contentsServiceMethod.pageResponseToRequest(paging,pageCount * nowPage + 1);
-    }
-
-//    @Override
-//    public Page<ContentResponse> findContentsBySentence(String orderCategory, String sentence, int nowPage, int pageCount){
-//        PageRequest pageRequest = this.contentsServiceMethod.pagingRequestMethod(orderCategory,nowPage,pageCount);
-//
-////        return ;
-//        sentence = this.contentsServiceMethod.sentenceSortingMethod(sentence);
-//
-//        Map<String, String> cates = this.contentsServiceMethod.sentenceSorting(sentence);
-//
-//        if(cates.size() >1){
-//            return this.contentRepository.findContentsByPlatformAndCategory(pageRequest, cates.get("platform"),cates.get("genre"));
-//        }else{
-//            return this.contentSimpleService.findContentsByGenre(pageRequest,sentence);
-//        }
-//    }
-
-    @Override
-    public Page<ContentRequest> findFilteredContents(FilterRequest filterRequest, int nowPage, int pageCount){
-        Page<ContentResponse> page = this.filterMethod.filteredContentLogic(filterRequest, nowPage, pageCount);
-
-        return this.contentsServiceMethod.pageResponseToRequest(page, nowPage * pageCount + 1);
-    }
+public interface ContentDetailService {
+//  장르에 따른 조회
+    public Page<ContentRequest> findSearchContentsByMultiCategory(String orderCategory, String category, int nowPage, int pageCount);
+//    장르에 따른 조회
+//    public Page<ContentRequest> findTest(String orderCategory, String category, int nowPage, int pageCount);
+//  문장에 따른 조회
+//    public Page<ContentResponse> findContentsBySentence(String orderCategory, String sentence, int nowPage, int pageCount);
+//  필터에 따른 조회
+    public Page<ContentRequest> findFilteredContents(FilterRequest filterRequest,int nowPage, int pageCount);
 }
-
-// 두근 -> 심장소리 -> 공포/스릴러/반전 두근두근 -> 심장소리 -> 공포/로맨스/반전
-// 뜨겁다 -> 가슴이 뛰는 -> 액션/학원/청춘/로

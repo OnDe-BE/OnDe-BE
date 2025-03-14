@@ -5,8 +5,9 @@ import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.request.FilterRequest;
 import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.dto.result.ContentDetailResult;
-import com.ott.onde.content.service.crud.ContentDetailService;
-import com.ott.onde.content.service.crud.ContentSimpleService;
+import com.ott.onde.content.service.serviceImpl.ContentDetailServiceImpl;
+import com.ott.onde.content.service.serviceImpl.ContentSimpleServiceImpl;
+import com.ott.onde.content.service.serviceImpl.UtilServiceImpl;
 import com.ott.onde.content.service.util.UserPreferContent;
 import com.ott.onde.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +26,17 @@ import java.util.List;
 @RequestMapping("/contents")
 @EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
 public class ContentApiController {
-    private final ContentSimpleService contentSimpleService;
+    private final ContentSimpleServiceImpl contentSimpleServiceImpl;
     private final UserPreferContent userPreferContent;
     private final UserService userService;
-    private final ContentDetailService contentDetailService;
+    private final UtilServiceImpl utilService;
+    private final ContentDetailServiceImpl contentDetailServiceImpl;
+//    private final CategoryServi
 
 //    컨텐츠 상세 조회
     @GetMapping("/content")
     public ResponseEntity<Object> findContentByContentId(@Param("contentId") String contentId){
-        ContentDetailResult cl = this.contentSimpleService.findContentDetails(contentId);
+        ContentDetailResult cl = this.contentSimpleServiceImpl.findContentDetails(contentId);
 
         return ResponseEntity.ok().body(cl);
     }
@@ -41,7 +44,7 @@ public class ContentApiController {
 //    컨텐츠 플랫폼 리스트 조회
     @PostMapping("/ott")
     public ResponseEntity<Object> findOttByContentId(@Param("contentId") String contentId){
-        List< PlatformResponse> cl = this.contentSimpleService.findPlatformByContentId(contentId);
+        List< PlatformResponse> cl = this.contentSimpleServiceImpl.findPlatformByContentId(contentId);
 
         return ResponseEntity.ok().body(cl);
     }
@@ -49,7 +52,7 @@ public class ContentApiController {
 //    컨텐츠에 대한 검색
     @PostMapping("/search")
     public ResponseEntity<Object> findContentsByTitle(@Param("search") String search){
-        Page<ContentRequest> cl = this.contentSimpleService.findContentByTitle(search);
+        Page<ContentRequest> cl = this.contentSimpleServiceImpl.findContentByTitle(search);
 
         return ResponseEntity.ok().body(cl);
     }
@@ -61,7 +64,7 @@ public class ContentApiController {
                                                             @Param("nowPage") int nowPage,
                                                             @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
         long bfTime = System.currentTimeMillis();
-        Page<ContentRequest> cl = this.contentDetailService.findSearchContentsByMultiCategory(order, String.join(" ",category), nowPage, pageCount);
+        Page<ContentRequest> cl = this.contentDetailServiceImpl.findSearchContentsByMultiCategory(order, String.join(" ",category), nowPage, pageCount);
         long afTime = System.currentTimeMillis();
 
         log.info("building DB time : {}, bfTime : {}, afTime : {}, original Time : {}", (afTime - bfTime)/1000, bfTime, afTime, (afTime - bfTime));
@@ -72,8 +75,19 @@ public class ContentApiController {
 //    컨텐츠 제목에 대한 검색
     @PostMapping("/ranking/category")
     public ResponseEntity<Object> findContentsByRanking(@Param("category") String category,
-                                                            @Param("nowPage") int nowPage){
-        Page<ContentRequest> cl = this.contentDetailService.findSearchContentsByMultiCategory("rank", category, nowPage, 20);
+                                                        @Param("nowPage") int nowPage,
+                                                        @RequestParam(name = "pageCount", required = false, defaultValue = "20")int pageCount){
+        Page<ContentRequest> cl = this.contentDetailServiceImpl.findSearchContentsByMultiCategory("인기순", category, nowPage, pageCount);
+
+        return ResponseEntity.ok().body(cl);
+    }
+//    컨텐츠 타입에 따른 조회
+    @PostMapping("/type")
+    public ResponseEntity<Object> findContentsByType(@Param("orderBy") String orderBy,
+                                                     @Param("type") String type,
+                                                     @Param("nowPage") int nowPage,
+                                                     @RequestParam(name = "pageSize", defaultValue = "20")int pageSize){
+        Page<ContentRequest> cl = this.contentSimpleServiceImpl.findContentsByCType(orderBy, type, nowPage, pageSize);
 
         return ResponseEntity.ok().body(cl);
     }
@@ -84,7 +98,9 @@ public class ContentApiController {
                                                          @Param("sentence") String sentence,
                                                          @Param("nowPage") int nowPage,
                                                          @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
-        Page<ContentRequest> res = this.contentDetailService.findSearchContentsByMultiCategory(order,sentence,nowPage,pageCount);
+//        this.contentMethod
+
+        Page<ContentRequest> res = this.contentDetailServiceImpl.findSearchContentsByMultiCategory(order,sentence,nowPage,pageCount);
 
         return ResponseEntity.ok().body(res);
     }
@@ -92,7 +108,7 @@ public class ContentApiController {
 //    메인 배너 오늘의 추천 방식
     @PostMapping("/todayPick")
     public ResponseEntity<Object> findContentsByTodayPick(){
-        Page<ContentRequest> res = this.contentSimpleService.findContentsByTodayPick();
+        Page<ContentRequest> res = this.contentSimpleServiceImpl.findContentsByTodayPick();
 
         return ResponseEntity.ok().body(res);
     }
@@ -122,8 +138,15 @@ public class ContentApiController {
                 .genre(genre)
                 .gender(gender)
                 .cType(cType).build();
-        Page<ContentRequest> contents = this.contentDetailService.findFilteredContents(filterRequest, nowPage, pageCount);
+        Page<ContentRequest> contents = this.contentDetailServiceImpl.findFilteredContents(filterRequest, nowPage, pageCount);
 
         return ResponseEntity.ok().body(contents);
+    }
+
+    @PostMapping("/recommendGenres")
+    public ResponseEntity<Object> findRecommendGenres(){
+        List<String> genres = this.utilService.findRecommendGenres();
+
+        return ResponseEntity.ok().body(genres);
     }
 }

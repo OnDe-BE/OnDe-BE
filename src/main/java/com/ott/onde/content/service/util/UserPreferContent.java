@@ -5,7 +5,7 @@ import com.ott.onde.content.entity.PreferSentence;
 import com.ott.onde.content.repository.genre.PreferGenreRepository;
 import com.ott.onde.content.repository.genre.PreferSentenceRepository;
 import com.ott.onde.content.service.ContentsServiceMethod;
-import com.ott.onde.content.service.crud.ContentSimpleService;
+import com.ott.onde.content.service.serviceImpl.ContentSimpleServiceImpl;
 import com.ott.onde.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class UserPreferContent {
     private final PreferGenreRepository preferGenreRepository;
     private final PreferSentenceRepository preferSentenceRepository;
     private final ContentsServiceMethod contentsServiceMethod;
-    private final ContentSimpleService contentSimpleService;
+    private final ContentSimpleServiceImpl contentSimpleServiceImpl;
 
 
 
@@ -47,7 +47,7 @@ public class UserPreferContent {
 
         log.info("preferGenre: {}, preferSentence : {}",genres.get(0), preferSentence.getPreferSentence());
 
-        Page< ContentRequest> page =  this.contentsServiceMethod.pageResponseToRequest(this.contentSimpleService.findContentsByGenre(pageRequest, genres.get(0)),1);
+        Page< ContentRequest> page =  this.contentsServiceMethod.pageResponseToRequest(this.contentSimpleServiceImpl.findContentsByGenre(pageRequest, genres.get(0)),1);
 
         return page;
     }

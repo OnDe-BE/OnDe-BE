@@ -21,7 +21,7 @@ public class CategoryService {
 
         Optional<InnerGenre> genre = this.innerGenreRepository.findGenreByGenre(dbWord);
 
-        category_code = genre.isPresent() ? "GR" : "PF";
+        category_code = genre.isPresent() ? "genre" : "platform";
 
         category_code = category_code+this.categorySortRepository.countByCategoryCode(category_code);
 
