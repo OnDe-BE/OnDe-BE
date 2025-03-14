@@ -29,7 +29,7 @@ public class UserRestController {
 
     /* 로그인 */
     @PostMapping("/login")
-    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
+    public ResponseEntity<UserLoginResponse> login(@RequestBody UserLoginRequest userLoginRequest, HttpServletResponse response) {
         // UserService에서 login 메소드 호출
         GlobalResDTO globalResDTO = userService.login(userLoginRequest.getUserId(), userLoginRequest.getPassword(), response);
 
@@ -37,7 +37,7 @@ public class UserRestController {
         UserLoginResponse userLoginResponse = (UserLoginResponse) globalResDTO.getData();
 
         // Response.success로 성공 응답 반환
-        return Response.success(userLoginResponse);
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE,userLoginResponse.getRefreshToken().toString()).body(userLoginResponse);
     }
 
     /* 프로필 값 가져오기 */
