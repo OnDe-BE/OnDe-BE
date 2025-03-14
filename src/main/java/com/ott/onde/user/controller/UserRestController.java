@@ -36,6 +36,8 @@ public class UserRestController {
         // GlobalResDTO에서 data 부분만 꺼내서 UserLoginResponse로 래핑
         UserLoginResponse userLoginResponse = (UserLoginResponse) globalResDTO.getData();
 
+        log.info("token :{}, {}", userLoginResponse.getAccessToken(),userLoginResponse.getRefreshToken());
+
         // Response.success로 성공 응답 반환
         return Response.success(userLoginResponse);
     }
