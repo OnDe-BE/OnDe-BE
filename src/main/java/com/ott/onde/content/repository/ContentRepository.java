@@ -17,7 +17,8 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     @Query(value = "SELECT * from content where content_id = :contentId", nativeQuery = true)
     Content findByContentId(@Param("contentId") String contentId);
 
-    @Query(value = "select c.content_id, c.title, c.age, cp.content_img  from content as c, content_platform as cp", nativeQuery = true)
+    @Query(value = "select c.content_id, c.title, c.age, cp.content_img  from content as c, content_platform as cp " +
+            "where c.content_id = cp.content_id", nativeQuery = true)
     Page<ContentResponse> findContentsAll(Pageable pageable);
 
     @Query(value = "SELECT c.content_id, c.title, c.age, cp.content_img from content as c, " +

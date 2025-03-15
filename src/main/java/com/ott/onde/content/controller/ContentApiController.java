@@ -60,11 +60,11 @@ public class ContentApiController {
 //    콘텐츠 검색에 대한 문장/장르에 대한 조회
     @PostMapping("/category")
     public ResponseEntity<Object> findContentsByCategory(@RequestParam(name = "order", required = false, defaultValue = "인기순") String order,
-                                                            @RequestParam(name = "category") List<String> category,
+                                                            @RequestParam(name = "category", required = false) List<String> category,
                                                             @Param("nowPage") int nowPage,
                                                             @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
         long bfTime = System.currentTimeMillis();
-        Page<ContentRequest> cl = this.contentDetailServiceImpl.findSearchContentsByMultiCategory(order, String.join(" ",category), nowPage, pageCount);
+        Page<ContentRequest> cl = this.contentDetailServiceImpl.findSearchContentsByMultiCategory(order, category != null ? String.join(" ",category) : null, nowPage, pageCount);
         long afTime = System.currentTimeMillis();
 
         log.info("building DB time : {}, bfTime : {}, afTime : {}, original Time : {}", (afTime - bfTime)/1000, bfTime, afTime, (afTime - bfTime));
@@ -74,10 +74,10 @@ public class ContentApiController {
 
 //    컨텐츠 제목에 대한 검색
     @PostMapping("/ranking/category")
-    public ResponseEntity<Object> findContentsByRanking(@Param("category") String category,
+    public ResponseEntity<Object> findContentsByRanking(@RequestParam(name = "category", required = false) List<String> category,
                                                         @Param("nowPage") int nowPage,
                                                         @RequestParam(name = "pageCount", required = false, defaultValue = "20")int pageCount){
-        Page<ContentRequest> cl = this.contentDetailServiceImpl.findSearchContentsByMultiCategory("인기순", category, nowPage, pageCount);
+        Page<ContentRequest> cl = this.contentDetailServiceImpl.findSearchContentsByMultiCategory("인기순", category != null ? String.join(" ",category) : null, nowPage, pageCount);
 
         return ResponseEntity.ok().body(cl);
     }

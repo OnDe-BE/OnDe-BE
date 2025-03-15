@@ -5,7 +5,6 @@ import com.ott.onde.content.dto.response.ContentDetailResponse;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.dto.result.ContentDetailResult;
-import com.ott.onde.content.repository.ContentMovieRepository;
 import com.ott.onde.content.repository.ContentPlatformRepository;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.repository.ContentViewRepository;
