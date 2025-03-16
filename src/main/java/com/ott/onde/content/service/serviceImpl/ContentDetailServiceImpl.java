@@ -3,6 +3,7 @@ package com.ott.onde.content.service.serviceImpl;
 import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.request.FilterRequest;
 import com.ott.onde.content.dto.response.ContentResponse;
+import com.ott.onde.content.entity.Content;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.service.ContentsServiceMethod;
 import com.ott.onde.content.service.crud.ContentDetailService;
@@ -37,7 +38,11 @@ public class ContentDetailServiceImpl implements ContentDetailService {
 
         Page<ContentResponse> paging;
 
-        paging = sr.containsKey("platform") ? this.contentRepository.findContentByPlatformsAndContentId(pageRequest, sr.get("platform"),this.contentRepository.findContentsByCategory(sr.get("genre")).stream().map(ContentResponse::getContent_id).toList()) : this.contentRepository.findContentsByCategory(pageRequest,sr.get("genre"));
+        if(sr.containsKey("platform")){
+           paging = sr.containsKey("genre") ? this.contentRepository.findContentsByPlatform(pageRequest,sr.get("platform")) : this.contentRepository.findContentByPlatformsAndContentId(pageRequest, sr.get("platform"),this.contentRepository.findContentsByCategory(sr.get("genre")).stream().map(ContentResponse::getContent_id).toList());
+        }else{
+            paging = this.contentRepository.findContentsByCategory(pageRequest,sr.get("genre"));
+        }
 
         return this.contentsServiceMethod.pageResponseToRequest(paging,pageCount * nowPage + 1);
     }
@@ -49,6 +54,3 @@ public class ContentDetailServiceImpl implements ContentDetailService {
         return this.contentsServiceMethod.pageResponseToRequest(page, nowPage * pageCount + 1);
     }
 }
-
-// 두근 -> 심장소리 -> 공포/스릴러/반전 두근두근 -> 심장소리 -> 공포/로맨스/반전
-// 뜨겁다 -> 가슴이 뛰는 -> 액션/학원/청춘/로
