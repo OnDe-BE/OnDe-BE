@@ -20,7 +20,9 @@ public class UserJoinRequest {
     private String nationality;
     private String email;
     private String provider;
-    private List<Long> preferGenreList;
+    private List<String> preferGenreList;
+    private List<String> preferSentenceList;
+
 
     public User toEntity(String password){
         return new User(this.userId, password, this.age, this.gender, this.nickname, this.nationality, this.email, this.provider);

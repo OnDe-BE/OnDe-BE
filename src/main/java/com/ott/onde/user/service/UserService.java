@@ -3,6 +3,12 @@ package com.ott.onde.user.service;
 import com.ott.onde.config.jwt.GlobalResDTO;
 import com.ott.onde.config.jwt.JwtTokenDTO;
 import com.ott.onde.config.jwt.TokenProvider;
+import com.ott.onde.content.entity.InnerGenre;
+import com.ott.onde.content.entity.PreferGenre;
+import com.ott.onde.content.entity.PreferSentence;
+import com.ott.onde.content.repository.genre.InnerGenreRepository;
+import com.ott.onde.content.repository.genre.PreferGenreRepository;
+import com.ott.onde.content.repository.genre.PreferSentenceRepository;
 import com.ott.onde.user.dto.UserInfoResponse;
 import com.ott.onde.user.dto.UserJoinRequest;
 import com.ott.onde.user.dto.UserLoginResponse;
@@ -25,6 +31,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,8 +41,9 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final PreferGenreRepository preferGenreRepository;
     private final RefreshTokenRepository refreshTokenRepository;
-//    private final InnerGenreRepository innerGenreRepository;
+    private final PreferSentenceRepository preferSentenceRepository;
     private final BCryptPasswordEncoder encoder;
     private final TokenProvider tokenProvider;
 
@@ -52,17 +61,30 @@ public class UserService {
         User user = userJoinRequest.toEntity(encoder.encode(userJoinRequest.getPassword()));
         user.setUserCode(user.getNickname() + "#" + RandomTag.createHashtag());
 
-//        List<PreferGenre> preferGenres = new ArrayList<>();
-//        for (Long genreId : userJoinRequest.getPreferGenreList()) {
-//            InnerGenre genre = innerGenreRepository.findById(String.valueOf(genreId)).orElseThrow(
-//                    () -> new IllegalArgumentException("Invalid genre ID: " + genreId)
-//            );
-//            PreferGenre preferGenre = new PreferGenre();
-//            preferGenre.setUser(user);
-//            preferGenre.setInnerGenre(genre);
-//            preferGenres.add(preferGenre);
-//        }
-//        user.setPreferGenres(preferGenres);
+        List<PreferGenre> preferGenres = new ArrayList<>();
+        List<PreferSentence> preferSentences = new ArrayList<>();
+
+        for (String genre : userJoinRequest.getPreferGenreList()) {
+            PreferGenre preferGenre = new PreferGenre();
+
+            preferGenre.setUser(user);
+            preferGenre.setGenre(genre);
+
+            preferGenreRepository.save(preferGenre);
+
+            preferGenres.add(preferGenre);
+        }
+
+        for(String sentence : userJoinRequest.getPreferSentenceList()){
+            PreferSentence preferSentence = new PreferSentence();
+
+            preferSentence.setUser(user);
+            preferSentence.setPreferSentence(sentence);
+
+            preferSentenceRepository.save(preferSentence);
+
+            preferSentences.add(preferSentence);
+        }
 
         // User 저장 (Cascade로 PreferGenre도 자동 저장)
         userRepository.save(user);
@@ -125,6 +147,7 @@ public class UserService {
 
         // 쿠키를 응답에 추가
         response.addHeader(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
+
 
         // GlobalResDTO 생성
         GlobalResDTO responseDTO = new GlobalResDTO(
