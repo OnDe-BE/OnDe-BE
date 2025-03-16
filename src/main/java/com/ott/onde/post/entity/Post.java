@@ -40,7 +40,7 @@ public class Post extends Timestamped {
     private Integer likeCount;
 
     @ManyToOne
-    @JoinColumn(name = "boardid", nullable = false)
+    @JoinColumn(name = "board_id", nullable = false)
     private BoardKind boardKind;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)

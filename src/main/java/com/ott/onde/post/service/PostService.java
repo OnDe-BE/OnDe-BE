@@ -6,20 +6,25 @@ import com.ott.onde.post.dto.SuccessResponseDto;
 import com.ott.onde.post.entity.BoardKind;
 import com.ott.onde.post.entity.Post;
 import com.ott.onde.post.repository.BoardKindRepository;
+import com.ott.onde.post.repository.CommentRepository;
 import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostService{
 
     private final PostRepository postRepository;
     private final BoardKindRepository boardKindRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
     public List<PostResponseDto> getPosts(Integer boardId, Integer type) {
@@ -39,7 +44,12 @@ public class PostService{
             };
         }
 
-        return posts.stream().map(PostResponseDto::new).toList();
+        List<PostResponseDto> post = posts.stream().map(PostResponseDto::new).toList();
+
+        return post.stream().map(x-> {
+            Optional<Integer> count = this.commentRepository.findCountByPostId(x.getPostIdx());
+            return x.setCommentCount(x, count.orElse(0));
+        }).toList();
     }
 
     //게시글 작성

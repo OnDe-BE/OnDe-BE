@@ -1,6 +1,7 @@
 package com.ott.onde.post.dto;
 
 import com.ott.onde.post.entity.Post;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ public class PostResponseDto {
     private Integer postViews;
     private Integer boardId;
     private Integer likeCount;
+    private Integer commentCount;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -30,6 +32,11 @@ public class PostResponseDto {
         this.likeCount = entity.getLikeCount();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
+    }
+
+    public PostResponseDto setCommentCount(PostResponseDto entity, Integer commentCount) {
+        entity.commentCount = commentCount;
+        return entity;
     }
 
     public static PostResponseDto from(Post entity) {
