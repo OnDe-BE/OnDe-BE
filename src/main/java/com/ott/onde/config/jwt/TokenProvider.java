@@ -26,8 +26,8 @@ public class TokenProvider {
 
     private static final long ACCESS_TIME =  15 * 60 * 1000; //15분
     private static final long REFRESH_TIME =  7 * 24 * 60 * 60 * 1000; // 7일
-    public static final String ACCESS_TOKEN = "Access_Token";
-    public static final String REFRESH_TOKEN = "Refresh_Token";
+    public static final String ACCESS_TOKEN = "accessToken";
+    public static final String REFRESH_TOKEN = "refreshToken";
 
     // header 토큰을 가져오는 기능
     public String getHeaderToken(HttpServletRequest request, String type) {
@@ -91,11 +91,11 @@ public class TokenProvider {
 
     // 어세스 토큰 헤더 설정
     public void setHeaderAccessToken(HttpServletResponse response, String accessToken) {
-        response.setHeader("Access_Token", accessToken);
+        response.setHeader("accessToken", accessToken);
     }
 
     // 리프레시 토큰 헤더 설정
     public void setHeaderRefreshToken(HttpServletResponse response, String refreshToken) {
-        response.setHeader("Refresh_Token", refreshToken);
+        response.setHeader("refreshToken", refreshToken);
     }
 }
