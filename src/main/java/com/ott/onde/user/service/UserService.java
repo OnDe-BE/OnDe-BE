@@ -137,11 +137,11 @@ public class UserService {
 
         // 로그인 후 Refresh Token을 HttpOnly 쿠키로 저장
         ResponseCookie refreshTokenCookie = ResponseCookie.from("refreshToken", jwtTokenDTO.getRefreshToken())
-                .httpOnly(false) // JavaScript에서 접근 못 하도록 설정
-                .secure(false)   // HTTPS에서만 접근 가능하도록 설정
+                .httpOnly(true) // JavaScript에서 접근 못 하도록 설정
+                .secure(true)   // HTTPS에서만 접근 가능하도록 설정
                 .path("/")      // 전체 도메인에서 접근 가능
                 .maxAge(60 * 60 * 24 * 7) // 7일 동안 유효
-                .domain("localhost")  // 최상위 도메인 설정
+                .domain(".ondemandia.com")  // 최상위 도메인 설정
                 .sameSite("None")
                 .build();
 
