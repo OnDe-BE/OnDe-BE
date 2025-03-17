@@ -11,6 +11,10 @@ import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,29 +31,29 @@ public class PostService{
     private final CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
-    public List<PostResponseDto> getPosts(Integer boardId, Integer type) {
+    public Page<PostResponseDto> getPosts(int boardId, int type, int nowPage, int pageSize) {
         // type = 0 : 인기순(조회순), type = 1 : 최신순, type = 2 : 좋아요순
-        BoardKind boardKind = boardKindRepository.findAllByBoardId(boardId).get(0);
 
-        List<Post> posts;
+        PageRequest pageRequest = PageRequest.of(nowPage, pageSize,type == 1 ? Sort.by(Sort.Direction.DESC, "modifiedAt") : Sort.by(Sort.Direction.ASC, "like_count"));
 
-        // type이 null일 경우 최신순 정렬
-        if (type == null || type == 1) {
-            posts = postRepository.findAllByBoardKindOrderByCreatedAtDesc(boardKind);
-        } else {
-            posts = switch (type) {
-                case 0 -> postRepository.findAllByBoardKindOrderByPostViewsDesc(boardKind);
-                case 2 -> postRepository.findAllByBoardKindOrderByLikeCountDesc(boardKind);
-                default -> postRepository.findAllByBoardKindOrderByCreatedAtDesc(boardKind); // 기본값: 최신순 정렬
-            };
-        }
+        Page<PostResponseDto> post = this.postRepository.findPostsByBoardId(pageRequest, Long.parseLong(Integer.toString(boardId)))
+                .map(PostResponseDto::new);
 
-        List<PostResponseDto> post = posts.stream().map(PostResponseDto::new).toList();
-
-        return post.stream().map(x-> {
+        return post.map(x-> {
             Optional<Integer> count = this.commentRepository.findCountByPostId(x.getPostIdx());
             return x.setCommentCount(x, count.orElse(0));
-        }).toList();
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public Page<PostResponseDto> getTopPosts(Integer parentId, Integer type) {
+        PageRequest pageRequest = PageRequest.of(0, 3,type == 1 ? Sort.by(Sort.Direction.DESC, "modifiedAt") : Sort.by(Sort.Direction.ASC, "like_count"));
+
+        Page<PostResponseDto> post = this.postRepository.findTop3ByParentId(pageRequest, Long.parseLong(Integer.toString(parentId))).map(PostResponseDto::new);
+        return post.map(x-> {
+            Optional<Integer> count = this.commentRepository.findCountByPostId(x.getPostIdx());
+            return x.setCommentCount(x, count.orElse(0));
+        });
     }
 
     //게시글 작성

@@ -9,6 +9,7 @@ import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.post.service.PostService;
 import com.ott.onde.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,13 +27,23 @@ public class PostController {
     private final PostService postService;
 
     // 게시판 조회 및 정렬
-    @GetMapping("/{boardId}")
-    public List<PostResponseDto> getPosts(
-            @PathVariable String boardId,
-            @RequestParam(required = false) Integer type // 선택적 파라미터
+    @PostMapping("/category")
+    public Page<PostResponseDto> getPosts(
+            @RequestParam(name = "boardId", required = false, defaultValue = "2") String boardId,
+            @RequestParam(required = false, defaultValue = "1") Integer type,
+            @RequestParam(required = false) Integer nowPage,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize// 선택적 파라미터
     ) {
-        return postService.getPosts(Integer.parseInt(boardId), type);
+        return postService.getPosts(Integer.parseInt(boardId), type, nowPage, pageSize);
     }
+
+    @PostMapping("/top")
+    public Page<PostResponseDto> getPostsByParentId(@RequestParam(name = "parentId", required = false, defaultValue = "1") String parentId,
+                                                    @RequestParam(required = false) Integer type
+    ) {
+        return postService.getTopPosts(Integer.parseInt(parentId), type);
+    }
+
 
     //게시글 작성
     @PostMapping("/create")
