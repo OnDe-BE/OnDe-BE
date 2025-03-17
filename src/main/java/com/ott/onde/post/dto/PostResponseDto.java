@@ -1,7 +1,6 @@
 package com.ott.onde.post.dto;
 
 import com.ott.onde.post.entity.Post;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -28,7 +27,7 @@ public class PostResponseDto {
         this.title = entity.getTitle();
         this.contents = entity.getContents();
         this.postViews = entity.getPostViews();
-        this.boardId = entity.getBoardKind().getBoardId();
+        this.boardId = entity.getBoard().getBoardId();
         this.likeCount = entity.getLikeCount();
         this.createdAt = entity.getCreatedAt();
         this.modifiedAt = entity.getModifiedAt();
