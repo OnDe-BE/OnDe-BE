@@ -27,7 +27,7 @@ public class Likes {
     private Comment comment;
 
     @ManyToOne
-    @JoinColumn(name = "user_idx", nullable = false)
+    @JoinColumn(name = "user_code", nullable = false)
     private User user;
 
 

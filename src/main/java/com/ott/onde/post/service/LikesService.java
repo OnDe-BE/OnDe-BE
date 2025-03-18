@@ -28,10 +28,9 @@ public class LikesService {
 
     // 게시글 좋아요 기능
     @Transactional
-    public PostResponseDto likePost(Long postIdx, LikesRequestsDto requestsDto) {
+    public PostResponseDto likePost(Long postIdx, User user) {
         // 선택한 게시글이 DB에 있는지 확인
         Optional<Post> post = postRepository.findById(postIdx);
-        User user = userRepository.findAllById(requestsDto.getId());
 
         if (post.isEmpty()) {
             throw new IllegalArgumentException("게시글이 존재하지 않습니다.");
@@ -56,10 +55,9 @@ public class LikesService {
 
     // 댓글 좋아요 기능
     @Transactional
-    public CommentResponseDto likeComment(Long commentIdx, LikesRequestsDto requestsDto) {
+    public CommentResponseDto likeComment(Long commentIdx, User user) {
         // 선택한 댓글이 DB에 있는지 확인
         Optional<Comment> comment = commentRepository.findById(commentIdx);
-        User user = userRepository.findAllById(requestsDto.getId());
 
         if (comment.isEmpty()) {
             throw new IllegalArgumentException("댓글이 존재하지 않습니다.");

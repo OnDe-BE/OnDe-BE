@@ -32,7 +32,14 @@ public class PostService{
     public Page<PostResponseDto> getPosts(int boardId, int type, int nowPage, int pageSize) {
         // type = 0 : 인기순(조회순), type = 1 : 최신순, type = 2 : 좋아요순
 
-        PageRequest pageRequest = PageRequest.of(nowPage, pageSize,type == 1 ? Sort.by(Sort.Direction.DESC, "modifiedAt") : Sort.by(Sort.Direction.ASC, "like_count"));
+        Sort sort = switch (type) {
+            case 0 -> Sort.by(Sort.Direction.DESC, "postViews");
+            case 1 -> Sort.by(Sort.Direction.DESC, "modifiedAt");
+            case 2 -> Sort.by(Sort.Direction.DESC, "like_count");
+            default -> Sort.by(Sort.Direction.DESC, "postViews");
+        };
+
+        PageRequest pageRequest = PageRequest.of(nowPage, pageSize, sort);
 
         Page<PostResponseDto> post = this.postRepository.findPostsByBoardId(pageRequest, Long.parseLong(Integer.toString(boardId)))
                 .map(PostResponseDto::new);
@@ -44,8 +51,8 @@ public class PostService{
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponseDto> getTopPosts(Integer parentId, Integer type) {
-        PageRequest pageRequest = PageRequest.of(0, 3,type == 1 ? Sort.by(Sort.Direction.DESC, "modifiedAt") : Sort.by(Sort.Direction.ASC, "like_count"));
+    public Page<PostResponseDto> getTopPosts(Integer parentId) {
+        PageRequest pageRequest = PageRequest.of(0, 3, Sort.by(Sort.Direction.DESC, "like_count"));
 
         Page<PostResponseDto> post = this.postRepository.findTop3ByParentId(pageRequest, Long.parseLong(Integer.toString(parentId))).map(PostResponseDto::new);
         return post.map(x-> {

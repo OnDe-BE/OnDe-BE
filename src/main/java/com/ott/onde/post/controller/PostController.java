@@ -29,10 +29,9 @@ public class PostController {
     }
 
     @GetMapping("/top")
-    public Page<PostResponseDto> getPostsByParentId(@RequestParam(name = "parentId", required = false, defaultValue = "1") Integer parentId,
-                                                    @RequestParam(required = false) Integer type
+    public Page<PostResponseDto> getPostsByParentId(@RequestParam(name = "parentId", required = false, defaultValue = "1") Integer parentId
     ) {
-        return postService.getTopPosts(parentId, type);
+        return postService.getTopPosts(parentId);
     }
 
 
