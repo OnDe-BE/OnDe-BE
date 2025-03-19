@@ -3,21 +3,12 @@ package com.ott.onde.post.controller;
 import com.ott.onde.post.dto.PostRequestsDto;
 import com.ott.onde.post.dto.PostResponseDto;
 import com.ott.onde.post.dto.SuccessResponseDto;
-import com.ott.onde.post.entity.BoardKind;
-import com.ott.onde.post.repository.BoardKindRepository;
-import com.ott.onde.post.repository.PostRepository;
 import com.ott.onde.post.service.PostService;
 import com.ott.onde.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,21 +18,20 @@ public class PostController {
     private final PostService postService;
 
     // 게시판 조회 및 정렬
-    @PostMapping("/category")
+    @GetMapping("/category")
     public Page<PostResponseDto> getPosts(
-            @RequestParam(name = "boardId", required = false, defaultValue = "2") String boardId,
+            @RequestParam(name = "boardId", required = false, defaultValue = "2") Integer boardId,
             @RequestParam(required = false, defaultValue = "1") Integer type,
-            @RequestParam(required = false) Integer nowPage,
+            @RequestParam(required = false, defaultValue = "0") Integer nowPage,
             @RequestParam(required = false, defaultValue = "10") Integer pageSize// 선택적 파라미터
     ) {
-        return postService.getPosts(Integer.parseInt(boardId), type, nowPage, pageSize);
+        return postService.getPosts(boardId, type, nowPage, pageSize);
     }
 
-    @PostMapping("/top")
-    public Page<PostResponseDto> getPostsByParentId(@RequestParam(name = "parentId", required = false, defaultValue = "1") String parentId,
-                                                    @RequestParam(required = false) Integer type
+    @GetMapping("/top")
+    public Page<PostResponseDto> getPostsByParentId(@RequestParam(name = "parentId", required = false, defaultValue = "1") Integer parentId
     ) {
-        return postService.getTopPosts(Integer.parseInt(parentId), type);
+        return postService.getTopPosts(parentId);
     }
 
 

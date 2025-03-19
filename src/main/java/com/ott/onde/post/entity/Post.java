@@ -41,7 +41,7 @@ public class Post extends Timestamped {
 
     @ManyToOne
     @JoinColumn(name = "board_id", nullable = false)
-    private BoardKind boardKind;
+    private Board board;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> commentList = new ArrayList<>();
@@ -50,20 +50,20 @@ public class Post extends Timestamped {
     private List<Likes> likesList = new ArrayList<>();
 
 
-    public Post(PostRequestsDto requestsDto, BoardKind boardKind, User user) {
+    public Post(PostRequestsDto requestsDto, Board board, User user) {
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         this.user = user;
-        this.boardKind = boardKind;
+        this.board = board;
         this.postViews = 0;
         this.likeCount = 0;
     }
 
-    public void update(PostRequestsDto requestsDto, BoardKind boardKind, User user){
+    public void update(PostRequestsDto requestsDto, Board board, User user){
         this.title = requestsDto.getTitle();
         this.contents = requestsDto.getContents();
         this.user = user;
-        this.boardKind = boardKind;
+        this.board = board;
     }
 
 }

@@ -1,6 +1,6 @@
 package com.ott.onde.post.repository;
 
-import com.ott.onde.post.entity.BoardKind;
+import com.ott.onde.post.entity.Board;
 import com.ott.onde.post.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,10 +13,10 @@ import java.util.List;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findAllByBoardKind(BoardKind boardKind);
-    List<Post> findAllByBoardKindOrderByPostViewsDesc(BoardKind boardKind);   // 조회순
-    List<Post> findAllByBoardKindOrderByCreatedAtDesc(BoardKind boardKind); // 최신순
-    List<Post> findAllByBoardKindOrderByLikeCountDesc(BoardKind boardKind);   // 좋아요순
+    List<Post> findAllByBoard(Board board);
+    List<Post> findAllByBoardOrderByPostViewsDesc(Board board);   // 조회순
+    List<Post> findAllByBoardOrderByCreatedAtDesc(Board board); // 최신순
+    List<Post> findAllByBoardOrderByLikeCountDesc(Board board);   // 좋아요순
 
     @Query(value = "select p.post_idx, p.user_code, p.title,p.contents, p.post_views," +
             "p.board_id, p.like_count, p.createdAt, p.modifiedAt from post as p, board as b " +
