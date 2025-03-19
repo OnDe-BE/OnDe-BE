@@ -30,4 +30,9 @@ public class UtilServiceImpl implements UtilService {
 
         return sentences;
     }
+
+    @Override
+    public List<String> findGenres(){
+        return this.genreRepository.findAllGenre();
+    }
 }

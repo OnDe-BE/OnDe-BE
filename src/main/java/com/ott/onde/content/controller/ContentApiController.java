@@ -9,6 +9,7 @@ import com.ott.onde.content.service.serviceImpl.ContentDetailServiceImpl;
 import com.ott.onde.content.service.serviceImpl.ContentSimpleServiceImpl;
 import com.ott.onde.content.service.serviceImpl.UtilServiceImpl;
 import com.ott.onde.content.service.util.UserPreferContent;
+import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -144,8 +147,22 @@ public class ContentApiController {
     }
 
     @PostMapping("/recommendGenres")
-    public ResponseEntity<Object> findRecommendGenres(){
-        List<String> genres = this.utilService.findRecommendGenres();
+    public ResponseEntity<Object> findRecommendGenres(@AuthenticationPrincipal User user){
+        Page<ContentRequest> cl = this.userPreferContent.recommendedContent(user);
+
+        return ResponseEntity.ok().body(cl);
+    }
+
+    @PostMapping("/recommendSentence")
+    public ResponseEntity<Object> findRecommendSentence(@AuthenticationPrincipal User user){
+        Page<ContentRequest> cl = this.userPreferContent.recommendedContent(user);
+
+        return ResponseEntity.ok().body(cl);
+    }
+
+    @PostMapping("/genreList")
+    public ResponseEntity<Object> findGenreList(){
+        List<String> genres = this.utilService.findGenres();
 
         return ResponseEntity.ok().body(genres);
     }
