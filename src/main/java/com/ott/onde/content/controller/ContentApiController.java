@@ -5,10 +5,12 @@ import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.dto.request.FilterRequest;
 import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.dto.result.ContentDetailResult;
+import com.ott.onde.content.dto.result.ContentPreferResult;
+import com.ott.onde.content.entity.genre.InnerGenre;
 import com.ott.onde.content.service.serviceImpl.ContentDetailServiceImpl;
 import com.ott.onde.content.service.serviceImpl.ContentSimpleServiceImpl;
 import com.ott.onde.content.service.serviceImpl.UtilServiceImpl;
-import com.ott.onde.content.service.util.UserPreferContent;
+import com.ott.onde.content.service.util.contentImpl.UserPreferContent;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -145,24 +145,28 @@ public class ContentApiController {
 
         return ResponseEntity.ok().body(contents);
     }
-
+//@AuthenticationPrincipal User user
     @PostMapping("/recommendGenres")
-    public ResponseEntity<Object> findRecommendGenres(@AuthenticationPrincipal User user){
-        Page<ContentRequest> cl = this.userPreferContent.recommendedContent(user);
+    public ResponseEntity<Object> findRecommendGenres(){
+        User user = this.userService.findById("testing#8485");
+
+        ContentPreferResult cl = this.userPreferContent.recommendedContent(user);
 
         return ResponseEntity.ok().body(cl);
     }
 
     @PostMapping("/recommendSentence")
-    public ResponseEntity<Object> findRecommendSentence(@AuthenticationPrincipal User user){
-        Page<ContentRequest> cl = this.userPreferContent.recommendedContent(user);
+    public ResponseEntity<Object> findRecommendSentence(){
+        User user = this.userService.findById("testing#8485");
+
+        ContentPreferResult cl = this.userPreferContent.recommendedSentence(user);
 
         return ResponseEntity.ok().body(cl);
     }
 
     @PostMapping("/genreList")
     public ResponseEntity<Object> findGenreList(){
-        List<String> genres = this.utilService.findGenres();
+        List<InnerGenre> genres = this.utilService.findGenres();
 
         return ResponseEntity.ok().body(genres);
     }

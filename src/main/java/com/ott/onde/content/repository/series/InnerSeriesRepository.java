@@ -1,6 +1,6 @@
 package com.ott.onde.content.repository.series;
 
-import com.ott.onde.content.entity.InnerSeries;
+import com.ott.onde.content.entity.detail.InnerSeries;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

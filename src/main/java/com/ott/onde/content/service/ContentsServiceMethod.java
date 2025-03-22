@@ -1,8 +1,9 @@
 package com.ott.onde.content.service;
 
 import com.ott.onde.content.dto.request.ContentRequest;
+import com.ott.onde.content.dto.request.GenreRequest;
 import com.ott.onde.content.dto.response.ContentResponse;
-import com.ott.onde.content.entity.CategorySort;
+import com.ott.onde.content.entity.genre.CategorySort;
 import com.ott.onde.content.repository.CategorySortRepository;
 import com.ott.onde.content.repository.ContentMovieRepository;
 import com.ott.onde.content.repository.genre.ContentGenreRepository;
@@ -38,16 +39,7 @@ public class ContentsServiceMethod {
     }
 
     public List<CategorySort> sentenceDivideType(String sentence){
-        List<CategorySort> cs = new ArrayList<>();
-
-        for(String s : sentence.split(" ")){
-
-            List<CategorySort> str = this.cateSortRepository.findByWord(s);
-
-            cs.addAll(str);
-        }
-
-        return cs;
+        return new ArrayList<>(this.cateSortRepository.findByWord(String.join("|", sentence.split(" "))));
     }
 
     public Map<String, String> sentenceToWord(CategorySort c,Map<String, String> result){
@@ -73,15 +65,31 @@ public class ContentsServiceMethod {
         return this.contentGenreRepository.findGenreByContentId(contentId);
     }
 
+    public Map<String, List<String>> findGenresByContentId(List<String> contentId){
+        List<GenreRequest> genres = this.contentGenreRepository.findGenreByContentId(contentId);
+
+        Map<String, List<String>> result = new HashMap<>();
+        genres.stream().map(GenreRequest::getContent_id).forEach(content -> {
+            List<String> genre = genres.stream().filter(x->x.getContent_id().equals(content)).map(GenreRequest::getGenre).toList();
+            result.put(content, genre);
+        });
+
+        return result;
+    }
+
     public Page<ContentRequest> pageResponseToRequest(Page<ContentResponse> paging, int number){
         AtomicInteger rank = new AtomicInteger(number);
+
+        List<String> contentIds = paging.stream().map(ContentResponse::getContent_id).toList();
+
+         Map<String, List<String>> genres = this.findGenresByContentId(contentIds);
 
         return paging.map(x-> ContentRequest.builder().contentId(x.getContent_id())
                 .title(x.getTitle())
                 .age(x.getAge())
                 .contentImg(x.getContent_img())
                 .rank(rank.getAndIncrement())
-                .genres(this.findGenresByContentId(x.getContent_id())).build());
+                .genres(genres.get(x.getContent_id())).build());
     }
 
     public String runtimeByClassifyType(String contentId, String cType){

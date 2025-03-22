@@ -1,4 +1,4 @@
-package com.ott.onde.content.entity;
+package com.ott.onde.content.entity.detail;
 
 import jakarta.persistence.*;
 import lombok.Data;

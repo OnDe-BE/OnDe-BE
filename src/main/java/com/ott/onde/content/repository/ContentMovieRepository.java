@@ -1,6 +1,6 @@
 package com.ott.onde.content.repository;
 
-import com.ott.onde.content.entity.ContentMovie;
+import com.ott.onde.content.entity.detail.ContentMovie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

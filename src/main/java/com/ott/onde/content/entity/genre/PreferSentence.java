@@ -1,4 +1,4 @@
-package com.ott.onde.content.entity;
+package com.ott.onde.content.entity.genre;
 
 import com.ott.onde.user.entity.User;
 import jakarta.persistence.*;
@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
+@Table(name = "prefer_sentence")
 public class PreferSentence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

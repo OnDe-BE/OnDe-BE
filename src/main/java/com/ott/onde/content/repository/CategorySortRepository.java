@@ -1,6 +1,6 @@
 package com.ott.onde.content.repository;
 
-import com.ott.onde.content.entity.CategorySort;
+import com.ott.onde.content.entity.genre.CategorySort;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

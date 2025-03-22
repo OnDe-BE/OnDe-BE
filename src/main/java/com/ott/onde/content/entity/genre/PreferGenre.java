@@ -1,15 +1,14 @@
-package com.ott.onde.content.entity;
+package com.ott.onde.content.entity.genre;
 
 import com.ott.onde.user.entity.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
 @NoArgsConstructor
 @Data
+@Table(name = "prefer_genre")
 public class PreferGenre {
     @Id@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "prefer_genre_id")

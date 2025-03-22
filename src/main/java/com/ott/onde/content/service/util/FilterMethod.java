@@ -5,6 +5,7 @@ import com.ott.onde.content.dto.response.ContentIdResponse;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.service.ContentsServiceMethod;
+import com.ott.onde.content.service.util.serivce.FilterCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

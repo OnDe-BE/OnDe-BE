@@ -1,6 +1,6 @@
 package com.ott.onde.content.repository;
 
-import com.ott.onde.content.entity.ContentView;
+import com.ott.onde.content.entity.util.ContentView;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

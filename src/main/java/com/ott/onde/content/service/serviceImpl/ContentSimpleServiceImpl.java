@@ -69,7 +69,7 @@ public class ContentSimpleServiceImpl implements ContentSimpleService {
 
     @Override
     public Page<ContentResponse> findContentsByGenre(PageRequest pageRequest, String genre){
-        return this.contentRepository.findContentsByTitleAndSummary(pageRequest, genre);
+        return this.contentRepository.findContentsByCategory(pageRequest, genre);
     }
 
     @Override

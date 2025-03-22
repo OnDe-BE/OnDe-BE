@@ -1,6 +1,7 @@
 package com.ott.onde.content.service.serviceImpl;
 
-import com.ott.onde.content.entity.PreferSentence;
+import com.ott.onde.content.entity.genre.InnerGenre;
+import com.ott.onde.content.entity.genre.PreferSentence;
 import com.ott.onde.content.repository.genre.InnerGenreRepository;
 import com.ott.onde.content.repository.genre.PreferSentenceRepository;
 import com.ott.onde.content.service.crud.UtilService;
@@ -19,7 +20,7 @@ public class UtilServiceImpl implements UtilService {
 
     @Override
     public List<String> findRecommendGenres() {
-        List<String> genres = this.genreRepository.findAllGenre();
+        List<String> genres = this.genreRepository.findAll().stream().map(InnerGenre::getGenre).toList();
 
         return genres;
     }
@@ -32,7 +33,7 @@ public class UtilServiceImpl implements UtilService {
     }
 
     @Override
-    public List<String> findGenres(){
-        return this.genreRepository.findAllGenre();
+    public List<InnerGenre> findGenres(){
+        return this.genreRepository.findAll();
     }
 }

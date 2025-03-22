@@ -1,4 +1,4 @@
-package com.ott.onde.content.entity;
+package com.ott.onde.content.entity.detail;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -21,7 +21,4 @@ public class ContentPlatform {
 
     @Column(name = "content_link")
     private String contentLink;
-
-    @Column(name = "content_img")
-    private String contentImg;
 }

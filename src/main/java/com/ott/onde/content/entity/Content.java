@@ -24,6 +24,9 @@ public class Content {
 
     private String released;
 
+    @Column(name = "content_img")
+    private String contentImg;
+
     @ColumnDefault("0")
     @Column(name = "hit_point")
     private Long hitPoint;

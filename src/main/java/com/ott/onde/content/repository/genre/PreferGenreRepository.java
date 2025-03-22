@@ -1,6 +1,6 @@
 package com.ott.onde.content.repository.genre;
 
-import com.ott.onde.content.entity.PreferGenre;
+import com.ott.onde.content.entity.genre.PreferGenre;
 import com.ott.onde.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

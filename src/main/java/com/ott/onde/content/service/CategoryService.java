@@ -1,6 +1,6 @@
 package com.ott.onde.content.service;
 
-import com.ott.onde.content.entity.InnerGenre;
+import com.ott.onde.content.entity.genre.InnerGenre;
 import com.ott.onde.content.repository.CategorySortRepository;
 import com.ott.onde.content.repository.genre.InnerGenreRepository;
 import lombok.RequiredArgsConstructor;
