@@ -39,28 +39,22 @@ public class ContentSimpleServiceImpl implements ContentSimpleService {
 
     @Override
     public ContentDetailResult findContentDetails(String contentId){
-        Optional<Content> res = this.contentRepository.findByContentId(contentId);
+        Content rs = this.contentRepository.findByContentId(contentId);
 
-        if(res.isPresent()){
-            Content rs = res.get();
+        String runtime = this.contentsServiceMethod.runtimeByClassifyType(rs.getContentId(), rs.getCType());
 
-            String runtime = this.contentsServiceMethod.runtimeByClassifyType(rs.getContentId(), rs.getCType());
+        this.contentViewRepository.updateHitPointContent(rs.getContentId());
 
-            this.contentViewRepository.updateHitPointContent(rs.getContentId());
-
-            return ContentDetailResult.builder()
-                    .contentId(rs.getContentId())
-                    .title(rs.getTitle())
-                    .summary(rs.getSummary())
-                    .cType(rs.getCType())
-                    .age(rs.getAge())
-                    .released(rs.getReleased())
-                    .contentImg(rs.getContentImg())
-                    .genres(this.contentsServiceMethod.findGenresByContentId(rs.getContentId()))
-                    .runtime(runtime).build();
-        }else{
-            return ContentDetailResult.builder().build();
-        }
+        return ContentDetailResult.builder()
+                .contentId(rs.getContentId())
+                .title(rs.getTitle())
+                .summary(rs.getSummary())
+                .cType(rs.getCType())
+                .age(rs.getAge())
+                .released(rs.getReleased())
+                .contentImg(rs.getContentImg())
+                .genres(this.contentsServiceMethod.findGenresByContentId(rs.getContentId()))
+                .runtime(runtime).build();
     }
 
     @Override
