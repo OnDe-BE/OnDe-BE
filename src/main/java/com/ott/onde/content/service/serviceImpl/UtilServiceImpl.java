@@ -1,10 +1,9 @@
 package com.ott.onde.content.service.serviceImpl;
 
 import com.ott.onde.content.entity.genre.InnerGenre;
-import com.ott.onde.content.entity.genre.PreferSentence;
+import com.ott.onde.content.entity.user.genre.PreferSentence;
 import com.ott.onde.content.repository.genre.InnerGenreRepository;
-import com.ott.onde.content.repository.genre.PreferSentenceRepository;
-import com.ott.onde.content.service.crud.UtilService;
+import com.ott.onde.content.repository.user.genre.PreferSentenceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

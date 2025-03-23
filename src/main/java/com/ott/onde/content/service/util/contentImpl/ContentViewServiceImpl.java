@@ -1,16 +1,19 @@
 package com.ott.onde.content.service.util.contentImpl;
 
-import com.ott.onde.content.entity.util.ContentLinkView;
-import com.ott.onde.content.entity.util.ContentView;
-import com.ott.onde.content.repository.ContentLinkViewRepository;
-import com.ott.onde.content.repository.ContentPlatformRepository;
-import com.ott.onde.content.repository.ContentViewRepository;
-import com.ott.onde.content.service.util.serivce.ContentViewService;
+import com.ott.onde.content.dto.request.ContentRequest;
+import com.ott.onde.content.entity.user.ContentLinkView;
+import com.ott.onde.content.entity.user.ContentView;
+import com.ott.onde.content.repository.user.ContentLinkViewRepository;
+import com.ott.onde.content.repository.detail.ContentPlatformRepository;
+import com.ott.onde.content.repository.user.ContentViewRepository;
+import com.ott.onde.content.service.util.user.ContentViewService;
 import com.ott.onde.user.entity.User;
 import com.ott.onde.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -41,5 +44,21 @@ public class ContentViewServiceImpl implements ContentViewService {
     @Override
     public void contentHitPoint(User user, String contentId) {
 
+    }
+
+    @Override
+    public List<ContentRequest> findRecentViewContentsByUser(User user) {
+        List<ContentView> contents = this.contentViewRepository.findByUser(user);
+
+
+
+        return List.of();
+    }
+
+    @Override
+    public ContentView findContentViewByContentId(User user, String contentId) {
+        ContentView contentView = this.contentViewRepository.findByUserAndContentId(user, contentId);
+
+        return contentView;
     }
 }

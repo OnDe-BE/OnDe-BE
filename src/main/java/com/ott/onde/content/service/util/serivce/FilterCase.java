@@ -7,8 +7,6 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface FilterCase {
-
-
     public Page<ContentResponse> filteredContentLogic(FilterRequest request,int page, int size);
     public FilterRequest filterParamDefaultValueSet(FilterRequest request);
     public FilterRequest filterParamSingleValueSet(FilterRequest request);

@@ -46,10 +46,7 @@ public interface ContentRepository extends JpaRepository<Content, String> {
             "where title REGEXP :category or summary REGEXP :category", nativeQuery = true)
     Page<ContentResponse> findContentsByTitleAndSummary(Pageable pageable, @Param("category") String category);
 
-    @Query(value = "select * from content as c " +
-            "right outer join content_genre as cg on c.content_id = cg.content_id " +
-            "left outer join inner_genre as ig on cg.genre_id = ig.genre_id " +
-            "order by c.hit_point", nativeQuery = true)
+    @Query(value = "select * from content as c", nativeQuery = true)
     Page<ContentResponse> findContentsByTodayPick(Pageable pageable);
 
     @Query(value = "select c.title, c.content_id, c.age, c.content_img from content as c " +

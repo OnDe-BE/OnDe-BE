@@ -1,7 +1,7 @@
 package com.ott.onde.content.controller;
 
 
-import com.ott.onde.content.service.serviceImpl.ContentSimpleServiceImpl;
+import com.ott.onde.content.service.contents.serviceImpl.ContentSimpleServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
