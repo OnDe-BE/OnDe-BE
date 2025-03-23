@@ -82,7 +82,7 @@ public class ContentSimpleServiceImpl implements ContentSimpleService {
 
     @Override
     public Page<ContentRequest> findContentsByTodayPick(){
-        Page<ContentResponse> cr = this.contentRepository.findContentsByTodayPick(this.contentsServiceMethod.pagingRequestMethod("인기순",0,20));
+        Page<ContentResponse> cr = this.contentRepository.findContentsByTodayPick(this.contentsServiceMethod.pagingRequestMethod("인기순",0,5));
 
         return this.contentsServiceMethod.pageResponseToRequest(cr,0);
     }
