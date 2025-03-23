@@ -25,10 +25,10 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     Optional<Page<ContentResponse>> findByTitle(Pageable pageable, @Param("contentTitle") String contentTitle);
 
 //    컨텐츠 상세 조회
-    @Query(value = "select c.content_id, c.title, c.age, c.released, c.summary, c.c_type, c.content_img " +
-            "from content as c " +
-            "where c.content_id = :contentId", nativeQuery = true)
-    Optional<ContentDetailResponse> findContentsByContentId(@Param("contentId")String contentId);
+//    @Query(value = "select c.content_id, c.title, c.age, c.released, c.summary, c.c_type, c.content_img " +
+//            "from content as c where c.content_id = :contentId", nativeQuery = true)
+//    Optional<ContentDetailResponse> findContentsByContentId(@Param("contentId")String contentId);
+    Optional<Content> findContentsByContentId(String contentId);
 
     @Query(value = "select c.content_id, c.title, c.age from content as c , " +
             "(select content_id, count(*) as relevance from content_genre as cg " +
