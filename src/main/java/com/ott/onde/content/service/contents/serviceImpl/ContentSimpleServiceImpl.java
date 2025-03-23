@@ -5,6 +5,7 @@ import com.ott.onde.content.dto.response.ContentDetailResponse;
 import com.ott.onde.content.dto.response.ContentResponse;
 import com.ott.onde.content.dto.response.PlatformResponse;
 import com.ott.onde.content.dto.result.ContentDetailResult;
+import com.ott.onde.content.entity.Content;
 import com.ott.onde.content.repository.detail.ContentPlatformRepository;
 import com.ott.onde.content.repository.ContentRepository;
 import com.ott.onde.content.repository.user.ContentViewRepository;
@@ -38,24 +39,24 @@ public class ContentSimpleServiceImpl implements ContentSimpleService {
 
     @Override
     public ContentDetailResult findContentDetails(String contentId){
-        Optional<ContentDetailResponse> res = this.contentRepository.findContentsByContentId(contentId);
+        Optional<Content> res = this.contentRepository.findContentsByContentId(contentId);
 
         if(res.isPresent()){
-            ContentDetailResponse rs = res.get();
+            Content rs = res.get();
 
-            String runtime = this.contentsServiceMethod.runtimeByClassifyType(rs.getContent_id(), rs.getC_type());
+            String runtime = this.contentsServiceMethod.runtimeByClassifyType(rs.getContentId(), rs.getCType());
 
-            this.contentViewRepository.updateHitPointContent(rs.getContent_id());
+            this.contentViewRepository.updateHitPointContent(rs.getContentId());
 
             return ContentDetailResult.builder()
-                    .contentId(rs.getContent_id())
+                    .contentId(rs.getContentId())
                     .title(rs.getTitle())
                     .summary(rs.getSummary())
-                    .cType(rs.getC_type())
+                    .cType(rs.getCType())
                     .age(rs.getAge())
                     .released(rs.getReleased())
-                    .contentImg(rs.getContent_img())
-                    .genres(this.contentsServiceMethod.findGenresByContentId(rs.getContent_id()))
+                    .contentImg(rs.getContentImg())
+                    .genres(this.contentsServiceMethod.findGenresByContentId(rs.getContentId()))
                     .runtime(runtime).build();
         }else{
             return ContentDetailResult.builder().build();
