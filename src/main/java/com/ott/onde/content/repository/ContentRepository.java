@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContentRepository extends JpaRepository<Content, String> {
-    @Query(value = "SELECT * from content where content_id = :contentId", nativeQuery = true)
-    Content findByContentId(@Param("contentId") String contentId);
+    Optional<Content> findByContentId(String contentId);
 
     @Query(value = "select c.content_id, c.title, c.age, c.content_img  from content as c", nativeQuery = true)
     Page<ContentResponse> findContentsAll(Pageable pageable);
@@ -28,7 +27,7 @@ public interface ContentRepository extends JpaRepository<Content, String> {
 //    @Query(value = "select c.content_id, c.title, c.age, c.released, c.summary, c.c_type, c.content_img " +
 //            "from content as c where c.content_id = :contentId", nativeQuery = true)
 //    Optional<ContentDetailResponse> findContentsByContentId(@Param("contentId")String contentId);
-    Optional<Content> findContentsByContentId(String contentId);
+
 
     @Query(value = "select c.content_id, c.title, c.age from content as c , " +
             "(select content_id, count(*) as relevance from content_genre as cg " +
