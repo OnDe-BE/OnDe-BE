@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ContentRepository extends JpaRepository<Content, String> {
-    Optional<Content> findByContentId(String contentId);
+    Content findByContentId(String contentId);
+//    @Query(value = "SELECT * from content where content_id = :contentId", nativeQuery = true)
+//    Content findByContentId(@Param("contentId") String contentId);
 
     @Query(value = "select c.content_id, c.title, c.age, c.content_img  from content as c", nativeQuery = true)
     Page<ContentResponse> findContentsAll(Pageable pageable);
