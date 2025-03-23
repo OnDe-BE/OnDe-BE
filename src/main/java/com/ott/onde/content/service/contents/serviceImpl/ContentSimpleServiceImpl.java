@@ -39,7 +39,7 @@ public class ContentSimpleServiceImpl implements ContentSimpleService {
 
     @Override
     public ContentDetailResult findContentDetails(String contentId){
-        Optional<Content> res = this.contentRepository.findContentsByContentId(contentId);
+        Optional<Content> res = this.contentRepository.findByContentId(contentId);
 
         if(res.isPresent()){
             Content rs = res.get();
