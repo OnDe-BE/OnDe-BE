@@ -22,7 +22,7 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     Page<ContentResponse> findContentsAll(Pageable pageable);
 
     @Query(value = "SELECT c.content_id, c.title, c.age, c.content_img from content as c " +
-            "title REGEXP :contentTitle", nativeQuery = true)
+            "where c.title REGEXP :contentTitle", nativeQuery = true)
     Optional<Page<ContentResponse>> findByTitle(Pageable pageable, @Param("contentTitle") String contentTitle);
 
 //    컨텐츠 상세 조회
