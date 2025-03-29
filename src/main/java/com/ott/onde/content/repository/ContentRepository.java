@@ -68,7 +68,7 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     @Query(value = "select c.content_id, c.title, c.age from content as c , " +
             "(select content_id, count(*) as relevance from content_genre as cg " +
             "left outer join inner_genre as ig on cg.genre_id = ig.genre_id " +
-            "where ig.genre REGEXP :cNategory group by content_id) as rel " +
+            "where ig.genre REGEXP :category group by content_id) as rel " +
             "where c.content_id = rel.content_id order by relevance desc", nativeQuery = true)
     List<ContentResponse> findContentsByCategory(@Param("category") String category);
 
