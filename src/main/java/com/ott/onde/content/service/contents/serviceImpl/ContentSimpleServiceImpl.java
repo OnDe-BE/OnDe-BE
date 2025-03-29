@@ -28,13 +28,18 @@ public class ContentSimpleServiceImpl implements ContentSimpleService {
     private final ContentsServiceMethod contentsServiceMethod;
 
     @Override
-    public Page<ContentRequest> findContentByTitle(String contentTitle){
+    public List<ContentRequest> findContentByTitle(String contentTitle){
         String titleExp = contentTitle.replace(" ", "|");
-        PageRequest pageRequest = PageRequest.of(0, 20);
 
-        Optional<Page<ContentResponse>> contents = this.contentRepository.findByTitle(pageRequest, titleExp);
+        Optional<List<ContentResponse>> contents = this.contentRepository.findByTitle(contentTitle);
 
-        return contents.isPresent() ? this.contentsServiceMethod.pageResponseToRequest(contents.get(),0) : this.findContentsByTodayPick();
+        List<ContentResponse> result = contents.orElseGet(() -> this.contentRepository.findBySimilarTitle(titleExp, 20));
+
+        if(result.size() < 20){
+            result.addAll(this.contentRepository.findBySimilarTitle(titleExp, 20 - result.size()));
+        }
+
+        return this.contentsServiceMethod.responseToRequest(result);
     }
 
     @Override

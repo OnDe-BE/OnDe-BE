@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface ContentSimpleService {
 //    제목에 대한 조회
-    public Page<ContentRequest> findContentByTitle(String contentTitle);
+    public List<ContentRequest> findContentByTitle(String contentTitle);
 //    콘텐츠 상세정보 조회
     public ContentDetailResult findContentDetails(String contentId);
 //    플랫폼 조회

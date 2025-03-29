@@ -13,8 +13,8 @@ public class ContentPlatform {
     @Column(name = "content_platform_id")
     private String contentPlatformId;
 
-    @Column(name = "platform_id")
-    private String platformId;
+    @Column(name = "platform")
+    private String platform;
 
     @Column(name = "content_id")
     private String contentId;

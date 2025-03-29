@@ -22,14 +22,14 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     Page<ContentResponse> findContentsAll(Pageable pageable);
 
     @Query(value = "SELECT c.content_id, c.title, c.age, c.content_img from content as c " +
-            "where c.title REGEXP :contentTitle", nativeQuery = true)
-    Optional<Page<ContentResponse>> findByTitle(Pageable pageable, @Param("contentTitle") String contentTitle);
+            "where c.title like %:title% order by case when title = :title then 0 " +
+            "when title = :title% then 1 when title = %:title then 2 when title = %:title% then 3 " +
+            "else 4 end limit 20", nativeQuery = true)
+    Optional<List<ContentResponse>> findByTitle(@Param("title") String contentTitle);
 
-//    컨텐츠 상세 조회
-//    @Query(value = "select c.content_id, c.title, c.age, c.released, c.summary, c.c_type, c.content_img " +
-//            "from content as c where c.content_id = :contentId", nativeQuery = true)
-//    Optional<ContentDetailResponse> findContentsByContentId(@Param("contentId")String contentId);
-
+    @Query(value = "SELECT c.content_id, c.title, c.age, c.content_img from content as c " +
+            "where c.title REGEXP :contentTitle limit :size", nativeQuery = true)
+    List<ContentResponse> findBySimilarTitle(@Param("contentTitle") String contentTitle, @Param("size") int size);
 
     @Query(value = "select c.content_id, c.title, c.age from content as c , " +
             "(select content_id, count(*) as relevance from content_genre as cg " +
@@ -68,7 +68,7 @@ public interface ContentRepository extends JpaRepository<Content, String> {
     @Query(value = "select c.content_id, c.title, c.age from content as c , " +
             "(select content_id, count(*) as relevance from content_genre as cg " +
             "left outer join inner_genre as ig on cg.genre_id = ig.genre_id " +
-            "where ig.genre REGEXP :category group by content_id) as rel " +
+            "where ig.genre REGEXP :cNategory group by content_id) as rel " +
             "where c.content_id = rel.content_id order by relevance desc", nativeQuery = true)
     List<ContentResponse> findContentsByCategory(@Param("category") String category);
 

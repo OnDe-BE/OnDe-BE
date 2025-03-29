@@ -39,6 +39,8 @@ public class ContentApiController {
 //    컨텐츠 상세 조회
     @GetMapping("/content")
     public ResponseEntity<Object> findContentByContentId(@Param("contentId") String contentId){
+
+        log.info(contentId);
         ContentDetailResult cl = this.contentSimpleServiceImpl.findContentDetails(contentId);
 
         return ResponseEntity.ok().body(cl);
@@ -55,7 +57,7 @@ public class ContentApiController {
 //    컨텐츠에 대한 검색
     @PostMapping("/search")
     public ResponseEntity<Object> findContentsByTitle(@Param("search") String search){
-        Page<ContentRequest> cl = this.contentSimpleServiceImpl.findContentByTitle(search);
+        List<ContentRequest> cl = this.contentSimpleServiceImpl.findContentByTitle(search);
 
         return ResponseEntity.ok().body(cl);
     }
@@ -96,17 +98,15 @@ public class ContentApiController {
     }
 
 //  컨텐츠 문장/필터에 대한 검색
-    @PostMapping("/sentence")
-    public ResponseEntity<Object> findContentsBySentence(@RequestParam(name = "order", required = false, defaultValue = "인기순") String order,
-                                                         @Param("sentence") String sentence,
-                                                         @Param("nowPage") int nowPage,
-                                                         @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
-//        this.contentMethod
-
-        Page<ContentRequest> res = this.contentDetailServiceImpl.findSearchContentsByMultiCategory(order,sentence,nowPage,pageCount);
-
-        return ResponseEntity.ok().body(res);
-    }
+//    @PostMapping("/sentence")
+//    public ResponseEntity<Object> findContentsBySentence(@RequestParam(name = "order", required = false, defaultValue = "인기순") String order,
+//                                                         @Param("sentence") String sentence,
+//                                                         @Param("nowPage") int nowPage,
+//                                                         @RequestParam(name = "pageCount", required = false, defaultValue = "50") int pageCount){
+//        Page<ContentRequest> res = this.contentDetailServiceImpl.findSearchContentsByMultiCategory(order,sentence,nowPage,pageCount);
+//
+//        return ResponseEntity.ok().body(res);
+//    }
 
 //    메인 배너 오늘의 추천 방식
     @PostMapping("/todayPick")
@@ -115,15 +115,6 @@ public class ContentApiController {
 
         return ResponseEntity.ok().body(res);
     }
-
-    // @PostMapping("/recommend")
-    // public ResponseEntity<Object> findContentsByRecommend(@AuthenticationPrincipal User user){
-        // user = this.userService.findUser("20250220");
-//            List<String> prefers = this.userPreferContent.genreSorting(userPreferContent.preferSentenceSorting(user),userPreferContent.preferGenreSorting(user));
-    //     Page<ContentRequest> prefers = this.userPreferContent.recommendedContent(user);
-
-    //     return ResponseEntity.ok().body(prefers);
-    // }
 
     @PostMapping("/filter")
     public ResponseEntity<Object> findContentsByFilter(@RequestParam(value = "age", required = false) List<String> age,
@@ -169,5 +160,12 @@ public class ContentApiController {
         List<InnerGenre> genres = this.utilService.findGenres();
 
         return ResponseEntity.ok().body(genres);
+    }
+
+    @PostMapping("/sentence")
+    public ResponseEntity<Object> findContentsBySentence(String sentence){
+        Page<ContentRequest> cl = this.contentDetailServiceImpl.findSentenceContents(sentence);
+
+        return ResponseEntity.ok().body(cl);
     }
 }

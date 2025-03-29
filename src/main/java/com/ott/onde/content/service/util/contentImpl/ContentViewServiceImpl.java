@@ -4,11 +4,9 @@ import com.ott.onde.content.dto.request.ContentRequest;
 import com.ott.onde.content.entity.user.ContentLinkView;
 import com.ott.onde.content.entity.user.ContentView;
 import com.ott.onde.content.repository.user.ContentLinkViewRepository;
-import com.ott.onde.content.repository.detail.ContentPlatformRepository;
 import com.ott.onde.content.repository.user.ContentViewRepository;
 import com.ott.onde.content.service.util.user.ContentViewService;
 import com.ott.onde.user.entity.User;
-import com.ott.onde.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,8 +18,6 @@ import java.util.List;
 @Slf4j
 public class ContentViewServiceImpl implements ContentViewService {
     private final ContentViewRepository contentViewRepository;
-    private final UserRepository userRepository;
-    private final ContentPlatformRepository contentPlatformRepository;
     private final ContentLinkViewRepository contentLinkViewRepository;
 
     @Override
@@ -61,4 +57,5 @@ public class ContentViewServiceImpl implements ContentViewService {
 
         return contentView;
     }
+
 }

@@ -16,6 +16,8 @@ public interface CategorySortRepository extends JpaRepository<CategorySort, Stri
     @Query(value = "SELECT * FROM category_sort WHERE word regexp :word",nativeQuery = true)
     List<CategorySort> findByWord(String word);
 
+
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO category_sort SET category_code = :category_code, word = :word, db_word = :db_word", nativeQuery = true)

@@ -59,7 +59,6 @@ public class ContentsServiceMethod {
 
         return PageRequest.of(nowPage, pageCount, sort);
     }
-    
 
     public List<String> findGenresByContentId(String contentId){
         return this.contentGenreRepository.findGenreByContentId(contentId);
@@ -90,6 +89,21 @@ public class ContentsServiceMethod {
                 .contentImg(x.getContent_img())
                 .rank(rank.getAndIncrement())
                 .genres(genres.get(x.getContent_id())).build());
+    }
+
+    public List<ContentRequest> responseToRequest(List<ContentResponse> paging){
+        AtomicInteger rank = new AtomicInteger(1);
+
+        List<String> contentIds = paging.stream().map(ContentResponse::getContent_id).toList();
+
+        Map<String, List<String>> genres = this.findGenresByContentId(contentIds);
+
+        return paging.stream().map(x-> ContentRequest.builder().contentId(x.getContent_id())
+                .title(x.getTitle())
+                .age(x.getAge())
+                .contentImg(x.getContent_img())
+                .rank(rank.getAndIncrement())
+                .genres(genres.get(x.getContent_id())).build()).toList();
     }
 
     public String runtimeByClassifyType(String contentId, String cType){
