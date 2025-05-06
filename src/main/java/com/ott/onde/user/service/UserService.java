@@ -139,7 +139,7 @@ public class UserService {
                 .secure(true)   // HTTPS에서만 접근 가능하도록 설정
                 .path("/")      // 전체 도메인에서 접근 가능
                 .maxAge(60 * 60 * 24 * 7) // 7일 동안 유효
-                .domain(".ondemandia.com")  // 최상위 도메인 설정
+                .domain("ondemandia.com")  // 최상위 도메인 설정
                 .sameSite("None")
                 .build();
 

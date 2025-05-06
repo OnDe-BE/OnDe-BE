@@ -1,4 +1,7 @@
 spring:
+  web:
+    servlet:
+      context-path: /api
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: ${DB_URL}
@@ -78,6 +81,7 @@ app:
   oauth2:
     authorizedRedirectUri:
       https://ondemandia.com/oauth2/redirect
+
 #logging:
 #  level:
 #    root: DEBUG  # 전체 로깅 레벨을 DEBUG로 설정
